@@ -113,7 +113,7 @@ namespace splitandthechro.nginz
 				window: window.WindowInfo,
 				major: 4,
 				minor: 5,
-				flags: GraphicsContextFlags.Default
+				flags: GraphicsContextFlags.ForwardCompatible
 			);
 
 			// Make the created context the current context
