@@ -1,4 +1,4 @@
-[![License: Simplified BSD license][licenseimg]][licenseurl]
+[![License: zlib-libpng license][licenseimg]][licenseurl]
 
 # nginz
 A 3D game engine with its own odd style.  
@@ -10,5 +10,5 @@ As Eminem said: With great power comes absolutely no responsibility.
 # Technology
 nginz is built on top of OpenTK and OpenAL.
 
-  [licenseurl]: https://tldrlegal.com/license/bsd-2-clause-license-(freebsd)
+  [licenseurl]: https://tldrlegal.com/license/zlib-libpng-license-(zlib)
   [licenseimg]: https://img.shields.io/github/license/splitandthechro/nginz.svg
