@@ -11,4 +11,4 @@ As Eminem said: With great power comes absolutely no responsibility.
 nginz is built on top of OpenTK and OpenAL.
 
   [licenseurl]: https://tldrlegal.com/license/zlib-libpng-license-(zlib)
-  [licenseimg]: https://img.shields.io/github/license/splitandthechro/nginz.svg
+  [licenseimg]: https://img.shields.io/github/license/splitandthechro/nginz.svg?style=flat-square
