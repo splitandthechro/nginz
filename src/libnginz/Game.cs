@@ -135,6 +135,9 @@ namespace splitandthechro.nginz
 				flags: GraphicsContextFlags.ForwardCompatible
 			);
 
+			// Make the created context the current context
+			context.MakeCurrent (window.WindowInfo);
+
 			// Throw if context is not available
 			GraphicsContext.Assert ();
 
@@ -150,9 +153,6 @@ namespace splitandthechro.nginz
 				context.SwapInterval = 1;
 				break;
 			}
-
-			// Make the created context the current context
-			context.MakeCurrent (window.WindowInfo);
 
 			// Load OpenGL entry points
 			context.LoadAll ();
