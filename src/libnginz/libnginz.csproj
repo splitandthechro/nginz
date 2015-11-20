@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C985815A-AAB7-45D2-9427-039101F10B76}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>splitandthechro.nginz</RootNamespace>
+    <RootNamespace>nginz</RootNamespace>
     <AssemblyName>libnginz</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -53,6 +53,10 @@
     <ProjectReference Include="..\..\iodine-build\iodine-source\src\Iodine\libIodine.csproj">
       <Project>{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}</Project>
       <Name>libIodine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libnginz.Common\libnginz.Common.csproj">
+      <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
+      <Name>libnginz.Common</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

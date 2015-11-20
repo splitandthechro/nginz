@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Iodine;
-using Iodine.Compiler;
 using Iodine.Runtime;
+using nginz.Common;
 
-namespace splitandthechro.nginz.Interop.Iodine
+namespace nginz.Interop.Iodine
 {
 	/// <summary>
 	/// Iodine VM.
 	/// </summary>
-	public class IodineVM
+	public class IodineVM : ICanLog, ICanThrow
 	{
 		/// <summary>
 		/// The virtual machine.
@@ -27,7 +27,7 @@ namespace splitandthechro.nginz.Interop.Iodine
 		readonly List<IodineModule> modules;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="splitandthechro.nginz.Interop.Iodine.IodineVM"/> class.
+		/// Initializes a new instance of the <see cref="nginz.Interop.Iodine.IodineVM"/> class.
 		/// </summary>
 		public IodineVM () {
 			log = new ErrorLog ();

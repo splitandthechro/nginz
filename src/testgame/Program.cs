@@ -1,6 +1,6 @@
 ﻿using System;
-using splitandthechro.nginz;
-using splitandthechro.nginz.Interop.Iodine;
+using nginz;
+using nginz.Interop.Iodine;
 using OpenTK.Graphics.OpenGL4;
 
 namespace testgame

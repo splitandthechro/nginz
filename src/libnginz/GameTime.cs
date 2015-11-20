@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace splitandthechro.nginz
+namespace nginz
 {
 	/// <summary>
 	/// Gametime.

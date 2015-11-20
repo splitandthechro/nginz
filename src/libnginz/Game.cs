@@ -4,7 +4,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
-namespace splitandthechro.nginz
+namespace nginz
 {
     public class Game
     {
