@@ -1,5 +1,6 @@
 ﻿using System;
 using splitandthechro.nginz;
+using splitandthechro.nginz.Interop.Iodine;
 using OpenTK.Graphics.OpenGL4;
 
 namespace testgame
@@ -21,6 +22,13 @@ namespace testgame
     class TestGame : Game
     {
 		public TestGame (GameConfiguration conf) : base (conf) {
+		}
+
+		protected override void Initialize () {
+			var vm = new IodineVM ();
+			vm.LoadModule ("test.id");
+			vm.Invoke ("hello");
+			base.Initialize ();
 		}
 
 		protected override void Update (GameTime time) {
