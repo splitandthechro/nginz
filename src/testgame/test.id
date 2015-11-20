@@ -1,3 +1,4 @@
 ﻿func hello () {
 	print ("Hello from Iodine!");
+	nginz.SayHello ();
 }

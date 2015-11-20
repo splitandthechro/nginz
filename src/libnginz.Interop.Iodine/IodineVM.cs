@@ -27,12 +27,37 @@ namespace nginz.Interop.Iodine
 		readonly List<IodineModule> modules;
 
 		/// <summary>
+		/// Module for exposed functions.
+		/// </summary>
+		IodineModule exposedModule;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Interop.Iodine.IodineVM"/> class.
 		/// </summary>
 		public IodineVM () {
 			log = new ErrorLog ();
 			vm = new VirtualMachine (new IodineConfiguration ());
 			modules = new List<IodineModule> ();
+			exposedModule = new IodineModule ("nginz");
+			vm.Globals.Add ("nginz", exposedModule);
+		}
+
+		/// <summary>
+		/// Expose a function to the iodine vm.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <param name="callback">Callback.</param>
+		public void ExposeFunction (string name, IodineMethodCallback callback) {
+			exposedModule.SetAttribute (vm, name, new InternalMethodCallback (callback, exposedModule));
+		}
+
+		/// <summary>
+		/// Expose a function to the iodine vm.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <param name="callback">Callback.</param>
+		public void ExposeFunction (string name, Func<IodineObject[], IodineObject> callback) {
+			ExposeFunction (name, new IodineMethodCallback ((vm, self, args) => callback (args)));
 		}
 
 		/// <summary>
@@ -82,7 +107,7 @@ namespace nginz.Interop.Iodine
 				if (module.HasAttribute (function))
 					return module.GetAttribute (function).Invoke (vm, args);
 
-			return (IodineObject)null;
+			return null;
 		}
 
 		/// <summary>

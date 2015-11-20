@@ -2,6 +2,7 @@
 using nginz;
 using nginz.Interop.Iodine;
 using OpenTK.Graphics.OpenGL4;
+using Iodine.Runtime;
 
 namespace testgame
 {
@@ -26,6 +27,7 @@ namespace testgame
 
 		protected override void Initialize () {
 			var vm = new IodineVM ();
+			vm.ExposeFunction ("SayHello", SayHello);
 			vm.LoadModule ("test.id");
 			vm.Invoke ("hello");
 			base.Initialize ();
@@ -39,6 +41,11 @@ namespace testgame
 			GL.ClearColor (.4f, .4f, .4f, 1f);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			base.Draw (time);
+		}
+
+		static IodineObject SayHello (params IodineObject[] args) {
+			Console.WriteLine ("Hello from C#, invoked from Iodine!");
+			return null;
 		}
     }
 }
