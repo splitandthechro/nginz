@@ -1,6 +1,9 @@
 #Autosave files
 *~
 
+#sources
+*-source/
+
 #build
 [Oo]bj/
 [Bb]in/
