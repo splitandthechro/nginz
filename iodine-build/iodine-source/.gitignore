@@ -1,0 +1,27 @@
+# Binaries
+
+# Useless VS/MonoDevelop crap
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+*.nlp
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.usertasks
+*.mdb
+
+# Allow the Debug source directory
+!src/Iodine/Runtime/Debug
+# @SplittyDev's personal files
+bin/splitty/
+
+# .deps for tests/
+tests/.deps

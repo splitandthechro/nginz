@@ -1,0 +1,538 @@
+use describe, expect from espresso;
+
+# Class tests
+class A {
+    func A(self, x) {
+        self.x = x;
+    }
+
+    func foo(self) {
+        return 1;
+    }
+}
+
+class B : A {
+    func B(self) {
+        super(2);
+    }
+
+    func bar(self) {
+        return 2;
+    }
+}
+
+class C : B {
+    # Empty
+}
+
+class D {
+    func x(self) {
+        return 2;
+    }
+}
+
+class E : D {
+    # Empty
+}
+
+# Decorator tests
+func doubleDecorator(function) {
+    func inner() {
+        res = function() * 2;
+        return res;
+    }
+    return inner;
+}
+
+func multiplyDecorator(times) {
+    func wrapper(function) {
+        func inner() {
+            res = function() * times;
+            return res;
+        }
+        return inner;
+    }
+    return wrapper;
+}
+
+@doubleDecorator
+func four() {
+    return 2;
+}
+
+@multiplyDecorator(3)
+func six() {
+    return 2;
+}
+
+# Generator tests
+func generatorTest () {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+
+describe('Iodine', lambda(test) {
+    test.describe('Inheritance', lambda(test) {
+        test.describe('A', lambda(test) {
+            test.it('should have attributes x and foo', lambda() {
+                obj = A(1);
+                expect(obj).to.have.attribute('x');
+                expect(obj.x).to.equal(1);
+
+                expect(obj).to.have.attribute('foo');
+                expect(obj.foo()).to.equal(1);
+            });
+
+            test.it('should be an "A"', lambda() {
+                obj = A(1);
+                expect(obj).to.be.an('A');
+            });
+
+            test.it('should not have attribute bar', lambda() {
+                obj = A(1);
+                expect(obj).not().to.have.attribute('bar');
+            });
+        });
+
+        test.describe('B', lambda(test) {
+            test.it('should have attributes x, foo and bar', lambda() {
+                obj = B();
+                expect(obj).to.have.attribute('x');
+                expect(obj.x).to.equal(2);
+
+                expect(obj).to.have.attribute('foo');
+                expect(obj.foo()).to.equal(1);
+
+                expect(obj).to.have.attribute('bar');
+                expect(obj.bar()).to.equal(2);
+            });
+
+            test.it('should be a "B"', lambda() {
+                obj = B();
+                expect(obj).to.be.a('B');
+            });
+        });
+
+        test.describe('C', lambda(test) {
+            test.it('should have attributes x, foo and bar without ' +
+                'calling super', lambda() {
+                # Objects with empty constructors don't need to call super();
+                obj = C();
+                expect(obj).to.have.attribute('x');
+                expect(obj.x).to.equal(2);
+
+                expect(obj).to.have.attribute('foo');
+                expect(obj.foo()).to.equal(1);
+
+                expect(obj).to.have.attribute('bar');
+                expect(obj.bar()).to.equal(2);
+            });
+        });
+
+        test.describe('D', lambda(test) {
+            test.it('should have attribute x', lambda() {
+                obj = D();
+                expect(obj).to.have.attribute('x');
+                expect(obj.x()).to.equal(2);
+            });
+        });
+
+        test.describe('E', lambda(test) {
+            test.it('should have attribute x without super call', lambda() {
+                obj = E();
+                expect(obj).to.have.attribute('x');
+                expect(obj.x()).to.equal(2);
+            });
+        });
+    });
+
+    test.describe('Decorator', lambda(test) {
+        test.it('should work with no parameters', lambda() {
+            expect(four()).to.equal(4);
+        });
+
+        test.it('should work with a parameter for the decorator', lambda() {
+            expect(six()).to.equal(6);
+        });
+    });
+
+    test.describe('Closure', lambda(test) {
+        test.it('should be created, stored and calculate the correct ' +
+            'value', lambda() {
+            func startAt(x) {
+                func incrementBy(y) {
+                    return x + y;
+                }
+                return incrementBy;
+            }
+            closure1 = startAt(1);
+            closure2 = startAt(5);
+            expect(closure1(3)).to.equal(4);
+            expect(closure2(3)).to.equal(8);
+        });
+    });
+
+    test.describe('Generator', lambda(test) {
+        test.it('should be able to iterate through all yielded values', 
+            lambda() {
+                _list = [];
+                foreach (i in generatorTest ()) {
+                    _list.add (i);
+                }
+                expect(_list[0]).to.equal(1);
+                expect(_list[1]).to.equal(2);
+                expect(_list[2]).to.equal(3);
+            });
+    });
+
+    test.describe('HashMap', lambda(test) {
+        test.it('should be created using {}', lambda() {
+            map = {};
+            expect(map).to.be.a('HashMap');
+        });
+
+        test.it('should index using keys', lambda() {
+            map = {
+                'x': 1,
+                'y': 'x'
+            };
+
+            expect(map).to.have.key('x');
+            expect(map['x']).to.equal(1);
+        });
+
+        test.describe('contains', lambda(test) {
+            test.it('should search through keys with .contains', lambda() {
+                map = {
+                    'a': 1,
+                    'b': 3,
+                    'c': 5,
+                    'aa': 7
+                };
+
+                expect(map.contains('a')).to.be._true();
+                expect(map.contains('aaa')).to.be._false();
+                expect(map.contains(7)).to.be._false();
+            });
+        });
+
+        test.it('should allow any value as a key', lambda() {
+            _a = A(1);
+            _b = B();
+            _c = [1, 2];
+            map = {
+                _a: 'a',
+                _b: 'b',
+                1: 'c',
+                _c: 'd'
+            };
+
+            expect(map[_a]).to.equal('a');
+            expect(map[_b]).to.equal('b');
+            expect(map[1]).to.equal('c');
+            expect(map[_c]).to.equal('d');
+        });
+
+        test.it('should filter using keys and return list', lambda() {
+            map = {
+                'a': 1,
+                'b': 2,
+                'c': 3
+            };
+
+            _map = filter(map, lambda(item) {
+                if (item != 'a') {
+                    return true;
+                }
+                return false;
+            });
+
+            expect(_map).to.be.a('List');
+            expect(_map.contains('a')).not().to.be._true();
+        });
+
+        test.it('should map using keys and return list', lambda() {
+            hmap = {
+                'a': 1,
+                'b': 2,
+                'c': 3
+            };
+
+            _map = map(hmap, lambda(item) {
+                if (item != 'a') {
+                    return item;
+                }
+                return 'a' + item;
+            });
+
+            expect(_map.contains('aa')).to.be._true();
+            expect(_map.contains('a')).not().to.be._true();
+            expect(_map).to.be.a('List');
+            expect(_map.contains('b')).to.be._true();
+        });
+
+        test.it('should iterate through foreach using keys', lambda() {
+            hash = {
+                'a': 1,
+                'b': 2,
+                'c': 3
+            };
+
+            _list = [];
+            foreach (item in hash) {
+                _list.add(item);
+            }
+
+            expect(_list.contains('a')).to.be._true();
+            expect(_list.contains('b')).to.be._true();
+            expect(_list.contains('c')).to.be._true();
+            expect(_list.contains(1)).to.be._false();
+        });
+    });
+
+    test.describe('List', lambda(test) {
+        test.it('should be created using []', lambda() {
+            list = [];
+            expect(list).to.be.a('List');
+        });
+
+        test.it('should index using integers', lambda() {
+            list = [1, 2, 3];
+            expect(list[0]).to.equal(1);
+            try {
+                expect(list['0']).not().to.equal(1);
+            } except (e as TypeException) {
+                return;
+            }
+
+            raise Exception('Expected exception to be thrown');
+        });
+
+        test.describe('contains', lambda(test) {
+            test.it('should search values', lambda() {
+                list = [1, 2, 3, 4];
+                expect(list.contains(4)).to.be._true();
+            });
+        });
+    });
+
+    test.describe('Int', lambda(test) {
+        test.it('should be assignable to a variable', lambda() {
+            x = 5;
+            expect(x).to.equal(5);
+        });
+
+        test.it('should be able to store negative values', lambda() {
+            x = -5;
+            expect(x).to.equal(0 - 5);
+        });
+
+        test.it('should be able to store large values', lambda() {
+            x = 100000000000000000;
+            expect(x).to.equal(100000000000000000);
+        });
+
+        test.it('should act as an integer type and not handle fractions', lambda() {
+            x = 5 / 2;
+            # floor
+            expect(x).to.equal(2);
+        });
+    });
+
+    test.describe('Float', lambda(test) {
+
+    });
+
+    test.describe('Keyword', lambda(test) {
+        test.describe('for', lambda(test) {
+            test.it('should take a start, end and step value', lambda() {
+                j = 0;
+                for (i = 0; i < 10; i += 1) {
+                    j += 1;
+                }
+
+                expect(j).to.equal(10);
+            });
+        });
+
+        test.describe('return', lambda(test) {
+            test.it('should end the function', lambda() {
+                y = lambda() {
+                    return;
+                    raise Exception('Lambda did not return!');
+                };
+
+                y();
+            });
+
+            test.it('should return the function if no value', lambda() {
+                y = lambda() {
+                    return;
+                };
+
+                expect(y()).to.equal(y);
+            });
+
+            test.it('should return the specified value otherwise', lambda() {
+                y = lambda() {
+                    return 1;
+                };
+
+                expect(y()).to.equal(1);
+            });
+        });
+
+        test.describe('break', lambda(test) {
+            test.it('should exit a foreach loop', lambda() {
+                list = [1, 2, 3];
+                reachedThree = false;
+                foreach(item in list) {
+                    if (item == 2) {
+                        break;
+                    } else if (item == 3) {
+                        reachedThree = true;
+                    }
+                }
+
+                expect(reachedThree).to.be._false();
+            });
+
+            test.it('should exit a for loop', lambda() {
+                i = 0;
+                for (i = 0; i < 10; i += 1) {
+                    if (i == 5) {
+                        break;
+                    }
+                }
+
+                expect(i).to.equal(5);
+            });
+        });
+
+        test.describe('continue', lambda(test) {
+            test.it('should skip an iteration of a for loop', lambda() {
+                j = 0;
+                for (i = 0; i < 10; i += 1) {
+                    # TODO: FIX
+                    continue;
+                    j += 1;
+                }
+
+                expect(j).to.equal(0);
+            });
+
+            test.it('should skip an iteration of a foreach loop', lambda() {
+                j = 0;
+                list = [1, 2, 3];
+                foreach (item in list) {
+                    continue;
+                    j += 1;
+                }
+
+                expect(j).to.equal(0);
+            });
+        });
+    });
+
+    test.describe('Enum', lambda(test) {
+        enum Test {
+            BAD,
+            OK,
+            GOOD,
+            GREAT
+        }
+
+        enum AnotherTest {
+            BAD = 1,
+            VERY_BAD = 2,
+            TERRIBLE = 4,
+            STRANGE = 8
+        }
+
+        test.it('should be created using the enum keyword', lambda() {
+            val = Test.BAD;
+            expect(val).to.equal(Test.BAD);
+            expect(val).to.be.an('Int');
+        });
+
+        test.it('should assign each value a unique integer', lambda() {
+            expect(Test.BAD).not().to.equal(Test.OK);
+        });
+
+        test.it('should respect values assigned explicitly', lambda() {
+            expect(AnotherTest.BAD).to.equal(1);
+        });
+
+        test.it('should be able to work as a bitmask', lambda() {
+            val = AnotherTest.BAD | AnotherTest.STRANGE;
+            expect(val & AnotherTest.STRANGE).to.equal(AnotherTest.STRANGE);
+        });
+    });
+
+    test.describe('with statement', lambda(test) {
+        class WithTestClass {
+
+            func WithTestClass(self, list) {
+                self.list = list;
+            }
+
+            func __enter__(self) {
+                self.list[0] = true;
+            }
+
+            func __exit__(self) {
+                self.list[1] = true;
+            }
+        }
+        list = [false, false];
+        with(myClass = WithTestClass(list)) {
+            test.it('__enter__ should be called', lambda() {
+                expect(list[0]).to.be._true();
+            });
+            test.it('__exit__ should not have been called yet', lambda() {
+                expect(list[1]).to.be._false();
+            });
+        }
+        test.it('__exit__ should be called', lambda() {
+            expect(list[1]).to.be._true();
+        });
+        list2 = [false, false];
+
+        func testWith() {
+            with(myClass = WithTestClass(list2)) {
+                return 12;
+            }
+        }
+
+        val = testWith();
+
+        test.it('testWith() should have returned 12', lambda() {
+            expect(val).to.equal(12);
+        });
+
+        test.it('__exit__ should have been called on return', lambda() {
+            expect(list2[1]).to.be._true();
+        });
+    });
+
+    test.describe('pattern matching', lambda(test) {
+        test.it('match 2 should yield 9', lambda() {
+            x = 2;
+            result = match x {
+                case 1 => 3
+                case 2 => 9
+                case _ => 1
+            };
+            expect(result).to.equal(9);
+        });
+        test.it('match (1, 2, 3) should yield 2', lambda() {
+            x = (1, 2, 3);
+            result = match x {
+                case (1, n, 3) => n
+                case _ => 9
+            };
+            expect(result).to.equal(2);
+        });
+    });
+});

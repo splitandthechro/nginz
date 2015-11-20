@@ -1,0 +1,103 @@
+use JsonFile, parse from json;
+use describe, expect from espresso;
+
+describe ("json module", lambda (test) {
+    test.describe ("Scanning", lambda (test) {
+        test.it ("'{}[]:,' should return 6 tokens", lambda () {
+            file = JsonFile ();
+            file._initialize ("{}[]:,");
+            tokens = file._tokenize ();
+            expect (tokens.getSize ()).to.equal (6);
+        });
+        test.it ("'{}' should produce BEGIN_OBJECT and END_OBJECT tokens", lambda () {
+            file = JsonFile ();
+            file._initialize ("{}");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.BEGIN_OBJECT);
+            expect (tokens [1].type).to.equal (JsonFile.JsonTokenType.END_OBJECT);
+        });
+        test.it ("'[]' should produce BEGIN_ARRAY and END_ARRAY tokens", lambda () {
+            file = JsonFile ();
+            file._initialize ("[]");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.BEGIN_ARRAY);
+            expect (tokens [1].type).to.equal (JsonFile.JsonTokenType.END_ARRAY);
+        });
+        test.it ("':,' should produce NAME_SEPERATOR and VALUE_SEPERATOR tokens", lambda () {
+            file = JsonFile ();
+            file._initialize (":,");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.NAME_SEPERATOR);
+            expect (tokens [1].type).to.equal (JsonFile.JsonTokenType.VALUE_SEPERATOR);
+        });
+        test.it ("'-10' should produce NUMBER_LITERAL", lambda () {
+            file = JsonFile ();
+            file._initialize ("-10");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.NUMBER_LITERAL);
+        });
+        test.it ("'10' should produce NUMBER_LITERAL", lambda () {
+            file = JsonFile ();
+            file._initialize ("10");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.NUMBER_LITERAL);
+        });
+        test.it ("'\"hello\"' should produce STRING_LITERAL", lambda () {
+            file = JsonFile ();
+            file._initialize ("\"hello\"");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.STRING_LITERAL);
+        });
+        test.it ("'\\r\\n\\t\\f\\\"\\\\' should produce STRING_LITERAL with correct values", lambda () {
+            file = JsonFile ();
+            file._initialize ("\"\\r\\n\\t\\f\\\"\\\\\"");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.STRING_LITERAL);
+            expect (tokens [0].value).to.equal ("\r\n\t\f\"\\");
+        });
+        test.it ("'true' should produce TRUE_LITERAL", lambda () {
+            file = JsonFile ();
+            file._initialize ("true");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.TRUE_LITERAL);
+        });
+        test.it ("'false' should produce FALSE_LITERAL", lambda () {
+            file = JsonFile ();
+            file._initialize ("false");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.FALSE_LITERAL);
+        });
+        test.it ("'null' should produce NULL_LITERAL", lambda () {
+            file = JsonFile ();
+            file._initialize ("null");
+            tokens = file._tokenize ();
+            expect (tokens [0].type).to.equal (JsonFile.JsonTokenType.NULL_LITERAL);
+        });
+    });
+    test.describe ("Parsing", lambda (test) {
+        test.it ("should return [1, \"2\", true, false, null]", lambda () {
+            res = parse ("[1, \"2\", true, false, null]");
+            expect (res).to.equal ([1, "2", true, false, null]);
+        });
+        test.it ("should return  {\"a\" : 1, \"b\" : 2, \"c\" : \"3\"}", lambda () {
+            file = JsonFile ();
+            file._initialize ("{\"a\" : 1, \"b\" : 2, \"c\" : \"3\"}");
+            tokens = file._tokenize ();
+            res = file._parse (tokens);
+            expect (res).to.equal ({"a" : 1, "b" : 2, "c" : "3"});
+        });
+        test.it ("should return [{\"a\" : 3}, [1, 2, 3]]", lambda () {
+            res = parse ("[{\"a\" : 3}, [1, 2, 3]]");
+            expect (res).to.equal ([{"a" : 3}, [1, 2, 3]]);
+        });
+        test.it ("should return {\"a\" : [1, 2, 3], \"b\" : {\"c\" : 2}}", lambda () {
+            file = JsonFile ();
+            file._initialize ("{\"a\" : [1, 2, 3], \"b\" : {\"c\" : 2}}");
+            tokens = file._tokenize ();
+            res = file._parse (tokens);
+            expected = {"a" : [1, 2, 3], "b" : {"c" : 2}};
+            expect (res).to.equal (expected);
+        });
+    });
+});
+

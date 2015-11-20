@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iodine", "Iodine.csproj", "{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleReflection", "..\ModuleReflection\ModuleReflection.csproj", "{4DF6CA93-D9D5-44CC-B057-AF19844DEDCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DF6CA93-D9D5-44CC-B057-AF19844DEDCF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4DF6CA93-D9D5-44CC-B057-AF19844DEDCF}.Debug|x86.Build.0 = Debug|Any CPU
+		{4DF6CA93-D9D5-44CC-B057-AF19844DEDCF}.Release|x86.ActiveCfg = Release|Any CPU
+		{4DF6CA93-D9D5-44CC-B057-AF19844DEDCF}.Release|x86.Build.0 = Release|Any CPU
+		{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}.Debug|x86.ActiveCfg = Debug|x86
+		{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}.Debug|x86.Build.0 = Debug|x86
+		{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}.Release|x86.ActiveCfg = Release|x86
+		{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+EndGlobal
