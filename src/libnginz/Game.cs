@@ -92,6 +92,8 @@ namespace splitandthechro.nginz
 		/// </summary>
 		/// <param name="time">Time.</param>
 		protected virtual void Draw (GameTime time) {
+
+			// Present the rendered scene to the user
 			context.SwapBuffers ();
 		}
 
@@ -110,6 +112,9 @@ namespace splitandthechro.nginz
 			// Subscribe to the Resize event of the window
 			// to correctly handle resizing of the window
 			window.Resize += (sender, e) => context.Update (window.WindowInfo);
+
+			// Subscribe to the Closing event of the window
+			// to dispose the context when closing the window.
 			window.Closing += (sender, e) => context.Dispose ();
 
 			// Present the window to the user
@@ -176,7 +181,7 @@ namespace splitandthechro.nginz
 			// Enter the actual game loop
 			while (true) {
 
-				// Break out of the loop if context is not available.
+				// Break out of the loop if the context is not available.
 				if (context.IsDisposed)
 					break;
 
