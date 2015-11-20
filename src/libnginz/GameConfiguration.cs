@@ -13,7 +13,7 @@ namespace nginz
 		readonly public static GameConfiguration Default;
 
 		/// <summary>
-		/// Initializes the <see cref="splitandthechro.nginz.GameConfiguration"/> struct.
+		/// Initializes the <see cref="nginz.GameConfiguration"/> struct.
 		/// </summary>
 		static GameConfiguration () {
 			Default = new GameConfiguration {

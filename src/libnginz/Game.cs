@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading;
+using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace nginz
 {
-    public class Game
+    public class Game : ICanLog, ICanThrow
     {
 		/// <summary>
 		/// The game configuration.
@@ -39,7 +40,7 @@ namespace nginz
 		GraphicsContext context;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="splitandthechro.nginz.Game"/> class.
+		/// Initializes a new instance of the <see cref="nginz.Game"/> class.
 		/// </summary>
 		/// <param name="conf">Conf.</param>
 		public Game (GameConfiguration conf) {
@@ -66,6 +67,7 @@ namespace nginz
 				flags |= GameWindowFlags.FixedWindow;
 
 			// Create window
+			this.Log ("Creating native window");
 			window = new NativeWindow (
 				width: conf.Width,
 				height: conf.Height,
@@ -103,6 +105,7 @@ namespace nginz
 		public void Run () {
 
 			// Call virtual Initialize function
+			this.Log ("Initializing game");
 			Initialize ();
 
 			// Start gameloop in a separate thread
@@ -121,6 +124,7 @@ namespace nginz
 			window.Visible = true;
 
 			// Process the message queue
+			this.Log ("Entering message processing loop");
 			while (window.Exists) {
 				window.ProcessEvents ();
 			}
@@ -132,6 +136,7 @@ namespace nginz
 		void EnterGameloop () {
 
 			// Create graphics context
+			this.Log ("Creating graphics context");
 			context = new GraphicsContext (
 				mode: graphicsMode,
 				window: window.WindowInfo,
@@ -147,6 +152,7 @@ namespace nginz
 			GraphicsContext.Assert ();
 
 			// Set vsync mode
+			this.Log ("Setting VSync mode: {0}", conf.Vsync);
 			switch (conf.Vsync) {
 			case VsyncMode.Adaptive:
 				context.SwapInterval = -1;
@@ -160,6 +166,7 @@ namespace nginz
 			}
 
 			// Load OpenGL entry points
+			this.Log ("Loading OpenGL entry points");
 			context.LoadAll ();
 
 			// Set target framerate
@@ -182,16 +189,22 @@ namespace nginz
 			while (true) {
 
 				// Break out of the loop if the context is not available.
-				if (context.IsDisposed)
+				if (context.IsDisposed) {
+					this.Log ("Context not available");
+					this.Log ("Leaving gameloop");
 					break;
+				}
+
+				// Update current time
+				now = DateTime.UtcNow;
 
 				// Use fixed framerate if requested
 				if (conf.FixedFramerate) {
 
 					// Calculate timing data
-					now = DateTime.UtcNow;
 					updateNewTime = now.Subtract (startTime).TotalSeconds;
 					updateFrameTime = updateNewTime - updateCurrentTime;
+					updateCurrentTime = updateNewTime;
 					updateAccumTime += updateFrameTime;
 
 					// Update according to calculated timing data
