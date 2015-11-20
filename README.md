@@ -1,4 +1,4 @@
-[![licenseimg]][licenseurl]
+[![License: Simplified BSD license][licenseimg]][licenseurl]
 
 # nginz
 A 3D game engine with its own odd style.  
