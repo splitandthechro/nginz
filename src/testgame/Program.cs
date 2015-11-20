@@ -11,7 +11,7 @@ namespace testgame
 				Width = 640,
 				Height = 480,
 				WindowTitle = "nginz Game",
-				FixedWindow = true,
+				FixedWindow = false,
 			};
 			var game = new TestGame (conf);
 			game.Run ();
