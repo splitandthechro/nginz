@@ -5,7 +5,7 @@ namespace nginz
 {
 	public class GeometryShader : BasicShader
 	{
-		public GeometryShader (string[] sources)
+		public GeometryShader (params string[] sources)
 			: base (ShaderType.GeometryShader, sources) {
 		}
 	}

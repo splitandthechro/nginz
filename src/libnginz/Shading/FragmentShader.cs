@@ -5,7 +5,7 @@ namespace nginz
 {
 	public class FragmentShader : BasicShader
 	{
-		public FragmentShader (string[] sources)
+		public FragmentShader (params string[] sources)
 			: base (ShaderType.FragmentShader, sources) {
 		}
 	}

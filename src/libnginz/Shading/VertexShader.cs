@@ -5,7 +5,7 @@ namespace nginz
 {
 	public class VertexShader : BasicShader
 	{
-		public VertexShader (string[] sources)
+		public VertexShader (params string[] sources)
 			: base (ShaderType.VertexShader, sources) {
 		}
 	}

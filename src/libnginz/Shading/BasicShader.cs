@@ -16,7 +16,7 @@ namespace nginz
 		/// </summary>
 		/// <param name="type">Type.</param>
 		/// <param name="sources">Sources.</param>
-		public BasicShader (ShaderType type, string[] sources) : base (type, sources) {
+		public BasicShader (ShaderType type, params string[] sources) : base (type, sources) {
 		}
 
 		/// <summary>

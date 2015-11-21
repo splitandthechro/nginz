@@ -37,7 +37,7 @@ namespace nginz
 		/// </summary>
 		/// <param name="type">Type.</param>
 		/// <param name="sources">Sources.</param>
-		protected Shader (ShaderType type, string[] sources) {
+		protected Shader (ShaderType type, params string[] sources) {
 			shaderType = type;
 			shaderSources = sources;
 		}

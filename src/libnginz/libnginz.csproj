@@ -38,11 +38,12 @@
     <Compile Include="GameConfiguration.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="VsyncMode.cs" />
-    <Compile Include="BasicShader.cs" />
     <Compile Include="Shader.cs" />
-    <Compile Include="FragmentShader.cs" />
-    <Compile Include="VertexShader.cs" />
-    <Compile Include="GeometryShader.cs" />
+    <Compile Include="Shading\BasicShader.cs" />
+    <Compile Include="Shading\FragmentShader.cs" />
+    <Compile Include="Shading\GeometryShader.cs" />
+    <Compile Include="Shading\VertexShader.cs" />
+    <Compile Include="Extensions\ShaderExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -63,5 +64,9 @@
       <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
       <Name>libnginz.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shading\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>
