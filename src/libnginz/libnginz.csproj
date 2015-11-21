@@ -43,7 +43,6 @@
     <Compile Include="Shading\FragmentShader.cs" />
     <Compile Include="Shading\GeometryShader.cs" />
     <Compile Include="Shading\VertexShader.cs" />
-    <Compile Include="Extensions\ShaderExtensions.cs" />
     <Compile Include="Shading\ShaderProgram.cs" />
     <Compile Include="Shading\Shader.cs" />
     <Compile Include="Shading\ShaderProgram.Func.cs" />
