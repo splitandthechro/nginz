@@ -47,10 +47,10 @@ namespace nginz
 		}
 
 		/// <summary>
-		/// Initialize this instance.
+		/// Initializes the game internally.
 		/// </summary>
-		protected virtual void Initialize () {
-
+		void InternalInitialize () {
+			
 			// Initialize graphics mode to default
 			graphicsMode = GraphicsMode.Default;
 
@@ -60,7 +60,7 @@ namespace nginz
 			// Set Fullscreen flag if requested
 			if (conf.Fullscreen && !flags.HasFlag (GameWindowFlags.Fullscreen))
 				flags |= GameWindowFlags.Fullscreen;
-			
+
 			// Set FixedWindow flag if requested
 			if (conf.FixedWindow && !flags.HasFlag (GameWindowFlags.FixedWindow))
 				flags |= GameWindowFlags.FixedWindow;
@@ -79,6 +79,12 @@ namespace nginz
 			// Initialize startTime and lastTime
 			startTime = DateTime.UtcNow;
 			lastTime = startTime;
+		}
+
+		/// <summary>
+		/// Initialize this instance.
+		/// </summary>
+		protected virtual void Initialize () {
 		}
 
 		/// <summary>
@@ -102,14 +108,16 @@ namespace nginz
 		/// Run the game.
 		/// </summary>
 		public void Run () {
+
+			// Initialize the game
+			InternalInitialize ();
 			
 			// Start gameloop in a separate thread
 			var trd = new Thread (EnterGameloop);
 			trd.Start ();
 
-			// Wait till context is created
-			while (context == null) {
-			}
+			// Wait till the context is available
+			while (context == null) { }
 
 			// Initialize the game
 			this.Log ("Initializing game");
