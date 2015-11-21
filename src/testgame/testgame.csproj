@@ -57,8 +57,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.id">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="..\..\bin\Debug\mods\test.id">
+      <Link>mods\test.id</Link>
     </None>
   </ItemGroup>
 </Project>

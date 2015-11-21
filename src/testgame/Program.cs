@@ -26,6 +26,7 @@ namespace testgame
 
 	class TestGame : Game
 	{
+		IodineVM vm;
 		double time_accum;
 		int updates;
 		bool first;
@@ -35,10 +36,23 @@ namespace testgame
 		}
 
 		protected override void Initialize () {
-			var vm = new IodineVM ();
+
+			// Create the iodine vm
+			vm = new IodineVM ();
+
+			// Expose functions to the vm
 			vm.ExposeFunction ("SayHello", SayHello);
-			vm.LoadModule ("test.id");
-			vm.Invoke ("hello");
+
+			// Load modules
+			vm.LoadModules (
+				"mods\\test.id"
+			);
+
+			// Observe modules for live-reload
+			vm.Observe (
+				"mods\\test.id"
+			);	
+
 			base.Initialize ();
 		}
 
@@ -46,11 +60,12 @@ namespace testgame
 			updates++;
 			time_accum += time.Elapsed.TotalMilliseconds;
 			if (time_accum >= 1000d) {
-				if (!first)
-					this.Log ("Measured fps: {0}", updates);
+				//if (!first)
+				//	this.Log ("Measured fps: {0}", updates);
 				first = false;
 				updates = 0;
 				time_accum = 1000d - time_accum;
+				vm.Invoke ("hello");
 			}
 			base.Update (time);
 		}
