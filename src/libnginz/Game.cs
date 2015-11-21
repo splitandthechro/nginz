@@ -116,13 +116,6 @@ namespace nginz
 			var trd = new Thread (EnterGameloop);
 			trd.Start ();
 
-			// Wait till the context is available
-			while (context == null) { }
-
-			// Initialize the game
-			this.Log ("Initializing game");
-			Initialize ();
-
 			// Subscribe to the Resize event of the window
 			// to correctly handle resizing of the window
 			window.Resize += (sender, e) => context.Update (window.WindowInfo);
@@ -179,6 +172,10 @@ namespace nginz
 			// Load OpenGL entry points
 			this.Log ("Loading OpenGL entry points");
 			context.LoadAll ();
+
+			// Initialize the game
+			this.Log ("Initializing game");
+			Initialize ();
 
 			// Set target framerate
 			// Use 60hz if framerate is not set
