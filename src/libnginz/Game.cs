@@ -102,11 +102,7 @@ namespace nginz
 		/// Run the game.
 		/// </summary>
 		public void Run () {
-
-			// Call virtual Initialize function
-			this.Log ("Initializing game");
-			Initialize ();
-
+			
 			// Start gameloop in a separate thread
 			var trd = new Thread (EnterGameloop);
 			trd.Start ();
@@ -118,6 +114,10 @@ namespace nginz
 			// Subscribe to the Closing event of the window
 			// to dispose the context when closing the window.
 			window.Closing += (sender, e) => context.Dispose ();
+
+			// Initialize the game
+			this.Log ("Initializing game");
+			Initialize ();
 
 			// Present the window to the user
 			window.Visible = true;
