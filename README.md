@@ -8,7 +8,9 @@ If you try to use it and it suddenly decides to eat your cat, don't blame it on 
 As Eminem said: With great power comes absolutely no responsibility.
 
 # Technology
-nginz is built on top of OpenTK.
+nginz is built on top of [OpenTK] and [Iodine].
 
-  [licenseurl]: https://tldrlegal.com/license/zlib-libpng-license-(zlib)
-  [licenseimg]: https://img.shields.io/badge/license-zlib--libpng-blue.svg?style=flat-square
+[licenseurl]: https://tldrlegal.com/license/zlib-libpng-license-(zlib)
+[licenseimg]: https://img.shields.io/badge/license-zlib--libpng-blue.svg?style=flat-square
+[OpenTK]: https://github.com/OpenTK/OpenTK "OpenTK"
+[Iodine]: https://github.com/IodineLang/Iodine "Iodine"
