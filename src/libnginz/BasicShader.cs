@@ -27,16 +27,16 @@ namespace nginz
 			// Create the shader
 			shaderId = GL.CreateShader (shaderType);
 
-			var lens = new int[shaderSources.Length];
-			for (var i = 0; i < lens.Length; i++)
-				lens [i] = -1;
+			var lengths = new int[shaderSources.Length];
+			for (var i = 0; i < lengths.Length; i++)
+				lengths [i] = -1;
 
 			// Load the shader sources
 			GL.ShaderSource (
 				shader: shaderId,
 				count: shaderSources.Length,
 				@string: shaderSources,
-				length: ref lens [0]
+				length: ref lengths [0]
 			);
 
 			// Compile the shader
