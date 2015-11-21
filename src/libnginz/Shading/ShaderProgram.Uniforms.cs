@@ -40,7 +40,7 @@ namespace nginz
 		/// </summary>
 		/// <returns>The uniform.</returns>
 		/// <param name="uniform">Uniform.</param>
-		object GetUniform (string uniform) {
+		int GetUniform (string uniform) {
 
 			// Check if the uniform exists
 			if (!uniforms.ContainsKey (uniform)) {
