@@ -28,9 +28,6 @@ tarballs/
 test-results/
 Thumbs.db
 
-# Allow iodine mods
-![Bb]in/*/mods/*.id
-
 # Mac bundle stuff
 *.dmg
 *.app
