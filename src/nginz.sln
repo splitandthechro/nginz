@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libIodine", "..\iodine-buil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Common", "libnginz.Common\libnginz.Common.csproj", "{C6313A63-A0A2-46CC-8B0C-9D60C226F707}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Iodine.nginzcore", "libnginz.Interop.Iodine.nginzcore\libnginz.Interop.Iodine.nginzcore.csproj", "{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,14 @@ Global
 		{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}.Release|Any CPU.Build.0 = Release|x86
 		{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}.Release|x86.ActiveCfg = Release|x86
 		{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}.Release|x86.Build.0 = Release|x86
+		{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}.Debug|x86.Build.0 = Debug|Any CPU
+		{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}.Release|x86.ActiveCfg = Release|Any CPU
+		{8B7A8420-F913-402F-BDD4-CFB2B57FE9B2}.Release|x86.Build.0 = Release|Any CPU
 		{C6313A63-A0A2-46CC-8B0C-9D60C226F707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6313A63-A0A2-46CC-8B0C-9D60C226F707}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6313A63-A0A2-46CC-8B0C-9D60C226F707}.Debug|x86.ActiveCfg = Debug|Any CPU
