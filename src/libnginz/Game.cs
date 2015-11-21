@@ -3,7 +3,6 @@ using System.Threading;
 using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
 
 namespace nginz
 {

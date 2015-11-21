@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using nginz.Common;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace nginz
@@ -61,6 +59,10 @@ namespace nginz
 			AttachAll ();
 		}
 
+		/// <summary>
+		/// Use the shader program.
+		/// </summary>
+		/// <returns>The handle of the previous shader program.</returns>
 		public ShaderProgramHandle UseProgram () {
 
 			// Get the handle of the current shader program

@@ -7,6 +7,9 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace nginz
 {
+	/// <summary>
+	/// Shader program.
+	/// </summary>
 	public partial class ShaderProgram
 	{
 
@@ -15,15 +18,28 @@ namespace nginz
 		/// </summary>
 		Dictionary<string, int> uniforms;
 
+		/// <summary>
+		/// Gets or sets the specified uniform.
+		/// </summary>
+		/// <param name="uniform">Uniform.</param>
 		public object this [string uniform] {
 			get { return GetUniform (uniform); }
 			set { SetUniform (uniform, value); }
 		}
 
+		/// <summary>
+		/// Gets or sets the specfied uniform by its identifier.
+		/// </summary>
+		/// <param name="uniformId">Uniform identifier.</param>
 		public object this [int uniformId] {
 			set { SetUniformValue (uniformId, value); }
 		}
 
+		/// <summary>
+		/// Gets the uniform.
+		/// </summary>
+		/// <returns>The uniform.</returns>
+		/// <param name="uniform">Uniform.</param>
 		object GetUniform (string uniform) {
 
 			// Check if the uniform exists
@@ -37,6 +53,11 @@ namespace nginz
 			return uniforms [uniform];
 		}
 
+		/// <summary>
+		/// Sets the uniform.
+		/// </summary>
+		/// <param name="uniform">Uniform.</param>
+		/// <param name="value">Value.</param>
 		void SetUniform (string uniform, object value) {
 
 			// Check if another program is loaded
@@ -51,6 +72,11 @@ namespace nginz
 			this [(int) this [uniform]] = value;
 		}
 
+		/// <summary>
+		/// Sets the uniform value.
+		/// </summary>
+		/// <param name="uniformId">Uniform identifier.</param>
+		/// <param name="value">Value.</param>
 		void SetUniformValue (int uniformId, object value) {
 
 			// Check if another program is loaded
