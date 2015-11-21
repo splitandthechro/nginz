@@ -53,10 +53,11 @@ namespace nginz
 			programId = GL.CreateProgram ();
 
 			// Initialize the shaderObjects list with the shaders 
-			shaderObjects = new List<Shader> (shaders);
+			shaderObjects = new List<Shader> (shaders.Length);
 
 			// Attach all shaders to the program
-			AttachAll ();
+			foreach (var shader in shaders)
+				Attach (shader);
 		}
 
 		/// <summary>
@@ -120,16 +121,6 @@ namespace nginz
 
 			// Add the shader to the shaderObjects list
 			shaderObjects.Add (shader);
-		}
-
-		/// <summary>
-		/// Attach all shaders.
-		/// </summary>
-		void AttachAll () {
-
-			// Attach all shaders to the program
-			for (var i = 0; i < shaderObjects.Count; i++)
-				GL.AttachShader (programId, shaderObjects [i].ShaderId);
 		}
 
 		public void Detach (Shader shader) {
