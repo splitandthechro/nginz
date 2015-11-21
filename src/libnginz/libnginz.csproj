@@ -38,12 +38,13 @@
     <Compile Include="GameConfiguration.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="VsyncMode.cs" />
-    <Compile Include="Shader.cs" />
     <Compile Include="Shading\BasicShader.cs" />
     <Compile Include="Shading\FragmentShader.cs" />
     <Compile Include="Shading\GeometryShader.cs" />
     <Compile Include="Shading\VertexShader.cs" />
     <Compile Include="Extensions\ShaderExtensions.cs" />
+    <Compile Include="Shading\ShaderProgram.cs" />
+    <Compile Include="Shading\Shader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
