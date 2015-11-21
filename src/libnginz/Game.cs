@@ -107,6 +107,14 @@ namespace nginz
 			var trd = new Thread (EnterGameloop);
 			trd.Start ();
 
+			// Wait till context is created
+			while (context == null) {
+			}
+
+			// Initialize the game
+			this.Log ("Initializing game");
+			Initialize ();
+
 			// Subscribe to the Resize event of the window
 			// to correctly handle resizing of the window
 			window.Resize += (sender, e) => context.Update (window.WindowInfo);
@@ -114,10 +122,6 @@ namespace nginz
 			// Subscribe to the Closing event of the window
 			// to dispose the context when closing the window.
 			window.Closing += (sender, e) => context.Dispose ();
-
-			// Initialize the game
-			this.Log ("Initializing game");
-			Initialize ();
 
 			// Present the window to the user
 			window.Visible = true;
