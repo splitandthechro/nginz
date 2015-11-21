@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using nginz;
 using nginz.Common;
 using OpenTK;
@@ -29,11 +23,13 @@ namespace othertestgame {
 	}
 
 	class TestGame : Game, ICanLog {
+		
 		Vector3[] points = {
 			new Vector3 (.0f, .5f, .0f),
 			new Vector3 (.5f, -.5f, .0f),
 			new Vector3 (-.5f, -.5f, .0f),
 		};
+
 		Color4[] colors = {
 			new Color4 (1.0f, 0.0f, 0.0f, 1.0f),
 			new Color4 (0.0f, 1.0f, 0.0f, 1.0f),
@@ -54,19 +50,20 @@ namespace othertestgame {
 
 			GraphicsContext.Assert ();
 
-			this.vbo = new GLBuffer<Vector3> (BufferTarget.ArrayBuffer, this.points, BufferUsageHint.StaticDraw);
-			this.cbo = new GLBuffer<Color4> (BufferTarget.ArrayBuffer, this.colors, BufferUsageHint.StaticDraw);
+			vbo = new GLBuffer<Vector3> (BufferTarget.ArrayBuffer, points, BufferUsageHint.StaticDraw);
+			cbo = new GLBuffer<Color4> (BufferTarget.ArrayBuffer, colors, BufferUsageHint.StaticDraw);
 
-			program = new ShaderProgram (BasicShader.FromFile<VertexShader> ("shaders\\passthrough.vs"),
-										BasicShader.FromFile<FragmentShader> ("shaders\\passthrough.fs"));
+			var vertexShader = BasicShader.FromFile<VertexShader> ("shaders\\passthrough.vs");
+			var fragmentShader = BasicShader.FromFile<FragmentShader> ("shaders\\passthrough.fs");
+			program = new ShaderProgram (vertexShader, fragmentShader);
 
 			program.Link ();
 
-			this.abo = GL.GenVertexArray ();
-			GL.BindVertexArray (this.abo);
+			abo = GL.GenVertexArray ();
+			GL.BindVertexArray (abo);
 			
-			this.vbo.PointTo (this.program.Attrib ("v_pos"), VertexAttribPointerType.Float);
-			this.cbo.PointTo (this.program.Attrib ("v_col"), VertexAttribPointerType.Float);
+			vbo.PointTo (program.Attrib ("v_pos"), VertexAttribPointerType.Float);
+			cbo.PointTo (program.Attrib ("v_col"), VertexAttribPointerType.Float);
 		}
 
 		protected override void Update (GameTime time) {

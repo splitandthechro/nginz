@@ -2,9 +2,9 @@
 
 namespace nginz.Interop.Iodine.nginzcore
 {
-	public class MyClass
+	public class GLBufferModule
 	{
-		public MyClass () {
+		public GLBufferModule () {
 		}
 	}
 }

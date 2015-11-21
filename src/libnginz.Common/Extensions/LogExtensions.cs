@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace nginz.Common
 {
+	/// <summary>
+	/// Log extensions.
+	/// </summary>
 	public static class LogExtensions
 	{
 		public static void Log<T> (this T dummy, string format, params object[] args)
