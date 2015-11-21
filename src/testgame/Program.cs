@@ -44,7 +44,7 @@ namespace testgame
 
 		protected override void Update (GameTime time) {
 			updates++;
-			time_accum += time.Elapsed.Milliseconds;
+			time_accum += time.Elapsed.TotalMilliseconds;
 			if (time_accum >= 1000d) {
 				if (!first)
 					this.Log ("Measured fps: {0}", updates);
