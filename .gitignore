@@ -3,7 +3,6 @@
 
 # build
 [Oo]bj/
-[Bb]in
 packages/
 TestResults/
 
