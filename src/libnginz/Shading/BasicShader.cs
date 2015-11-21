@@ -4,6 +4,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System.IO;
+using System.Text;
 
 namespace nginz
 {
@@ -18,6 +19,7 @@ namespace nginz
 		/// <param name="type">Type.</param>
 		/// <param name="sources">Sources.</param>
 		public BasicShader (ShaderType type, params string[] sources) : base (type, sources) {
+			this.Compile ();
 		}
 
 		/// <summary>
@@ -25,26 +27,9 @@ namespace nginz
 		/// </summary>
 		/// <param name="type">Type.</param>
 		/// <param name="sources">Sources.</param>
-		public static BasicShader Create (ShaderType type, params string[] sources) {
-
-			// Check if another shader class should be returned
-			switch (type) {
-
-			// Return vertex shader
-			case ShaderType.VertexShader:
-				return new VertexShader (sources);
-
-			// Return geometry shader
-			case ShaderType.GeometryShader:
-				return new GeometryShader (sources);
-
-			// Return fragment shader
-			case ShaderType.FragmentShader:
-				return new FragmentShader (sources);
-			}
-
+		public static Shader Create<Shader> (params string[] sources) where Shader : BasicShader {
 			// Return basic shader
-			return new BasicShader (type, sources);
+			return (Shader) Activator.CreateInstance(typeof(Shader), sources);
 		}
 
 		/// <summary>
@@ -53,20 +38,20 @@ namespace nginz
 		/// <returns>The shader.</returns>
 		/// <param name="type">Type.</param>
 		/// <param name="path">Path.</param>
-		public static BasicShader FromFile (ShaderType type, string path) {
+		public static Shader FromFile<Shader>(string path) where Shader : BasicShader {
 
 			// Get the full path
 			var fullpath = Path.GetFullPath (path);
 
 			// Throw if the file doesn't exist
 			if (!File.Exists (fullpath))
-				LogExtensions.Throw ("Could not load {0} from file. Reason: File not found: {1}", type, path);
+				LogExtensions.Throw ("Could not load {0} from file. Reason: File not found: {1}", (object) typeof(Shader).Name, path);
 
 			// Read the source code from the file
-			var source = File.ReadAllText (fullpath);
+			var source = File.ReadAllText (fullpath, Encoding.ASCII);
 
 			// Create and return the shader
-			return Create (type, path);
+			return Create<Shader> (source);
 		}
 
 		/// <summary>

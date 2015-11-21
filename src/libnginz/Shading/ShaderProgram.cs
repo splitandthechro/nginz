@@ -49,6 +49,8 @@ namespace nginz
 			// Initialize uniforms
 			uniforms = new Dictionary<string, int> ();
 
+			attributes = new Dictionary<string, int> ();
+
 			// Create the shader program
 			programId = GL.CreateProgram ();
 

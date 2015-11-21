@@ -16,7 +16,7 @@ namespace nginz.Common
 			var classname = stackframe.GetMethod ().DeclaringType.Name;
 			throw new Exception (string.Format ("[{0}] {1}", classname, string.Format (format, args)));
 		}
-
+		
 		public static void Throw<T> (this T dummy, string format, params object[] args)
 			where T : class, ICanThrow {
 			throw new Exception (string.Format ("[{0}] {1}", dummy.GetType ().Name, string.Format (format, args)));
