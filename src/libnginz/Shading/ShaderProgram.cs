@@ -1,20 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
+using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
-using System.Collections.Generic;
 
 namespace nginz
 {
 	/// <summary>
 	/// Shader program.
 	/// </summary>
-	public class ShaderProgram : IDisposable
+	public partial class ShaderProgram : ICanThrow, IDisposable
 	{
+		/// <summary>
+		/// The current shader program identifier.
+		/// </summary>
+		public static int CurrentProgramId;
+
+		/// <summary>
+		/// Initializes the <see cref="nginz.ShaderProgram"/> class.
+		/// </summary>
+		static ShaderProgram () {
+
+			// Initialize the current program id to 0
+			CurrentProgramId = 0;
+		}
+
 		/// <summary>
 		/// The shader objects.
 		/// </summary>
-		List<Shader> shaderObjects;
+		readonly List<Shader> shaderObjects;
 
 		/// <summary>
 		/// The program identifier.
@@ -33,6 +48,9 @@ namespace nginz
 		/// <param name="shaders">Shaders.</param>
 		public ShaderProgram (params Shader[] shaders) {
 
+			// Initialize uniforms
+			uniforms = new Dictionary<string, int> ();
+
 			// Create the shader program
 			programId = GL.CreateProgram ();
 
@@ -41,6 +59,52 @@ namespace nginz
 
 			// Attach all shaders to the program
 			AttachAll ();
+		}
+
+		public ShaderProgramHandle UseProgram () {
+
+			// Get the handle of the current shader program
+			var handle = new ShaderProgramHandle (CurrentProgramId);
+
+			// Check if the shader program doesn't equal the current one
+			if (CurrentProgramId != programId) {
+
+				// Use this shader program
+				GL.UseProgram (programId);
+
+				// Make the shader program the current one
+				CurrentProgramId = programId;
+			}
+
+			// Return the handle of the previous shader program
+			return handle;
+		}
+
+		/// <summary>
+		/// Link the program.
+		/// </summary>
+		public void Link () {
+
+			// Link the shader program
+			GL.LinkProgram (programId);
+
+			// Ge the shader link status
+			int status;
+			GL.GetProgram (
+				program: programId,
+				pname: GetProgramParameterName.LinkStatus,
+				@params: out status
+			);
+
+			// Check if there was an error linking the shader
+			if (status == 0) {
+
+				// Get the error message
+				var error = GL.GetProgramInfoLog (programId);
+
+				// Throw an exception
+				this.Throw ("Could not link program: {0}", error);
+			}
 		}
 
 		/// <summary>
@@ -64,6 +128,19 @@ namespace nginz
 			// Attach all shaders to the program
 			for (var i = 0; i < shaderObjects.Count; i++)
 				GL.AttachShader (programId, shaderObjects [i].ShaderId);
+		}
+
+		public void Detach (Shader shader) {
+
+			// Check if the shader is loaded
+			if (shaderObjects.Contains (shader)) {
+			
+				// Detach the shader from the program
+				GL.DetachShader (programId, shader.ShaderId);
+
+				// Remove the shader from the shaderObjects list
+				shaderObjects.Remove (shader);
+			}
 		}
 
 		/// <summary>
@@ -97,6 +174,10 @@ namespace nginz
 			// Delete the program if its id is not -1
 			if (programId != -1)
 				GL.DeleteProgram (programId);
+
+			// Clear shaders
+			// TODO: Check if detaching the shaders is needed
+			shaderObjects.Clear ();
 
 			// Set the program id to -1
 			programId = -1;

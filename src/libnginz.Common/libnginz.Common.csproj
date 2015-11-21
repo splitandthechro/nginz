@@ -34,6 +34,7 @@
     <Compile Include="Interfaces\ICanLog.cs" />
     <Compile Include="Interfaces\ICanThrow.cs" />
     <Compile Include="Extensions\LogExtensions.cs" />
+    <Compile Include="TypeSwitch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -31,6 +31,7 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\opentk-build\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -45,6 +46,9 @@
     <Compile Include="Extensions\ShaderExtensions.cs" />
     <Compile Include="Shading\ShaderProgram.cs" />
     <Compile Include="Shading\Shader.cs" />
+    <Compile Include="Shading\ShaderProgram.Func.cs" />
+    <Compile Include="Shading\ShaderProgram.Uniforms.cs" />
+    <Compile Include="Shading\ShaderProgramHandle.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

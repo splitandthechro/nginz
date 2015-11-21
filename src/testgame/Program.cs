@@ -7,7 +7,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace testgame
 {
-    class MainClass
+	class MainClass
 	{
 		public static void Main (string[] args) {
 			var conf = new GameConfiguration {
@@ -24,8 +24,8 @@ namespace testgame
 		}
 	}
 
-    class TestGame : Game
-    {
+	class TestGame : Game
+	{
 		double time_accum;
 		int updates;
 		bool first;
@@ -65,5 +65,5 @@ namespace testgame
 			Console.WriteLine ("Hello from C#, invoked from Iodine!");
 			return null;
 		}
-    }
+	}
 }

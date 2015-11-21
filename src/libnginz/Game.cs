@@ -7,8 +7,8 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace nginz
 {
-    public class Game : ICanLog, ICanThrow
-    {
+	public class Game : ICanLog, ICanThrow
+	{
 		/// <summary>
 		/// The game configuration.
 		/// </summary>
@@ -182,7 +182,7 @@ namespace nginz
 			var gameTime = GameTime.ZeroTime;
 			var updateTime = 0d;
 			var updateAccumTime = 0d;
-			var updateDeltaTime = 1d / (double)framerate;
+			var updateDeltaTime = 1d / (double) framerate;
 			var updateCurrentTime = now.Subtract (startTime).TotalSeconds;
 
 			// Enter the actual game loop
@@ -252,6 +252,6 @@ namespace nginz
 				Draw (gameTime);
 			}
 		}
-    }
+	}
 }
 

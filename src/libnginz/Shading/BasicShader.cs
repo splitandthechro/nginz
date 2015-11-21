@@ -1,8 +1,8 @@
 ﻿using System;
+using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
-using nginz.Common;
 
 namespace nginz
 {
@@ -53,7 +53,7 @@ namespace nginz
 			// Check if there was an error compiling the shader
 			if (status == 0) {
 
-				// Get the error string
+				// Get the error message
 				var error = GL.GetShaderInfoLog (shaderId);
 
 				// Throw an exception
