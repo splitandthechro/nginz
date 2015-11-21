@@ -4,6 +4,7 @@ using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
+using System.Drawing;
 
 namespace nginz
 {
@@ -90,19 +91,20 @@ namespace nginz
 			// Set the uniform
 			using (UseProgram ()) {
 				TypeSwitch.On (value)
-				.Case ((int x) => GL.Uniform1 (uniformId, x))
-				.Case ((uint x) => GL.Uniform1 (uniformId, x))
-				.Case ((float x) => GL.Uniform1 (uniformId, x))
-				.Case ((Vector2 x) => GL.Uniform2 (uniformId, x))
-				.Case ((Vector3 x) => GL.Uniform3 (uniformId, x))
-				.Case ((Vector4 x) => GL.Uniform4 (uniformId, x))
-				.Case ((Quaternion x) => GL.Uniform4 (uniformId, x))
-				.Case ((Color4 x) => GL.Uniform4 (uniformId, x))
-				.Case ((int[] x) => GL.Uniform1 (uniformId, x.Length, x))
-				.Case ((uint[] x) => GL.Uniform1 (uniformId, x.Length, x))
-				.Case ((float[] x) => GL.Uniform1 (uniformId, x.Length, x))
-				.Case ((Matrix4 x) => GL.UniformMatrix4 (uniformId, false, ref x))
-				.Default (x => this.Throw ("GlUniform type {0} is not (yet?) implemented.", value.GetType ().FullName));
+					.Case ((int x) => GL.Uniform1 (uniformId, x))
+					.Case ((uint x) => GL.Uniform1 (uniformId, x))
+					.Case ((float x) => GL.Uniform1 (uniformId, x))
+					.Case ((Vector2 x) => GL.Uniform2 (uniformId, x))
+					.Case ((Vector3 x) => GL.Uniform3 (uniformId, x))
+					.Case ((Vector4 x) => GL.Uniform4 (uniformId, x))
+					.Case ((Quaternion x) => GL.Uniform4 (uniformId, x))
+					.Case ((Color4 x) => GL.Uniform4 (uniformId, x))
+					.Case ((int[] x) => GL.Uniform1 (uniformId, x.Length, x))
+					.Case ((uint[] x) => GL.Uniform1 (uniformId, x.Length, x))
+					.Case ((float[] x) => GL.Uniform1 (uniformId, x.Length, x))
+					.Case ((Matrix4 x) => GL.UniformMatrix4 (uniformId, false, ref x))
+					.Case ((Color x) => GL.Uniform4 (uniformId, x.R, x.G, x.B, x.A))
+					.Default (x => this.Throw ("GlUniform type {0} is not (yet?) implemented.", value.GetType ().FullName));
 			}
 		}
 	}
