@@ -1,0 +1,3 @@
+﻿func hello () {
+	print ("Hello from Iodine!");
+}

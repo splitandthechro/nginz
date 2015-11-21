@@ -37,6 +37,9 @@ namespace testgame
 
 		protected override void Initialize () {
 
+			// Mod directory
+			const string mods = "..\\..\\mods\\";
+
 			// Create the iodine vm
 			vm = new IodineVM ();
 
@@ -45,12 +48,12 @@ namespace testgame
 
 			// Load modules
 			vm.LoadModules (
-				"mods\\test.id"
+				mods + "test.id"
 			);
 
 			// Observe modules for live-reload
 			vm.Observe (
-				"mods\\test.id"
+				mods + "test.id"
 			);	
 
 			base.Initialize ();
