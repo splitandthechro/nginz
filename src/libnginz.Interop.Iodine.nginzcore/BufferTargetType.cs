@@ -20,15 +20,20 @@ namespace nginz.Interop.Iodine.nginzcore
 
 			// arguments [0]: IodineString
 			public override IodineObject Invoke (VirtualMachine vm, IodineObject[] arguments) {
-				this.Log ("kek");
+
+				// Read the enum name
 				var name = arguments [0] as IodineString;
-				this.Log ("Name: {0}", name);
+
+				// Return the BufferTarget
 				return new BufferTargetType (name.Value);
 			}
 		}
 
 		public BufferTargetType (string name) : base (typeDef) {
-			Value = (BufferTarget) Enum.Parse (typeof(BufferTarget), name);
+
+			// Try to parse the BufferTargetType
+			if (!Enum.TryParse<BufferTarget> (name, out Value))
+				this.IodineError ("Invalid BufferTarget: {0}", name);
 		}
 	}
 }
