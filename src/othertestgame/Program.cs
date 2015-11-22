@@ -72,8 +72,8 @@ namespace othertestgame {
 			abo = GL.GenVertexArray ();
 			GL.BindVertexArray (abo);
 
-			vbo.PointTo (0, 3, VertexAttribPointerType.Float);
-			cbo.PointTo (1, 3, VertexAttribPointerType.Float);
+			vbo.PointTo (program.Attrib ("v_pos"), 3, VertexAttribPointerType.Float);
+			cbo.PointTo (program.Attrib ("v_col"), 3, VertexAttribPointerType.Float);
 
 			GL.BindVertexArray (0);
 		}
