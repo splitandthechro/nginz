@@ -83,7 +83,7 @@ namespace nginz {
 		/// <param name="type">Type.</param>
 		/// <param name="normalized">If set to <c>true</c> normalized.</param>
 		/// <param name="offset">Offset.</param>
-		public void PointTo (int index, VertexAttribPointerType type, bool normalized = false, int offset = 0) {
+		public void PointTo (int index, int size, VertexAttribPointerType type, bool normalized = false, int offset = 0) {
 
 			// Bind buffer
 			Bind ();
@@ -92,7 +92,7 @@ namespace nginz {
 			GL.EnableVertexAttribArray (index);
 
 			// Set vertex attribute pointer
-			GL.VertexAttribPointer (index, Buffer.Length, type, normalized, ElementSize, offset);
+			GL.VertexAttribPointer (index, size, type, normalized, ElementSize, offset);
 
 			// Unbind buffer
 			Unbind ();
