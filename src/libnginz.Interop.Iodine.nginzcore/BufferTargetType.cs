@@ -7,22 +7,28 @@ namespace nginz.Interop.Iodine.nginzcore
 {
 	public class BufferTargetType : IodineObject, ICanLog
 	{
-		readonly static IodineTypeDefinition typeDef;
+		readonly public static IodineTypeDefinition typeDef;
 
 		static BufferTargetType () {
-			typeDef = new IodineTypeDefinition ("GLBuffer");
+			typeDef = new BufferTargetTypeDefinition ("BufferTarget");
 		}
 
-		public BufferTargetType () : base (typeDef) {
-			var names = Enum.GetNames (typeof(BufferTarget));
-			foreach (var name in names) {
-				this.Log ("Registering {{{0} => {1}}}", name, BufferTargetValue (name));
-				SetAttribute (name, BufferTargetValue (name));
+		public BufferTarget Value;
+
+		class BufferTargetTypeDefinition : IodineTypeDefinition, ICanLog {
+			public BufferTargetTypeDefinition (string name) : base (name) { }
+
+			// arguments [0]: IodineString
+			public override IodineObject Invoke (VirtualMachine vm, IodineObject[] arguments) {
+				this.Log ("kek");
+				var name = arguments [0] as IodineString;
+				this.Log ("Name: {0}", name);
+				return new BufferTargetType (name.Value);
 			}
 		}
 
-		static IodineInteger BufferTargetValue (string name) {
-			return new IodineInteger ((long)Enum.Parse (typeof (BufferTarget), name));
+		public BufferTargetType (string name) : base (typeDef) {
+			Value = (BufferTarget) Enum.Parse (typeof(BufferTarget), name);
 		}
 	}
 }

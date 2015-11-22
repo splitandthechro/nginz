@@ -7,12 +7,8 @@ namespace nginz.Interop.Iodine.nginzcore
 	public class nginzcoreModule : IodineModule
 	{
 		public nginzcoreModule () : base ("nginz") {
-			var glBufferCallback = new InternalMethodCallback (createGlBuffer, this);
-			SetAttribute ("GLBuffer", glBufferCallback);
-		}
-
-		static IodineObject createGlBuffer (VirtualMachine vm, IodineObject self, IodineObject[] args) {
-			return new GLBufferType ();
+			SetAttribute ("GLBuffer", GLBufferType.typeDef);
+			SetAttribute ("BufferTarget", BufferTargetType.typeDef);
 		}
 	}
 }
