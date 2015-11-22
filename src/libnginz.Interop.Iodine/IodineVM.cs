@@ -34,6 +34,11 @@ namespace nginz.Interop.Iodine
 		IodineModule exposedModule;
 
 		/// <summary>
+		/// Module that contains the nginz core.
+		/// </summary>
+		IodineModule nginzcore;
+
+		/// <summary>
 		/// The livereload watchers.
 		/// </summary>
 		List<FileSystemWatcher> livereloadWatchers;
@@ -66,10 +71,24 @@ namespace nginz.Interop.Iodine
 			livereloadTempFiles = new List<string> ();
 
 			// Create a module to hold the functions exposed to the vm
-			exposedModule = new IodineModule ("nginz");
+			exposedModule = new IodineModule ("nginzgame");
+
+			// Load nginz core module
+			const string nginzcore_path = "libnginz.Interop.Iodine.nginzcore.dll";
+			nginzcore = IodineModule.LoadExtensionModule ("nginz", nginzcore_path);
 
 			// Add the module that holds the exposed functions to the globals
-			vm.Globals.Add ("nginz", exposedModule);
+			vm.Globals.Add ("nginzgame", exposedModule);
+			vm.Globals.Add ("nginz", nginzcore);
+
+			if (nginzcore == null)
+				this.Log ("Error loading nginzcore");
+
+			if (nginzcore != null) {
+				foreach (var attrib in nginzcore.Attributes) {
+					this.Log ("Attrib: nginz/{0}", attrib.Key);
+				}
+			}
 		}
 
 		/// <summary>
@@ -84,7 +103,8 @@ namespace nginz.Interop.Iodine
 			vm = new VirtualMachine (new IodineConfiguration ());
 
 			// Add the module that holds the exposed functions to the globals
-			vm.Globals.Add ("nginz", exposedModule);
+			vm.Globals.Add ("nginzgame", exposedModule);
+			vm.Globals.Add ("nginz", nginzcore);
 		}
 
 		/// <summary>
@@ -112,6 +132,7 @@ namespace nginz.Interop.Iodine
 		public void Watch (string directory) {
 
 			// The full path of the directory
+			directory = directory.EndsWith ("\\") ? directory : directory + "\\";
 			var directorypath = Path.GetFullPath (directory);
 
 			// Throw if the directory doesn't exist
@@ -122,11 +143,15 @@ namespace nginz.Interop.Iodine
 			if (livereloadWatchers.All (watcher => Path.GetFullPath (watcher.Path) != directorypath)) {
 
 				// Create the watcher
+				this.Log (directorypath);
 				var watcher = CreateFilesystemWatcher (directorypath);
 
 				// Add the watcher to the list of watchers
 				livereloadWatchers.Add (watcher);
-				this.Log ("Added {0} directory to live-reload watch.", Path.GetDirectoryName (directorypath));
+
+				// Log the directory name
+				var directoryname = Directory.GetParent (directorypath).Name;
+				this.Log ("Added {0} directory to live-reload watch.", directoryname);
 			}
 		}
 
@@ -140,7 +165,7 @@ namespace nginz.Interop.Iodine
 			var filepath = Path.GetFullPath (file);
 
 			// Get the directory of the path
-			var directory = Path.GetFullPath (Path.GetDirectoryName (file));
+			var directory = Path.GetFullPath (Path.GetDirectoryName (filepath));
 
 			// Observe the directory
 			Watch (directory);
@@ -173,7 +198,13 @@ namespace nginz.Interop.Iodine
 		public void LoadModule (string path) {
 
 			// Load module from file
-			var module = IodineModule.LoadModule (log, path);
+			IodineModule module;
+			try {
+				module = IodineModule.LoadModule (log, path);
+			} catch (Exception ex) {
+				this.Log (ex.Message);
+				return;
+			}
 
 			// Throw if module is null
 			if (module == null)
@@ -272,9 +303,16 @@ namespace nginz.Interop.Iodine
 				throw new Exception (string.Format ("Attribute '{0}' is defined more than once!", function));
 
 			// Invoke the function
-			foreach (var module in modules)
-				if (module.HasAttribute (function))
-					return module.GetAttribute (function).Invoke (vm, args);
+			foreach (var module in modules) {
+				if (module.HasAttribute (function)) {
+					try {
+						return module.GetAttribute (function).Invoke (vm, args);
+					} catch (UnhandledIodineExceptionException ex) {
+						var originalException = (IodineException) ex.OriginalException;
+						this.Log ("! {0}: {1}", function, originalException.Message);
+					}
+				}
+			}
 
 			return null;
 		}

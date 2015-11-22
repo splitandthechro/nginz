@@ -176,9 +176,9 @@
     <Compile Include="Runtime\CoreTypes\IodineInterface.cs" />
     <Compile Include="Runtime\CoreTypes\IodineModule.cs" />
     <Compile Include="Compiler\SyntaxException.cs" />
-    <Compile Include="Runtime\IodineBuiltinModule.cs" />
     <Compile Include="Runtime\Debug\DebugServer.cs" />
     <Compile Include="Runtime\Debug\DebugSession.cs" />
+    <Compile Include="Runtime\IodineBuiltinModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

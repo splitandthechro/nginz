@@ -179,14 +179,13 @@ namespace Iodine.Runtime
 			return null;
 		}
 
-		private static IodineModule LoadExtensionModule (string module, string dll)
+		public static IodineModule LoadExtensionModule (string module, string dll)
 		{
 			Assembly extension = Assembly.Load (AssemblyName.GetAssemblyName (dll));
 
 			foreach (Type type in extension.GetTypes ()) {
-				if (type.IsDefined (typeof(IodineBuiltinModule), false)) {
-					IodineBuiltinModule attr = (IodineBuiltinModule)type.GetCustomAttributes (
-						typeof(IodineBuiltinModule), false).First ();
+				var attr = type.GetCustomAttributes (typeof(IodineBuiltinModule), true).FirstOrDefault () as IodineBuiltinModule;
+				if (attr != null) {
 					if (attr.Name == module) {
 						return (IodineModule)type.GetConstructor (new Type[] { }).Invoke (new object[]{ });
 					}
