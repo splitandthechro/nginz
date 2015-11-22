@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using nginz.Common;
 using OpenTK.Graphics.OpenGL4;
 
 namespace nginz {
@@ -7,23 +8,14 @@ namespace nginz {
 	/// <summary>
 	/// GL buffer.
 	/// </summary>
-	public class GLBuffer<T> where T : struct {
+	public class GLBuffer<T> : IBind<int>, IPointTo<int> where T : struct {
 
 		/// <summary>
 		/// The buffer identifier.
 		/// </summary>
 		readonly public int BufferId;
 
-		/// <summary>
-		/// The buffer target.
-		/// </summary>
-		readonly BufferTarget Target;
-
-		/// <summary>
-		/// The buffer usage hint.
-		/// </summary>
-		/// <value>The hint.</value>
-		BufferUsageHint Hint;
+		public GLBufferSettings Settings;
 
 		/// <summary>
 		/// Gets or sets the size of the buffer.
@@ -49,19 +41,14 @@ namespace nginz {
 		/// <param name="target">Target.</param>
 		/// <param name="buffer">Buffer.</param>
 		/// <param name="hint">Hint.</param>
-		public GLBuffer (BufferTarget target, T[] buffer, BufferUsageHint hint) {
-
-			// Set the buffer target
-			Target = target;
+		public GLBuffer (GLBufferSettings settings, T[] buffer) {
+			Settings = settings;
 
 			// Set the buffer
 			Buffer = buffer;
 
 			// Calculate the buffer size
 			BufferSize = Marshal.SizeOf (buffer [0]) * Buffer.Length;
-
-			// Set the buffer usage hint
-			Hint = hint;
 
 			// Generate the buffer
 			BufferId = GL.GenBuffer ();
@@ -70,7 +57,7 @@ namespace nginz {
 			Bind ();
 
 			// Set the buffer data
-			GL.BufferData (Target, BufferSize, Buffer, Hint);
+			GL.BufferData (Settings.Target, BufferSize, Buffer, Settings.Hint);
 
 			// Unbind the data
 			Unbind ();
@@ -83,7 +70,7 @@ namespace nginz {
 		/// <param name="type">Type.</param>
 		/// <param name="normalized">If set to <c>true</c> normalized.</param>
 		/// <param name="offset">Offset.</param>
-		public void PointTo (int index, int size, VertexAttribPointerType type, bool normalized = false, int offset = 0) {
+		public void PointTo (int index) {
 
 			// Bind buffer
 			Bind ();
@@ -92,7 +79,7 @@ namespace nginz {
 			GL.EnableVertexAttribArray (index);
 
 			// Set vertex attribute pointer
-			GL.VertexAttribPointer (index, size, type, normalized, ElementSize, offset);
+			GL.VertexAttribPointer (index, Settings.AttribSize, Settings.Type, Settings.Normalized, ElementSize, Settings.Offset);
 
 			// Unbind buffer
 			Unbind ();
@@ -104,7 +91,7 @@ namespace nginz {
 		/// <param name="buffer">Buffer.</param>
 		/// <typeparam name="BuffType">The 1st type parameter.</typeparam>
 		public static void Bind<BuffType> (GLBuffer<BuffType> buffer) where BuffType : struct {
-			GL.BindBuffer (buffer.Target, buffer.BufferId);
+			GL.BindBuffer (buffer.Settings.Target, buffer.BufferId);
 		}
 
 		/// <summary>
@@ -120,7 +107,7 @@ namespace nginz {
 		/// <param name="buffer">Buffer.</param>
 		/// <typeparam name="BuffType">The 1st type parameter.</typeparam>
 		public static void Unbind<BuffType>(GLBuffer<BuffType> buffer) where BuffType : struct {
-			GL.BindBuffer (buffer.Target, 0);
+			GL.BindBuffer (buffer.Settings.Target, 0);
 		}
 
 		/// <summary>
@@ -129,5 +116,14 @@ namespace nginz {
 		public void Unbind () {
 			GLBuffer<T>.Unbind (this);
 		}
+	}
+
+	public struct GLBufferSettings {
+		public BufferTarget Target;
+		public BufferUsageHint Hint;
+		public int AttribSize;
+		public VertexAttribPointerType Type;
+		public bool Normalized;
+		public int Offset;
 	}
 }

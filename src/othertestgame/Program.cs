@@ -43,10 +43,7 @@ namespace othertestgame {
 			0, 1, 3, // right
 		};
 
-		GLBuffer<Vector3> vbo;
-		GLBuffer<Vector3> cbo;
-		GLBuffer<uint> ibo;
-		int abo = -1;
+		Geometry testGeometry;
 
 		ShaderProgram program;
 
@@ -58,25 +55,35 @@ namespace othertestgame {
 
 			GraphicsContext.Assert ();
 
-			vbo = new GLBuffer<Vector3> (BufferTarget.ArrayBuffer, points, BufferUsageHint.StaticDraw);
-			cbo = new GLBuffer<Vector3> (BufferTarget.ArrayBuffer, colors, BufferUsageHint.StaticDraw);
-
-			ibo = new GLBuffer<uint> (BufferTarget.ElementArrayBuffer, indices, BufferUsageHint.StaticDraw);
-
 			var vertexShader = BasicShader.FromFile<VertexShader> ("shaders\\passthrough.vs");
 			var fragmentShader = BasicShader.FromFile<FragmentShader> ("shaders\\passthrough.fs");
 			program = new ShaderProgram (vertexShader, fragmentShader);
 
 			program.Link ();
 
-			abo = GL.GenVertexArray ();
-			GL.BindVertexArray (abo);
+			var buffSettings = new GLBufferSettings {
+				Target = BufferTarget.ArrayBuffer,
+				Hint = BufferUsageHint.StaticDraw,
+				AttribSize = 3,
+				Type = VertexAttribPointerType.Float
+			};
 
-			vbo.PointTo (program.Attrib ("v_pos"), 3, VertexAttribPointerType.Float);
-			cbo.PointTo (program.Attrib ("v_col"), 3, VertexAttribPointerType.Float);
+			var indSettings = new GLBufferSettings {
+				Target = BufferTarget.ElementArrayBuffer,
+				Hint = BufferUsageHint.StaticDraw
+			};
 
-			GL.BindVertexArray (0);
-		}
+			var v_pos = new GLBuffer<Vector3> (buffSettings, points);
+			var v_col = new GLBuffer<Vector3> (buffSettings, colors);
+
+			var ind = new GLBuffer<uint> (indSettings, indices);
+
+			testGeometry = new Geometry ()
+				.AddBuffer ("v_pos", v_pos)
+				.AddBuffer ("v_col", v_col)
+				.SetIndices (ind)
+				.Construct (program);
+        }
 
 		protected override void Update (GameTime time) {
 			
@@ -88,10 +95,7 @@ namespace othertestgame {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			using (program.UseProgram ()) {
-				GL.BindVertexArray (abo);
-				ibo.Bind ();
-				GL.DrawElements (BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
-				GL.BindVertexArray (0);
+				testGeometry.Draw (BeginMode.Triangles);
 			}
 
 			base.Draw (time);
