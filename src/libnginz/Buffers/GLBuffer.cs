@@ -8,7 +8,7 @@ namespace nginz {
 	/// <summary>
 	/// GL buffer.
 	/// </summary>
-	public class GLBuffer<T> : IBind<int>, IPointTo<int> where T : struct {
+	public class GLBuffer<T> : IBuffer<int> where T : struct {
 
 		/// <summary>
 		/// The buffer identifier.

@@ -6,18 +6,18 @@ using nginz.Common;
 using OpenTK.Graphics.OpenGL4;
 
 namespace nginz {
-	public class Geometry : IBind<int> {
-		public Dictionary<string, IBind<int>> Buffers;
+	public class Geometry : IBind {
+		public Dictionary<string, IBuffer<int>> Buffers;
 		public GLBuffer<uint> Indices;
 
 		int abo = -1;
 
 		public Geometry () {
-			Buffers = new Dictionary<string, IBind<int>> ();
+			Buffers = new Dictionary<string, IBuffer<int>> ();
 			abo = GL.GenVertexArray ();
 		}
 
-		public Geometry AddBuffer (string name, IBind<int> buffer) {
+		public Geometry AddBuffer (string name, IBuffer<int> buffer) {
 			this.Buffers[name] = buffer;
 			return this;
 		}
@@ -63,10 +63,6 @@ namespace nginz {
 			});
 			Unbind ();
 			return this;
-		}
-
-		public void PointTo (int where) {
-			throw new NotImplementedException ();
 		}
 
 		public void Draw (BeginMode mode, int offset = 0) {

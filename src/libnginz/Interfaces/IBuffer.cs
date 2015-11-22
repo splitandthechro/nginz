@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using nginz.Common;
 
-namespace nginz.Common {
-	public interface IBind {
-		void Bind ();
-		void Unbind ();
+namespace nginz {
+	public interface IBuffer<T> : IBind, IPointTo<T> {
 	}
 }
