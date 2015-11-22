@@ -35,9 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="nginzcoreModule.cs" />
     <Compile Include="GLBufferType.cs" />
     <Compile Include="BufferTargetType.cs" />
+    <Compile Include="nginzModule.cs" />
+    <Compile Include="BufferUsageHintType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

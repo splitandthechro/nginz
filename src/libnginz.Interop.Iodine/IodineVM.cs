@@ -174,6 +174,11 @@ namespace nginz.Interop.Iodine
 			if (!File.Exists (filepath))
 				this.Throw ("File does not exist: {0}", filepath);
 
+			// Delete cached file if it exists
+			var tempfile = string.Format ("{0}.live", Path.GetFileNameWithoutExtension (filepath));
+			if (File.Exists (tempfile))
+				File.Delete (tempfile);
+
 			// Add the file to the livereload files if it
 			// isn't yet in the livereload list
 			if (!livereloadFiles.Contains (filepath))
@@ -253,7 +258,8 @@ namespace nginz.Interop.Iodine
 					return;
 
 				// Create a temporary filename
-				var tempfile = string.Format ("{0}.live", e.Name);
+				var filename = Path.GetFileNameWithoutExtension (e.FullPath);
+				var tempfile = string.Format ("{0}.live", filename);
 
 				// Add the temprary filename to the list of temprary files
 				livereloadTempFiles.Add (Path.GetFullPath (tempfile));
