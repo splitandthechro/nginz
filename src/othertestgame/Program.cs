@@ -64,6 +64,8 @@ namespace othertestgame {
 			
 			vbo.PointTo (program.Attrib ("v_pos"), VertexAttribPointerType.Float);
 			cbo.PointTo (program.Attrib ("v_col"), VertexAttribPointerType.Float);
+
+			GL.BindVertexArray (0);
 		}
 
 		protected override void Update (GameTime time) {
@@ -76,7 +78,9 @@ namespace othertestgame {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			using (program.UseProgram ()) {
+				GL.BindVertexArray (abo);
 				GL.DrawArrays (PrimitiveType.Triangles, 0, 3);
+				GL.BindVertexArray (0);
 			}
 
 			base.Draw (time);
