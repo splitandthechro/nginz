@@ -57,7 +57,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\bin\Debug\mods\test.id">
+    <None Include="..\..\mods\test.id">
       <Link>mods\test.id</Link>
     </None>
   </ItemGroup>

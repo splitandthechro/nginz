@@ -47,5 +47,9 @@
       <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
       <Name>libnginz.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\libnginz\libnginz.csproj">
+      <Project>{C985815A-AAB7-45D2-9427-039101F10B76}</Project>
+      <Name>libnginz</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
-﻿func hello () {
-    print ("Hello from Iodine!");
-    arr = [1, 2, 3];
-    target = nginz.BufferTarget ("ArrayBuffer");
-    usagehint = nginz.BufferUsageHint ("StaticDraw");
-    buf = nginz.GLBuffer (target, arr, usagehint);
+﻿func update () {
+}
+
+func draw () {
+	nginz.GL.ClearColor (0.5, 0.1, 0.6);
 }

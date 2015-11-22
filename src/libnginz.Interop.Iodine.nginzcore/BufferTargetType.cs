@@ -5,7 +5,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace nginz.Interop.Iodine.nginzcore
 {
-	public class BufferTargetType : IodineObject, ICanLog
+	public class BufferTargetType : IodineObject
 	{
 		readonly public static IodineTypeDefinition typeDef;
 
@@ -13,27 +13,13 @@ namespace nginz.Interop.Iodine.nginzcore
 			typeDef = new BufferTargetTypeDefinition ("BufferTarget");
 		}
 
-		public BufferTarget Value;
-
-		class BufferTargetTypeDefinition : IodineTypeDefinition, ICanLog {
-			public BufferTargetTypeDefinition (string name) : base (name) { }
-
-			// arguments [0]: IodineString
-			public override IodineObject Invoke (VirtualMachine vm, IodineObject[] arguments) {
-
-				// Read the enum name
-				var name = arguments [0] as IodineString;
-
-				// Return the BufferTarget
-				return new BufferTargetType (name.Value);
+		class BufferTargetTypeDefinition : IodineTypeDefinition {
+			public BufferTargetTypeDefinition (string name) : base (name) {
+				this.AutoimplementEnum<BufferTarget> ();
 			}
 		}
 
-		public BufferTargetType (string name) : base (typeDef) {
-
-			// Try to parse the BufferTargetType
-			if (!Enum.TryParse<BufferTarget> (name, out Value))
-				this.IodineError ("Invalid BufferTarget: {0}", name);
+		public BufferTargetType () : base (typeDef) {
 		}
 	}
 }

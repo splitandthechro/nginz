@@ -1,6 +1,7 @@
 ﻿using System;
 using Iodine.Runtime;
 using nginz.Common;
+using OpenTK.Graphics.OpenGL4;
 
 namespace nginz.Interop.Iodine.nginzcore
 {
@@ -35,7 +36,7 @@ namespace nginz.Interop.Iodine.nginzcore
 				}
 
 				// Read the BufferTarget
-				var targetType = arguments [0] as BufferTargetType;
+				var targetType = arguments [0] as IodineInteger;
 
 				// Check if the BufferTarget is null
 				if (targetType == null) {
@@ -88,7 +89,7 @@ namespace nginz.Interop.Iodine.nginzcore
 					return null;
 
 				// Read the BufferUsageHint
-				var hintType = arguments [2] as BufferUsageHintType;
+				var hintType = arguments [2] as IodineInteger;
 
 				// Check if the BufferUsageHint is null
 				if (hintType == null) {
@@ -96,14 +97,14 @@ namespace nginz.Interop.Iodine.nginzcore
 					return null;
 				}
 
-				this.IodineInfo ("GLBuffer: Accepted BufferTarget '{0}'", targetType.Value);
-				this.IodineInfo ("GLBuffer: Accepted BufferUsageHint '{0}'", hintType.Value);
-
 				// Create the BufferTarget
-				var bufferTarget = targetType.Value;
+				var bufferTarget = (BufferTarget) targetType.Value;
 
 				// Create the BufferUsageHint
-				var bufferUsageHint = hintType.Value;
+				var bufferUsageHint = (BufferUsageHint) hintType.Value;
+
+				this.IodineInfo ("GLBuffer: Accepted BufferTarget '{0}'", bufferTarget);
+				this.IodineInfo ("GLBuffer: Accepted BufferUsageHint '{0}'", bufferUsageHint);
 
 				// Create the GLBuffer object
 				object glBufferObject;
