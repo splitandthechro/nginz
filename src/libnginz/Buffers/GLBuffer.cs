@@ -125,5 +125,17 @@ namespace nginz {
 		public VertexAttribPointerType Type;
 		public bool Normalized;
 		public int Offset;
+
+		public static GLBufferSettings StaticDraw3FloatArray = new GLBufferSettings {
+			Target = BufferTarget.ArrayBuffer,
+			Hint = BufferUsageHint.StaticDraw,
+			AttribSize = 3,
+			Type = VertexAttribPointerType.Float
+		};
+
+		public static GLBufferSettings Indices = new GLBufferSettings {
+			Target = BufferTarget.ElementArrayBuffer,
+			Hint = BufferUsageHint.StaticDraw
+		};
 	}
 }

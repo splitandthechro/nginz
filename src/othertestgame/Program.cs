@@ -61,22 +61,10 @@ namespace othertestgame {
 
 			program.Link ();
 
-			var buffSettings = new GLBufferSettings {
-				Target = BufferTarget.ArrayBuffer,
-				Hint = BufferUsageHint.StaticDraw,
-				AttribSize = 3,
-				Type = VertexAttribPointerType.Float
-			};
+			var v_pos = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, points);
+			var v_col = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, colors);
 
-			var indSettings = new GLBufferSettings {
-				Target = BufferTarget.ElementArrayBuffer,
-				Hint = BufferUsageHint.StaticDraw
-			};
-
-			var v_pos = new GLBuffer<Vector3> (buffSettings, points);
-			var v_col = new GLBuffer<Vector3> (buffSettings, colors);
-
-			var ind = new GLBuffer<uint> (indSettings, indices);
+			var ind = new GLBuffer<uint> (GLBufferSettings.Indices, indices);
 
 			testGeometry = new Geometry ()
 				.AddBuffer ("v_pos", v_pos)
