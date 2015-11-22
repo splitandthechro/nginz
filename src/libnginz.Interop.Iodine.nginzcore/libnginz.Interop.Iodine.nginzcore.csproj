@@ -39,6 +39,9 @@
     <Compile Include="BufferTargetType.cs" />
     <Compile Include="nginzModule.cs" />
     <Compile Include="BufferUsageHintType.cs" />
+    <Compile Include="GLType.cs" />
+    <Compile Include="ClearBufferMaskType.cs" />
+    <Compile Include="Extensions\TypeDefExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -54,5 +57,8 @@
       <Project>{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}</Project>
       <Name>libIodine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>

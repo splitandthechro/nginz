@@ -187,7 +187,8 @@ namespace Iodine.Runtime
 				var attr = type.GetCustomAttributes (typeof(IodineBuiltinModule), true).FirstOrDefault () as IodineBuiltinModule;
 				if (attr != null) {
 					if (attr.Name == module) {
-						return (IodineModule)type.GetConstructor (new Type[] { }).Invoke (new object[]{ });
+						return (IodineModule)Activator.CreateInstance (type);
+						//return (IodineModule)type.GetConstructor (new Type[] { }).Invoke (new object[]{ });
 					}
 				}
 			}

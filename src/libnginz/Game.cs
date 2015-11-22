@@ -39,11 +39,36 @@ namespace nginz
 		GraphicsContext context;
 
 		/// <summary>
+		/// Whether the game should pause.
+		/// </summary>
+		volatile bool pause;
+
+		/// <summary>
+		/// Whether the game is paused.
+		/// </summary>
+		volatile bool paused;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Game"/> class.
 		/// </summary>
 		/// <param name="conf">Conf.</param>
 		public Game (GameConfiguration conf) {
 			this.conf = conf;
+		}
+
+		/// <summary>
+		/// Pause the game.
+		/// </summary>
+		public void Pause () {
+			pause = true;
+			while (!paused) { }
+		}
+
+		/// <summary>
+		/// Resume the game.
+		/// </summary>
+		public void Resume () {
+			pause = false;
 		}
 
 		/// <summary>
@@ -195,6 +220,16 @@ namespace nginz
 
 			// Enter the actual game loop
 			while (true) {
+
+				// Set the paused variable to true
+				// if the game should be paused and continue
+				if (pause) {
+					paused = true;
+					continue;
+				}
+
+				// Set the paused variable to false
+				paused = false;
 
 				// Break out of the loop if the context is not available.
 				if (context.IsDisposed) {

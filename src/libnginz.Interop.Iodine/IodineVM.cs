@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Iodine;
 using Iodine.Runtime;
+using nginz;
 using nginz.Common;
 
 namespace nginz.Interop.Iodine
@@ -27,6 +28,11 @@ namespace nginz.Interop.Iodine
 		/// Loaded iodine modules.
 		/// </summary>
 		readonly List<IodineModule> modules;
+
+		/// <summary>
+		/// The game instance.
+		/// </summary>
+		readonly Game game;
 
 		/// <summary>
 		/// Module for exposed functions.
@@ -56,7 +62,10 @@ namespace nginz.Interop.Iodine
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Interop.Iodine.IodineVM"/> class.
 		/// </summary>
-		public IodineVM () {
+		public IodineVM (Game game) {
+
+			// Set the game variable to the specified game
+			this.game = game;
 
 			// Create the vm log
 			log = new ErrorLog ();
@@ -80,21 +89,20 @@ namespace nginz.Interop.Iodine
 			// Add the module that holds the exposed functions to the globals
 			vm.Globals.Add ("nginzgame", exposedModule);
 			vm.Globals.Add ("nginz", nginzcore);
+			BuiltInModules.Modules ["nginz"] = nginzcore;
 
+			// Check if the nginzcore module is null
 			if (nginzcore == null)
 				this.Log ("Error loading nginzcore");
-
-			if (nginzcore != null) {
-				foreach (var attrib in nginzcore.Attributes) {
-					this.Log ("Attrib: nginz/{0}", attrib.Key);
-				}
-			}
 		}
 
 		/// <summary>
 		/// Hot-reload the vm.
 		/// </summary>
-		public void Hotreload () {
+		public void Hotreload (bool resume = false) {
+
+			// Pause the game
+			game.Pause ();
 
 			// Clear all modules
 			ClearModules ();
@@ -105,6 +113,11 @@ namespace nginz.Interop.Iodine
 			// Add the module that holds the exposed functions to the globals
 			vm.Globals.Add ("nginzgame", exposedModule);
 			vm.Globals.Add ("nginz", nginzcore);
+			BuiltInModules.Modules ["nginz"] = nginzcore;
+
+			// Resume the game if requested
+			if (resume)
+				game.Resume ();
 		}
 
 		/// <summary>
@@ -257,6 +270,9 @@ namespace nginz.Interop.Iodine
 				if (!livereloadFiles.Contains (e.FullPath))
 					return;
 
+				// Pause the game
+				game.Pause ();
+
 				// Create a temporary filename
 				var filename = Path.GetFileNameWithoutExtension (e.FullPath);
 				var tempfile = string.Format ("{0}.live", filename);
@@ -273,10 +289,13 @@ namespace nginz.Interop.Iodine
 				File.Copy (e.FullPath, tempfile);
 
 				// Reload the vm
-				Hotreload ();
+				Hotreload (resume: false);
 
 				// Reload the cached module
 				LoadModule (tempfile);
+
+				// Resume the game
+				game.Resume ();
 			};
 
 			// Enable raising events

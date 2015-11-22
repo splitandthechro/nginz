@@ -27,12 +27,8 @@ namespace testgame
 	class TestGame : Game
 	{
 		IodineVM vm;
-		double time_accum;
-		int updates;
-		bool first;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
-			first = true;
 		}
 
 		protected override void Initialize () {
@@ -41,10 +37,7 @@ namespace testgame
 			const string mods = "..\\..\\mods\\";
 
 			// Create the iodine vm
-			vm = new IodineVM ();
-
-			// Expose functions to the vm
-			vm.ExposeFunction ("SayHello", SayHello);
+			vm = new IodineVM (this);
 
 			// Load modules
 			vm.LoadModules (
@@ -60,28 +53,14 @@ namespace testgame
 		}
 
 		protected override void Update (GameTime time) {
-			updates++;
-			time_accum += time.Elapsed.TotalMilliseconds;
-			if (time_accum >= 1000d) {
-				//if (!first)
-				//	this.Log ("Measured fps: {0}", updates);
-				first = false;
-				updates = 0;
-				time_accum = 1000d - time_accum;
-				vm.Invoke ("hello");
-			}
+			vm.Invoke ("update");
 			base.Update (time);
 		}
 
 		protected override void Draw (GameTime time) {
-			GL.ClearColor (.4f, .4f, .4f, 1f);
+			vm.Invoke ("draw");
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			base.Draw (time);
-		}
-
-		static IodineObject SayHello (params IodineObject[] args) {
-			Console.WriteLine ("Hello from C#, invoked from Iodine!");
-			return null;
 		}
 	}
 }

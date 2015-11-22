@@ -13,27 +13,13 @@ namespace nginz.Interop.Iodine.nginzcore
 			typeDef = new BufferUsageHintTypeDefinition ("BufferUsageHint");
 		}
 
-		public BufferUsageHint Value;
-
 		class BufferUsageHintTypeDefinition : IodineTypeDefinition, ICanLog {
-			public BufferUsageHintTypeDefinition (string name) : base (name) { }
-
-			// arguments [0]: IodineString
-			public override IodineObject Invoke (VirtualMachine vm, IodineObject[] arguments) {
-
-				// Read the enum name
-				var name = arguments [0] as IodineString;
-
-				// Return the BufferUsageHint
-				return new BufferUsageHintType (name.Value);
+			public BufferUsageHintTypeDefinition (string name) : base (name) {
+				this.AutoimplementEnum<BufferUsageHint> ();
 			}
 		}
 
-		public BufferUsageHintType (string name) : base (typeDef) {
-
-			// Try to parse the BufferUsageHint
-			if (!Enum.TryParse<BufferUsageHint> (name, out Value))
-				this.IodineError ("Invalid BufferUsageHint: {0}", name);
+		public BufferUsageHintType () : base (typeDef) {
 		}
 	}
 }
