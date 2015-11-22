@@ -11,6 +11,7 @@ namespace nginz.Interop.Iodine.nginzcore
 			SetAttribute ("GLBuffer", GLBufferType.typeDef);
 			SetAttribute ("BufferTarget", BufferTargetType.typeDef);
 			SetAttribute ("BufferUsageHint", BufferUsageHintType.typeDef);
+			SetAttribute ("ClearBufferMask", ClearBufferMaskType.typeDef);
 		}
 	}
 }

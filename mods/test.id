@@ -1,6 +1,20 @@
-﻿func update () {
+﻿use GL from nginz;
+use ClearBufferMask from nginz;
+
+func update () {
 }
 
 func draw () {
-	nginz.GL.ClearColor (0.5, 0.1, 0.6);
+	
+	# Clear color buffer
+	mask = ClearBufferMask.ColorBufferBit;
+
+	# Clear depth buffer
+	mask |= ClearBufferMask.DepthBufferBit;
+
+	# Clear the color
+	GL.ClearColor (0.6, 0.0, 0.4);
+
+	# Clear the mask
+	GL.Clear (mask);
 }

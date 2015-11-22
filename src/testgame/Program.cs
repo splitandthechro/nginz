@@ -1,9 +1,7 @@
 ﻿using System;
-using Iodine.Runtime;
 using nginz;
-using nginz.Common;
 using nginz.Interop.Iodine;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK;
 
 namespace testgame
 {
@@ -28,13 +26,36 @@ namespace testgame
 	{
 		IodineVM vm;
 
+		Vector3[] points = {
+			new Vector3 (-.5f, .5f, .0f),
+			new Vector3 (.5f, -.5f, .0f),
+			new Vector3 (-.5f, -.5f, .0f),
+			new Vector3 (.5f, .5f, .0f),
+		};
+
+		Vector3[] colors = {
+			new Vector3 (1.0f, .0f, .0f),
+			new Vector3 (.0f, 1.0f, .0f),
+			new Vector3 (.0f, .0f, 1.0f),
+			new Vector3 (.0f, 1.0f, .0f),
+		};
+
+		uint[] indices = {
+			0, 1, 2,
+			0, 1, 3,
+		};
+
+		Geometry square;
+		ShaderProgram program;
+
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
 		protected override void Initialize () {
 
-			// Mod directory
+			// Directories
 			const string mods = "..\\..\\mods\\";
+			const string shaders = "..\\..\\shaders\\";
 
 			// Create the iodine vm
 			vm = new IodineVM (this);
@@ -47,7 +68,10 @@ namespace testgame
 			// Observe modules for live-reload
 			vm.Observe (
 				mods + "test.id"
-			);	
+			);
+
+			var vertexShader = BasicShader.FromFile<VertexShader> (shaders + "basic.vs");
+			var fragmentShader = BasicShader.FromFile<FragmentShader> (shaders + "basic.fs");
 
 			base.Initialize ();
 		}
@@ -59,7 +83,6 @@ namespace testgame
 
 		protected override void Draw (GameTime time) {
 			vm.Invoke ("draw");
-			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			base.Draw (time);
 		}
 	}

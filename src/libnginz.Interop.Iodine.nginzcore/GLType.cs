@@ -23,22 +23,35 @@ namespace nginz.Interop.Iodine.nginzcore
 						"ClearColor",
 						Callback ((vm, self, args) => {
 							if (args.Length < 3) {
-								this.IodineError ("GLClearColor: Expected at least three arguments");
+								this.IodineError ("GLClearColor: Expected at least three parameters");
 								return null;
 							}
-							this.IodineInfo ("Type: {0}", args[0].GetType ().Name);
-							var fr = args[0] as IodineFloat;
-							var fg = args[1] as IodineFloat;
-							var fb = args[2] as IodineFloat;
-							var r = (float)fr.Value;
-							var g = (float)fg.Value;
-							var b = (float)fb.Value;
-							var a = 1.0f;
-							if (args.Length == 4)
-								a = (float)(args[3] as IodineFloat).Value;
-							this.IodineInfo ("IodineColor: {{R:{0:F},G:{1:F},B:{2:F}}}", fr.Value, fg.Value, fb.Value);
-							this.IodineInfo ("Color: {{R:{0},G:{1},B:{2},A:{3}}}", r, g, b, a);
-							GL.ClearColor (r / 10, g / 10, b / 10, a / 10);
+							var colors = new float[4];
+							for (var i = 0; i < (args.Length < 4 ? 3 : 4); i++) {
+								TypeSwitch.On (args [i])
+									.Case ((IodineFloat x) => colors [i] = (float)x.Value / 10f)
+									.Case ((IodineInteger x) => colors [i] = x.Value)
+									.Default (x => colors [i] = 1.0f);
+							}
+							GL.ClearColor (
+								red: colors [0],
+								green: colors [1],
+								blue: colors [2],
+								alpha: colors [3]
+							);
+							return null;
+						})
+					},
+					{
+						"Clear",
+						Callback ((vm, self, args) => {
+							if (args.Length == 0) {
+								this.IodineError ("GLClear: Expected one parameter");
+								return null;
+							}
+							var maskVal = args [0] as IodineInteger;
+							var mask = (ClearBufferMask) maskVal.Value;
+							GL.Clear (mask);
 							return null;
 						})
 					}

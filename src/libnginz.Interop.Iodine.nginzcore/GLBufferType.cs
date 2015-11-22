@@ -116,9 +116,16 @@ namespace nginz.Interop.Iodine.nginzcore
 						var buffer = new long[theList.Objects.Count];
 						for (var i = 0; i < buffer.Length; i++)
 							buffer [i] = (theList.Objects [i] as IodineInteger).Value;
+						var settings = new GLBufferSettings {
+							Target = bufferTarget,
+							Hint = bufferUsageHint,
+							Normalized = false,
+							Type = VertexAttribPointerType.Float,
+							Offset = 0,
+							AttribSize = sizeof (float),
+						};
 						glBufferObject = new GLBuffer<long> (
-							target: bufferTarget,
-							hint: bufferUsageHint,
+							settings: settings,
 							buffer: buffer
 						);
 						return new GLBufferType (glBufferObject, typeof(GLBuffer<long>));
