@@ -25,19 +25,27 @@ namespace othertestgame {
 	class TestGame : Game, ICanLog {
 		
 		Vector3[] points = {
-			new Vector3 (.0f, .5f, .0f),
-			new Vector3 (.5f, -.5f, .0f),
-			new Vector3 (-.5f, -.5f, .0f),
+			new Vector3 (-.5f, .5f, .0f), // 0
+			new Vector3 (.5f, -.5f, .0f), // 1
+			new Vector3 (-.5f, -.5f, .0f),// 2
+			new Vector3 (.5f, .5f, .0f),  // 3
 		};
 
-		Color4[] colors = {
-			new Color4 (1.0f, 0.0f, 0.0f, 1.0f),
-			new Color4 (0.0f, 1.0f, 0.0f, 1.0f),
-			new Color4 (0.0f, 0.0f, 1.0f, 1.0f),
+		Vector3[] colors = {
+			new Vector3 (1.0f, 0.0f, 0.0f), // 0
+			new Vector3 (0.0f, 1.0f, 0.0f), // 1
+			new Vector3 (0.0f, 0.0f, 1.0f), // 2
+			new Vector3 (0.0f, 1.0f, 1.0f), // 3
 		};
 
-		GLBuffer<Vector3> vbo;
-		GLBuffer<Color4> cbo;
+		uint[] indices = {
+			0, 1, 2, // left
+			0, 1, 3, // right
+		};
+
+		int vbo = -1;
+		int cbo = -1;
+		int ibo = -1;
 		int abo = -1;
 
 		ShaderProgram program;
@@ -50,8 +58,8 @@ namespace othertestgame {
 
 			GraphicsContext.Assert ();
 
-			vbo = new GLBuffer<Vector3> (BufferTarget.ArrayBuffer, points, BufferUsageHint.StaticDraw);
-			cbo = new GLBuffer<Color4> (BufferTarget.ArrayBuffer, colors, BufferUsageHint.StaticDraw);
+			//vbo = new GLBuffer<Vector3> (BufferTarget.ArrayBuffer, points, BufferUsageHint.StaticDraw);
+			//cbo = new GLBuffer<Color4> (BufferTarget.ArrayBuffer, colors, BufferUsageHint.StaticDraw);
 
 			var vertexShader = BasicShader.FromFile<VertexShader> ("shaders\\passthrough.vs");
 			var fragmentShader = BasicShader.FromFile<FragmentShader> ("shaders\\passthrough.fs");
@@ -61,9 +69,21 @@ namespace othertestgame {
 
 			abo = GL.GenVertexArray ();
 			GL.BindVertexArray (abo);
-			
-			vbo.PointTo (program.Attrib ("v_pos"), VertexAttribPointerType.Float);
-			cbo.PointTo (program.Attrib ("v_col"), VertexAttribPointerType.Float);
+
+			vbo = GL.GenBuffer ();
+			GL.BindBuffer (BufferTarget.ArrayBuffer, vbo);
+			GL.BufferData (BufferTarget.ArrayBuffer, Vector3.SizeInBytes * points.Length, points, BufferUsageHint.StaticDraw);
+			GL.EnableVertexAttribArray (0);
+			GL.VertexAttribPointer (0, 3, VertexAttribPointerType.Float, false, Vector3.SizeInBytes, 0);
+			cbo = GL.GenBuffer ();
+			GL.BindBuffer (BufferTarget.ArrayBuffer, cbo);
+			GL.BufferData (BufferTarget.ArrayBuffer, Vector3.SizeInBytes * colors.Length, colors, BufferUsageHint.StaticDraw);
+			GL.EnableVertexAttribArray (1);
+			GL.VertexAttribPointer (1, 3, VertexAttribPointerType.Float, false, Vector3.SizeInBytes, 0);
+
+			ibo = GL.GenBuffer ();
+			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
+			GL.BufferData (BufferTarget.ElementArrayBuffer, indices.Length * sizeof (uint), indices, BufferUsageHint.StaticDraw);
 
 			GL.BindVertexArray (0);
 		}
@@ -79,7 +99,8 @@ namespace othertestgame {
 
 			using (program.UseProgram ()) {
 				GL.BindVertexArray (abo);
-				GL.DrawArrays (PrimitiveType.Triangles, 0, 3);
+				GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
+				GL.DrawElements (BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
 				GL.BindVertexArray (0);
 			}
 
