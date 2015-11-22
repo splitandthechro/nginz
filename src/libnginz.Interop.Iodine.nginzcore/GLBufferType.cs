@@ -6,7 +6,7 @@ namespace nginz.Interop.Iodine.nginzcore
 {
 	public class GLBufferType : IodineObject, ICanLog
 	{
-		readonly static IodineTypeDefinition typeDef;
+		readonly public static IodineTypeDefinition typeDef;
 
 		static GLBufferType () {
 			typeDef = new GLBufferTypeDefinition ("GLBuffer");
@@ -14,22 +14,19 @@ namespace nginz.Interop.Iodine.nginzcore
 
 		class GLBufferTypeDefinition : IodineTypeDefinition, ICanLog {
 			public GLBufferTypeDefinition (string name) : base (name) { }
+
+			// arguments [0]: BufferTargetType
 			public override IodineObject Invoke (VirtualMachine vm, IodineObject[] arguments) {
-				this.Log ("Initializing GLBuffer");
+				if (arguments.Length < 3)
+					return null;
+				
+				var targetType = arguments [0] as BufferTargetType;
+				this.Log ("Target type: {0}", targetType);
 				return null;
 			}
 		}
 
 		public GLBufferType () : base (typeDef) {
-			SetAttribute ("init", new InternalMethodCallback (init, this));
-		}
-
-		// args [0]: BufferTargetType
-		// args [1]: IodineArray
-		IodineObject init (VirtualMachine vm, IodineObject self, IodineObject[] args) {
-			this.Log ("Initializing GLBuffer");
-			//var iodinetarget = args [0] as BufferTargetType;
-			return null;
 		}
 	}
 }
