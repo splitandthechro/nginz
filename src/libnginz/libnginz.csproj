@@ -60,6 +60,8 @@
     <Compile Include="Buffers\GLBufferSettings.cs" />
     <Compile Include="Texture2.cs" />
     <Compile Include="ProjectionType.cs" />
+    <Compile Include="TexturedModel.cs" />
+    <Compile Include="InterpolationMode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

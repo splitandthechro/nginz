@@ -6,6 +6,7 @@ using nginz.Common;
 using OpenTK.Graphics.OpenGL4;
 using GDIPixelFormat = System.Drawing.Imaging.PixelFormat;
 using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
+using System.Collections.Generic;
 
 namespace nginz
 {
@@ -25,28 +26,52 @@ namespace nginz
 		/// Initializes a new instance of the <see cref="nginz.Texture2"/> class.
 		/// </summary>
 		/// <param name="bmp">The bitmap.</param>
-		/// <param name="unit">The texture unit.</param>
-		public Texture2 (Bitmap bmp, TextureUnit unit = TextureUnit.Texture0) {
+		/// <param name = "mipmapped">Whether the texture uses mipmapping.</param>
+		/// <param name = "interpolation">Interpolation mode.</param>
+		public Texture2 (Bitmap bmp, bool mipmapped = false,
+			InterpolationMode interpolation = InterpolationMode.Linear) {
 			
 			// Get the texture id
 			TextureId = GL.GenTexture ();
 
 			// Bind the texture
-			Bind (unit);
+			Bind (TextureUnit.Texture0);
+
+			// Choose which filters to use
+			TextureMinFilter minfilter = TextureMinFilter.Linear;
+			TextureMagFilter magfilter = TextureMagFilter.Linear;
+			switch (interpolation) {
+			case InterpolationMode.Linear:
+				minfilter = mipmapped
+					? TextureMinFilter.LinearMipmapLinear
+					: TextureMinFilter.Linear;
+				magfilter = TextureMagFilter.Linear;
+				break;
+			case InterpolationMode.Nearest:
+				minfilter = mipmapped
+					? TextureMinFilter.LinearMipmapNearest
+					: TextureMinFilter.Nearest;
+				magfilter = TextureMagFilter.Nearest;
+				break;
+			}
 
 			// Set the min filter parameter
 			GL.TexParameter (
 				target: TextureTarget.Texture2D,
 				pname: TextureParameterName.TextureMinFilter,
-				param: (int)TextureMinFilter.Linear
+				param: (int) minfilter
 			);
 
 			// Set the mag filter parameter
 			GL.TexParameter (
 				target: TextureTarget.Texture2D,
 				pname: TextureParameterName.TextureMagFilter,
-				param: (int)TextureMagFilter.Linear
+				param: (int) magfilter
 			);
+
+			// Create a mipmap if requested
+			if (mipmapped)
+				GL.GenerateMipmap (GenerateMipmapTarget.Texture2D);
 
 			// Build a rectangle representing the bitmap's size
 			var rect = new Rectangle (0, 0, bmp.Width, bmp.Height);
@@ -69,6 +94,9 @@ namespace nginz
 
 			// Unlock the bitmap
 			bmp.UnlockBits (bmpData);
+
+			// Unbind the texture
+			Unbind (TextureUnit.Texture0);
 		}
 
 		/// <summary>
@@ -97,27 +125,38 @@ namespace nginz
 		/// </summary>
 		public void Bind () {
 
-			// Bind the texture
-			GL.BindTexture (TextureTarget.Texture2D, TextureId);
+			// Bind the texture to texture unit 0
+			Bind (TextureUnit.Texture0);
 		}
 
 		/// <summary>
 		/// Bind the texture.
 		/// </summary>
-		/// <param name="unit">The texture unit.</param>
 		public void Bind (TextureUnit unit) {
 
 			// Make the texture unit the active one
 			GL.ActiveTexture (unit);
 
 			// Bind the texture
-			Bind ();
+			GL.BindTexture (TextureTarget.Texture2D, TextureId);
 		}
 
 		/// <summary>
 		/// Unbind the texture.
 		/// </summary>
 		public void Unbind () {
+
+			// Unbind the texture value from texture unit 0
+			Unbind (TextureUnit.Texture0);
+		}
+
+		/// <summary>
+		/// Unbind the texture.
+		/// </summary>
+		public void Unbind (TextureUnit unit) {
+
+			// Make the texture unit the active one
+			GL.ActiveTexture (unit);
 
 			// Unbind the texture
 			GL.BindTexture (TextureTarget.Texture2D, 0);
