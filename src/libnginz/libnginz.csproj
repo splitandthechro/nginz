@@ -59,6 +59,7 @@
     <Compile Include="Shading\ShaderProgramHandle.cs" />
     <Compile Include="Resolution.cs" />
     <Compile Include="Buffers\GLBufferSettings.cs" />
+    <Compile Include="Texture2.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

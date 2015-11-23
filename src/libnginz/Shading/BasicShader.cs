@@ -42,7 +42,7 @@ namespace nginz
 
 			// Throw if the file doesn't exist
 			if (!File.Exists (fullpath))
-				LogExtensions.Throw ("Could not load {0} from file. Reason: File not found: {1}", (object) typeof(Shader).Name, path);
+				LogExtensions.ThrowStatic ("Could not load {0} from file. Reason: File not found: {1}", typeof(Shader).Name, path);
 
 			// Read the source code from the file
 			var source = File.ReadAllText (fullpath, Encoding.ASCII);
