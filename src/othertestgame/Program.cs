@@ -108,7 +108,7 @@ namespace othertestgame {
 			const float speed = 1f;
 			var movement = speed * (float) time.Elapsed.TotalSeconds;
 			var left = new Vector3 (-movement, 0, 0);
-			var up = new Vector3 (0, movement, 0);
+			var up = new Vector3 (0, 0, movement);
 			var enlarge = movement;
 			var flip = 180f;
 
@@ -122,11 +122,11 @@ namespace othertestgame {
 
 			// Move up if Up or W is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Up, Key.W))
-				camera.Position += up;
+				camera.Position -= up;
 
 			// Move down if Down or S is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Down, Key.S))
-				camera.Position -= up;
+				camera.Position += up;
 
 			// Scale up if + is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Plus, Key.KeypadPlus))
@@ -136,14 +136,15 @@ namespace othertestgame {
 			if (Keyboard.IsAnyKeyDown (Key.Minus, Key.KeypadMinus))
 				camera.Position += new Vector3 (0, 0, enlarge);
 
+			if (Keyboard.IsKeyDown (Key.E))
+				camera.SetRotation (Vector3.UnitY, .25f, relative: true);
+			if (Keyboard.IsKeyDown (Key.Q))
+				camera.SetRotation (Vector3.UnitY, -.25f, relative: true);
+
 			// Flip texture if f is pressed
 			if (Keyboard.IsKeyTyped (Key.F))
 				camera.SetRotation (Vector3.UnitZ, flip, relative: true);
 
-			// Exit if escape is pressed
-			if (Keyboard.IsKeyTyped (Key.Escape))
-				Exit ();
-			
 			base.Update (time);
 		}
 
