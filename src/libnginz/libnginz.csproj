@@ -64,6 +64,7 @@
     <Compile Include="InterpolationMode.cs" />
     <Compile Include="Buffers\KeyboardBuffer.cs" />
     <Compile Include="Buffers\KeyState.cs" />
+    <Compile Include="Buffers\MouseBuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

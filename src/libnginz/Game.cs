@@ -4,6 +4,7 @@ using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
+using GLMouse = OpenTK.Input.Mouse;
 
 namespace nginz
 {
@@ -22,6 +23,36 @@ namespace nginz
 		/// The keyboard.
 		/// </summary>
 		readonly public KeyboardBuffer Keyboard;
+
+		/// <summary>
+		/// The mouse.
+		/// </summary>
+		public MouseBuffer Mouse;
+
+		/// <summary>
+		/// The state of the current mouse.
+		/// </summary>
+		public MouseState CurrentMouseState;
+
+		/// <summary>
+		/// The state of the previous mouse.
+		/// </summary>
+		public MouseState PreviousMouseState;
+
+		/// <summary>
+		/// Occurs when a key is pressed.
+		/// </summary>
+		public event EventHandler<KeyPressEventArgs> KeyPress;
+
+		/// <summary>
+		/// Occurs when a key is pressed.
+		/// </summary>
+		public event EventHandler<KeyboardKeyEventArgs> KeyDown;
+
+		/// <summary>
+		// Occurs when a key is released.
+		/// </summary>
+		public event EventHandler<KeyboardKeyEventArgs> KeyUp;
 
 		/// <summary>
 		/// The start time.
@@ -49,21 +80,6 @@ namespace nginz
 		GraphicsContext context;
 
 		/// <summary>
-		/// Occurs when a key is pressed.
-		/// </summary>
-		public event EventHandler<KeyPressEventArgs> KeyPress;
-
-		/// <summary>
-		/// Occurs when a key is pressed.
-		/// </summary>
-		public event EventHandler<KeyboardKeyEventArgs> KeyDown;
-
-		/// <summary>
-		// Occurs when a key is released.
-		/// </summary>
-		public event EventHandler<KeyboardKeyEventArgs> KeyUp;
-
-		/// <summary>
 		/// Whether the game should pause.
 		/// </summary>
 		volatile bool pause;
@@ -72,6 +88,11 @@ namespace nginz
 		/// Whether the game is paused.
 		/// </summary>
 		volatile bool paused;
+
+		/// <summary>
+		/// Whether the game should exit.
+		/// </summary>
+		volatile bool exit;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Game"/> class.
@@ -144,6 +165,14 @@ namespace nginz
 			// Initialize startTime and lastTime
 			startTime = DateTime.UtcNow;
 			lastTime = startTime;
+
+			// Initialize the mouse state
+			CenterMouse ();
+			PreviousMouseState = GLMouse.GetState ();
+			CurrentMouseState = GLMouse.GetState ();
+
+			// Initialize the mouse buffer
+			Mouse = new MouseBuffer (window, CurrentMouseState);
 		}
 
 		/// <summary>
@@ -157,6 +186,25 @@ namespace nginz
 		/// </summary>
 		/// <param name="time">Time.</param>
 		protected virtual void Update (GameTime time) {
+
+			// Get the current mouse state
+			CurrentMouseState = GLMouse.GetState ();
+
+			// Update the mouse buffer if the window is focused
+			if (window.Focused) {
+				Mouse.DeltaX = CurrentMouseState.X - PreviousMouseState.X;
+				Mouse.DeltaY = CurrentMouseState.Y - PreviousMouseState.Y;
+				Mouse.DeltaZ = CurrentMouseState.WheelPrecise - PreviousMouseState.WheelPrecise;
+				Mouse.Update (CurrentMouseState);
+			}
+
+			// Set the previous mouse state
+			PreviousMouseState = CurrentMouseState;
+
+			// Center the mouse if the window is focused
+			if (window.Focused)
+				CenterMouse ();
+
 		}
 
 		/// <summary>
@@ -169,8 +217,22 @@ namespace nginz
 			context.SwapBuffers ();
 		}
 
+		/// <summary>
+		/// Resize the game window.
+		/// </summary>
+		/// <param name="resolution">Resolution.</param>
 		public virtual void Resize (Resolution resolution) {
+
+			// Update the context
 			context.Update (window.WindowInfo);
+		}
+
+		/// <summary>
+		/// Gets called before the game exits.
+		/// Maybe save the game here and do other stuff
+		/// that needs to be done before the game exits.
+		/// </summary>
+		public virtual void BeforeExit () {
 		}
 
 		/// <summary>
@@ -198,6 +260,33 @@ namespace nginz
 			while (window.Exists) {
 				window.ProcessEvents ();
 			}
+		}
+
+		/// <summary>
+		/// Exit the game.
+		/// </summary>
+		public void Exit () {
+
+			// Call the BeforeExit function
+			BeforeExit ();
+
+			// Set exit to true
+			exit = true;
+		}
+
+		/// <summary>
+		/// Center the mouse.
+		/// </summary>
+		void CenterMouse () {
+
+			// Calculate target x position
+			var x = window.Bounds.Left + window.Bounds.Width / 2;
+
+			// Calculate target y position
+			var y = window.Bounds.Top + window.Bounds.Height / 2;
+
+			// Set new mouse position
+			GLMouse.SetPosition(x, y);
 		}
 
 		/// <summary>
@@ -263,7 +352,7 @@ namespace nginz
 			window.Visible = true;
 
 			// Enter the actual game loop
-			while (true) {
+			while (!exit) {
 
 				// Set the paused variable to true
 				// if the game should be paused and continue
@@ -338,6 +427,12 @@ namespace nginz
 				// Draw
 				Draw (gameTime);
 			}
+
+			// Dispose of the context
+			context.Dispose ();
+
+			// Dispose of the window
+			window.Dispose ();
 		}
 	}
 }

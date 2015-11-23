@@ -139,6 +139,10 @@ namespace othertestgame {
 			// Flip texture if f is pressed
 			if (Keyboard.IsKeyTyped (Key.F))
 				camera.SetRotation (Vector3.UnitZ, flip, relative: true);
+
+			// Exit if escape is pressed
+			if (Keyboard.IsKeyTyped (Key.Escape))
+				Exit ();
 			
 			base.Update (time);
 		}
