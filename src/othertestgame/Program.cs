@@ -4,6 +4,7 @@ using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Input;
 
 namespace othertestgame {
 	class Program {
@@ -15,7 +16,7 @@ namespace othertestgame {
 				FixedWindow = false,
 				Vsync = VsyncMode.Off,
 				FixedFramerate = true,
-				TargetFramerate = 60,
+				TargetFramerate = 30,
 			};
 			var game = new TestGame (conf);
 			game.Run ();
@@ -89,12 +90,48 @@ namespace othertestgame {
 
 			testTexture = Texture2.FromFile ("textures\\testWood.jpg");
 
-			camera = new Camera (60f, new Resolution { Width = conf.Width, Height = conf.Height }, 0.1f, 64.0f);
+			camera = new Camera (60f, new Resolution { Width = Configuration.Width, Height = Configuration.Height }, 0.1f, 64.0f);
 			camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 		}
 		int theTime = 0;
 		protected override void Update (GameTime time) {
 			//camera.SetRelativePosition (new Vector3(0, 0, (theTime / 60000f) * time.Elapsed.Milliseconds));
+
+			const float speed = 0.5f;
+			var movement = speed * (float) time.Elapsed.TotalSeconds;
+			var left = new Vector3 (-movement, 0, 0);
+			var up = new Vector3 (0, movement, 0);
+			var enlarge = new Vector3 (movement, movement, 0);
+			var flip = new Vector3 (-1.0f, -1.0f, 1.0f);
+
+			// Move to the left if Left or A is pressed
+			if (Keyboard.IsAnyKeyDown (Key.Left, Key.A))
+				testModel.Position += left;
+
+			// Move to the right if Right or D is pressed
+			if (Keyboard.IsAnyKeyDown (Key.Right, Key.D))
+				testModel.Position -= left;
+
+			// Move up if Up or W is pressed
+			if (Keyboard.IsAnyKeyDown (Key.Up, Key.W))
+				testModel.Position += up;
+
+			// Move down if Down or S is pressed
+			if (Keyboard.IsAnyKeyDown (Key.Down, Key.S))
+				testModel.Position -= up;
+
+			// Scale up if + is pressed
+			if (Keyboard.IsAnyKeyDown (Key.Plus, Key.KeypadPlus))
+				testModel.Scale += enlarge;
+
+			// Scale down if - is pressed
+			if (Keyboard.IsAnyKeyDown (Key.Minus, Key.KeypadMinus))
+				testModel.Scale -= enlarge;
+
+			// Flip texture if f is pressed
+			if (Keyboard.IsKeyTyped (Key.F))
+				testModel.Scale *= flip;
+			
 			theTime++;
 			base.Update (time);
 		}

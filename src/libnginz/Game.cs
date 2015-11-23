@@ -7,12 +7,21 @@ using OpenTK.Input;
 
 namespace nginz
 {
+
+	/// <summary>
+	/// Game.
+	/// </summary>
 	public class Game : ICanLog, ICanThrow
 	{
 		/// <summary>
 		/// The game configuration.
 		/// </summary>
-		readonly public GameConfiguration conf;
+		readonly public GameConfiguration Configuration;
+
+		/// <summary>
+		/// The keyboard.
+		/// </summary>
+		readonly public KeyboardBuffer Keyboard;
 
 		/// <summary>
 		/// The start time.
@@ -69,10 +78,17 @@ namespace nginz
 		/// </summary>
 		/// <param name="conf">Conf.</param>
 		public Game (GameConfiguration conf) {
-			this.conf = conf;
+
+			// Set the configuration
+			Configuration = conf;
+
+			// Initialize the keyboard buffer
+			Keyboard = new KeyboardBuffer ();
+
+			// Register the key event handlers
 			KeyPress += delegate { };
-			KeyDown += delegate { };
-			KeyUp += delegate { };
+			KeyDown += Keyboard.RegisterKeyDown;
+			KeyUp += Keyboard.RegisterKeyUp;
 		}
 
 		/// <summary>
@@ -102,19 +118,19 @@ namespace nginz
 			var flags = GameWindowFlags.Default;
 
 			// Set Fullscreen flag if requested
-			if (conf.Fullscreen && !flags.HasFlag (GameWindowFlags.Fullscreen))
+			if (Configuration.Fullscreen && !flags.HasFlag (GameWindowFlags.Fullscreen))
 				flags |= GameWindowFlags.Fullscreen;
 
 			// Set FixedWindow flag if requested
-			if (conf.FixedWindow && !flags.HasFlag (GameWindowFlags.FixedWindow))
+			if (Configuration.FixedWindow && !flags.HasFlag (GameWindowFlags.FixedWindow))
 				flags |= GameWindowFlags.FixedWindow;
 
 			// Create window
 			this.Log ("Creating native window");
 			window = new NativeWindow (
-				width: conf.Width,
-				height: conf.Height,
-				title: conf.WindowTitle,
+				width: Configuration.Width,
+				height: Configuration.Height,
+				title: Configuration.WindowTitle,
 				options: flags,
 				mode: GraphicsMode.Default,
 				device: DisplayDevice.Default
@@ -177,9 +193,6 @@ namespace nginz
 			// to dispose the context when closing the window.
 			window.Closing += (sender, e) => context.Dispose ();
 
-			// Present the window to the user
-			window.Visible = true;
-
 			// Process the message queue
 			this.Log ("Entering message processing loop");
 			while (window.Exists) {
@@ -209,8 +222,8 @@ namespace nginz
 			GraphicsContext.Assert ();
 
 			// Set vsync mode
-			this.Log ("Setting VSync mode: {0}", conf.Vsync);
-			switch (conf.Vsync) {
+			this.Log ("Setting VSync mode: {0}", Configuration.Vsync);
+			switch (Configuration.Vsync) {
 			case VsyncMode.Adaptive:
 				context.SwapInterval = -1;
 				break;
@@ -232,7 +245,7 @@ namespace nginz
 
 			// Set target framerate
 			// Use 60hz if framerate is not set
-			var framerate = conf.TargetFramerate > 0 ? conf.TargetFramerate : 60;
+			var framerate = Configuration.TargetFramerate > 0 ? Configuration.TargetFramerate : 60;
 
 			// Prepare timing variables
 			TimeSpan totalTime;
@@ -245,6 +258,9 @@ namespace nginz
 			var updateAccumTime = 0d;
 			var updateDeltaTime = 1d / (double) framerate;
 			var updateCurrentTime = now.Subtract (startTime).TotalSeconds;
+
+			// Present the window to the user
+			window.Visible = true;
 
 			// Enter the actual game loop
 			while (true) {
@@ -270,7 +286,7 @@ namespace nginz
 				now = DateTime.UtcNow;
 
 				// Use fixed framerate if requested
-				if (conf.FixedFramerate) {
+				if (Configuration.FixedFramerate) {
 
 					// Calculate timing data
 					updateNewTime = now.Subtract (startTime).TotalSeconds;

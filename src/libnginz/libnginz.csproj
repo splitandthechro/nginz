@@ -62,6 +62,8 @@
     <Compile Include="ProjectionType.cs" />
     <Compile Include="TexturedModel.cs" />
     <Compile Include="InterpolationMode.cs" />
+    <Compile Include="Buffers\KeyboardBuffer.cs" />
+    <Compile Include="Buffers\KeyState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
