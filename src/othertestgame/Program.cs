@@ -25,26 +25,26 @@ namespace othertestgame {
 	class TestGame : Game, ICanLog {
 		
 		Vector3[] points = {
-			new Vector3 (-.5f, .5f, .0f), // 0
-			new Vector3 (.5f, -.5f, .0f), // 1
+			new Vector3 (.5f, -.5f, .0f), // 0
+			new Vector3 (-.5f, .5f, .0f), // 1
 			new Vector3 (-.5f, -.5f, .0f),// 2
 			new Vector3 (.5f, .5f, .0f),  // 3
 		};
 
 		Vector3[] colors = {
-			new Vector3 (1.0f, 0.0f, 0.0f), // 0
-			new Vector3 (0.0f, 1.0f, 0.0f), // 1
+			new Vector3 (0.0f, 1.0f, 0.0f), // 0
+			new Vector3 (1.0f, 0.0f, 0.0f), // 1
 			new Vector3 (0.0f, 0.0f, 1.0f), // 2
 			new Vector3 (0.0f, 1.0f, 1.0f), // 3
 		};
 
 		uint[] indices = {
 			0, 1, 2, // left
-			0, 1, 3, // right
+			1, 0, 3, // right
 		};
 
 		Geometry testGeometry;
-
+		Camera camera;
 		ShaderProgram program;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
@@ -52,6 +52,9 @@ namespace othertestgame {
 
 		protected override void Initialize () {
 			base.Initialize ();
+
+			GL.CullFace (CullFaceMode.Back);
+			GL.Enable (EnableCap.CullFace);
 
 			GraphicsContext.Assert ();
 
@@ -71,19 +74,23 @@ namespace othertestgame {
 				.AddBuffer ("v_col", v_col)
 				.SetIndices (ind)
 				.Construct (program);
-        }
 
+			camera = new Camera (60f, new Resolution { Width = conf.Width, Height = conf.Height }, 0.1f, 64.0f);
+			camera.SetAbsolutePosition (new Vector3 (0, 0, 1));
+		}
+		int theTime = 0;
 		protected override void Update (GameTime time) {
-			
+			camera.SetRelativePosition (new Vector3(0, 0, (theTime / 60000f) * time.Elapsed.Milliseconds));
+			theTime++;
 			base.Update (time);
 		}
 
 		protected override void Draw (GameTime time) {
-			GL.ClearColor (.4f, .4f, .4f, 1f);
+			GL.ClearColor (.25f, .30f, .35f, 1f);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			using (program.UseProgram ()) {
-				testGeometry.Draw (BeginMode.Triangles);
+				testGeometry.Draw (BeginMode.Triangles, program, Matrix4.Identity, camera);
 			}
 
 			base.Draw (time);

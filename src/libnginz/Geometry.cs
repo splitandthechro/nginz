@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using nginz.Common;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace nginz {
@@ -118,8 +119,9 @@ namespace nginz {
 		/// </summary>
 		/// <param name="mode">Mode.</param>
 		/// <param name="offset">Offset.</param>
-		public void Draw (BeginMode mode, int offset = 0) {
+		public void Draw (BeginMode mode, ShaderProgram program, Matrix4 Model, Camera camera, int offset = 0) {
 			Bind ();
+			program["MVP"] = Model * camera.ViewProjectionMatrix;
 			GL.DrawElements (mode, Indices.Buffer.Length, DrawElementsType.UnsignedInt, offset);
 			Unbind ();
 		}
