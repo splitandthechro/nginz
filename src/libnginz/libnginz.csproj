@@ -57,6 +57,7 @@
     <Compile Include="Shading\ShaderProgram.Uniforms.cs" />
     <Compile Include="Shading\ShaderProgramHandle.cs" />
     <Compile Include="Resolution.cs" />
+    <Compile Include="Buffers\GLBufferSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

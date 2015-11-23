@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using nginz.Common;
 using OpenTK.Graphics.OpenGL4;
 
 namespace nginz {
 
 	/// <summary>
-	/// GL buffer.
+	/// OpenGL Buffer.
 	/// </summary>
 	public class GLBuffer<T> : IBuffer<int> where T : struct {
 
@@ -15,6 +14,9 @@ namespace nginz {
 		/// </summary>
 		readonly public int BufferId;
 
+		/// <summary>
+		/// The settings.
+		/// </summary>
 		public GLBufferSettings Settings;
 
 		/// <summary>
@@ -38,10 +40,11 @@ namespace nginz {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.GLBuffer{T}"/> class.
 		/// </summary>
-		/// <param name="target">Target.</param>
-		/// <param name="buffer">Buffer.</param>
-		/// <param name="hint">Hint.</param>
+		/// <param name="settings">The buffer settings.</param>
+		/// <param name="buffer">The buffer initialization array.</param>
 		public GLBuffer (GLBufferSettings settings, T[] buffer) {
+
+			// Set the settings
 			Settings = settings;
 
 			// Set the buffer
@@ -67,9 +70,6 @@ namespace nginz {
 		/// Point the buffer to an index
 		/// </summary>
 		/// <param name="index">Index.</param>
-		/// <param name="type">Type.</param>
-		/// <param name="normalized">If set to <c>true</c> normalized.</param>
-		/// <param name="offset">Offset.</param>
 		public void PointTo (int index) {
 
 			// Bind buffer
@@ -91,6 +91,8 @@ namespace nginz {
 		/// <param name="buffer">Buffer.</param>
 		/// <typeparam name="BuffType">The 1st type parameter.</typeparam>
 		public static void Bind<BuffType> (GLBuffer<BuffType> buffer) where BuffType : struct {
+
+			// Bind the buffer
 			GL.BindBuffer (buffer.Settings.Target, buffer.BufferId);
 		}
 
@@ -98,6 +100,8 @@ namespace nginz {
 		/// Bind the buffer.
 		/// </summary>
 		public void Bind () {
+
+			// Bind the buffer
 			GLBuffer<T>.Bind (this);
 		}
 
@@ -107,6 +111,8 @@ namespace nginz {
 		/// <param name="buffer">Buffer.</param>
 		/// <typeparam name="BuffType">The 1st type parameter.</typeparam>
 		public static void Unbind<BuffType>(GLBuffer<BuffType> buffer) where BuffType : struct {
+
+			// Unbind the buffer
 			GL.BindBuffer (buffer.Settings.Target, 0);
 		}
 
@@ -114,35 +120,9 @@ namespace nginz {
 		/// Unbind the buffer.
 		/// </summary>
 		public void Unbind () {
+
+			// Unbind the buffer
 			GLBuffer<T>.Unbind (this);
 		}
-	}
-
-	public struct GLBufferSettings {
-		public BufferTarget Target;
-		public BufferUsageHint Hint;
-		public int AttribSize;
-		public VertexAttribPointerType Type;
-		public bool Normalized;
-		public int Offset;
-
-		public static GLBufferSettings StaticDraw3FloatArray = new GLBufferSettings {
-			Target = BufferTarget.ArrayBuffer,
-			Hint = BufferUsageHint.StaticDraw,
-			AttribSize = 3,
-			Type = VertexAttribPointerType.Float
-		};
-
-		public static GLBufferSettings StaticDraw2FloatArray = new GLBufferSettings {
-			Target = BufferTarget.ArrayBuffer,
-			Hint = BufferUsageHint.StaticDraw,
-			AttribSize = 2,
-			Type = VertexAttribPointerType.Float
-		};
-
-		public static GLBufferSettings Indices = new GLBufferSettings {
-			Target = BufferTarget.ElementArrayBuffer,
-			Hint = BufferUsageHint.StaticDraw
-		};
 	}
 }
