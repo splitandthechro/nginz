@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using nginz;
 using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
+using System.Reflection;
 
 namespace othertestgame {
 	class Program {
@@ -15,8 +17,8 @@ namespace othertestgame {
 				WindowTitle = "nginz Game",
 				FixedWindow = false,
 				Vsync = VsyncMode.Off,
-				FixedFramerate = true,
-				TargetFramerate = 30,
+				FixedFramerate = false,
+				TargetFramerate = 60,
 			};
 			var game = new TestGame (conf);
 			game.Run ();
@@ -59,6 +61,12 @@ namespace othertestgame {
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
+		static string GetAssetPath (string directory, string asset) {
+			var location = Assembly.GetEntryAssembly ().Location;
+			var directoryName = Path.GetDirectoryName (location);
+			return Path.Combine (directoryName, directory, asset);
+		}
+
 		protected override void Initialize () {
 			base.Initialize ();
 
@@ -67,8 +75,8 @@ namespace othertestgame {
 
 			GraphicsContext.Assert ();
 
-			var vertexShader = BasicShader.FromFile<VertexShader> ("shaders\\passTex.vs");
-			var fragmentShader = BasicShader.FromFile<FragmentShader> ("shaders\\passTex.fs");
+			var vertexShader = BasicShader.FromFile<VertexShader> (GetAssetPath ("shaders", "passTex.vs"));
+			var fragmentShader = BasicShader.FromFile<FragmentShader> (GetAssetPath ("shaders", "passTex.fs"));
 			program = new ShaderProgram (vertexShader, fragmentShader);
 
 			program.Link ();
@@ -88,7 +96,7 @@ namespace othertestgame {
 
 			testModel = new TexturedModel (testGeometry);
 
-			testTexture = Texture2.FromFile ("textures\\testWood.jpg");
+			testTexture = Texture2.FromFile (GetAssetPath ("textures", "testWood.jpg"));
 
 			camera = new Camera (60f, new Resolution { Width = Configuration.Width, Height = Configuration.Height }, 0.1f, 64.0f);
 			camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
