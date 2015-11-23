@@ -14,7 +14,7 @@ namespace nginz.Common
 			Console.WriteLine ("[{0}] {1}", dummy.GetType ().Name, string.Format (format, args));
 		}
 
-		public static void Throw (string format, params object[] args) {
+		public static void ThrowStatic (string format, params object[] args) {
 			var stacktrace = new StackTrace (skipFrames: 1);
 			var stackframe = stacktrace.GetFrame (0);
 			var classname = stackframe.GetMethod ().DeclaringType.Name;
