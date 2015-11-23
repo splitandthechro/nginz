@@ -133,6 +133,13 @@ namespace nginz {
 			Type = VertexAttribPointerType.Float
 		};
 
+		public static GLBufferSettings StaticDraw2FloatArray = new GLBufferSettings {
+			Target = BufferTarget.ArrayBuffer,
+			Hint = BufferUsageHint.StaticDraw,
+			AttribSize = 2,
+			Type = VertexAttribPointerType.Float
+		};
+
 		public static GLBufferSettings Indices = new GLBufferSettings {
 			Target = BufferTarget.ElementArrayBuffer,
 			Hint = BufferUsageHint.StaticDraw
