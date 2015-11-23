@@ -93,46 +93,45 @@ namespace othertestgame {
 			camera = new Camera (60f, new Resolution { Width = Configuration.Width, Height = Configuration.Height }, 0.1f, 64.0f);
 			camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 		}
-		int theTime = 0;
+
 		protected override void Update (GameTime time) {
 			//camera.SetRelativePosition (new Vector3(0, 0, (theTime / 60000f) * time.Elapsed.Milliseconds));
 
-			const float speed = 0.5f;
+			const float speed = 1f;
 			var movement = speed * (float) time.Elapsed.TotalSeconds;
 			var left = new Vector3 (-movement, 0, 0);
 			var up = new Vector3 (0, movement, 0);
-			var enlarge = new Vector3 (movement, movement, 0);
-			var flip = new Vector3 (-1.0f, -1.0f, 1.0f);
+			var enlarge = movement;
+			var flip = 180f;
 
 			// Move to the left if Left or A is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Left, Key.A))
-				testModel.Position += left;
+				camera.Position += left;
 
 			// Move to the right if Right or D is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Right, Key.D))
-				testModel.Position -= left;
+				camera.Position -= left;
 
 			// Move up if Up or W is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Up, Key.W))
-				testModel.Position += up;
+				camera.Position += up;
 
 			// Move down if Down or S is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Down, Key.S))
-				testModel.Position -= up;
+				camera.Position -= up;
 
 			// Scale up if + is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Plus, Key.KeypadPlus))
-				testModel.Scale += enlarge;
+				camera.Position -= new Vector3(0, 0, enlarge);
 
 			// Scale down if - is pressed
 			if (Keyboard.IsAnyKeyDown (Key.Minus, Key.KeypadMinus))
-				testModel.Scale -= enlarge;
+				camera.Position += new Vector3 (0, 0, enlarge);
 
 			// Flip texture if f is pressed
 			if (Keyboard.IsKeyTyped (Key.F))
-				testModel.Scale *= flip;
+				camera.SetRotation (Vector3.UnitZ, flip, relative: true);
 			
-			theTime++;
 			base.Update (time);
 		}
 

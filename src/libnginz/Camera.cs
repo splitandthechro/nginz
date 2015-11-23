@@ -181,7 +181,7 @@ namespace nginz {
 				: Quaternion.Identity;
 
 			// Set the orientation
-			Orientation = startValue + Quaternion.FromAxisAngle (axis, rotation);
+			Orientation = startValue * Quaternion.FromAxisAngle (axis, rotation);
 		}
 
 		/// <summary>
@@ -215,7 +215,7 @@ namespace nginz {
 				: Quaternion.Identity;
 
 			// Set the orientation
-			Orientation = startValue + Quaternion.FromEulerAngles (pitch, yaw, roll);
+			Orientation = startValue * Quaternion.FromEulerAngles (pitch, yaw, roll);
 		}
 	}
 }
