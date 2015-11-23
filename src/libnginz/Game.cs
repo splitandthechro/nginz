@@ -3,6 +3,7 @@ using System.Threading;
 using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Input;
 
 namespace nginz
 {
@@ -39,6 +40,21 @@ namespace nginz
 		GraphicsContext context;
 
 		/// <summary>
+		/// Occurs when a key is pressed.
+		/// </summary>
+		public event EventHandler<KeyPressEventArgs> KeyPress;
+
+		/// <summary>
+		/// Occurs when a key is pressed.
+		/// </summary>
+		public event EventHandler<KeyboardKeyEventArgs> KeyDown;
+
+		/// <summary>
+		// Occurs when a key is released.
+		/// </summary>
+		public event EventHandler<KeyboardKeyEventArgs> KeyUp;
+
+		/// <summary>
 		/// Whether the game should pause.
 		/// </summary>
 		volatile bool pause;
@@ -54,6 +70,9 @@ namespace nginz
 		/// <param name="conf">Conf.</param>
 		public Game (GameConfiguration conf) {
 			this.conf = conf;
+			KeyPress += delegate { };
+			KeyDown += delegate { };
+			KeyUp += delegate { };
 		}
 
 		/// <summary>
@@ -100,6 +119,11 @@ namespace nginz
 				mode: GraphicsMode.Default,
 				device: DisplayDevice.Default
 			);
+
+			// Register events
+			window.KeyDown += KeyDown;
+			window.KeyUp += KeyUp;
+			window.KeyPress += KeyPress;
 
 			// Initialize startTime and lastTime
 			startTime = DateTime.UtcNow;
