@@ -25,10 +25,10 @@ namespace othertestgame {
 	class TestGame : Game, ICanLog {
 		
 		Vector3[] points = {
-			new Vector3 (.35f, -.5f, .0f), // 0
-			new Vector3 (-.35f, .5f, .0f), // 1
-			new Vector3 (-.35f, -.5f, .0f),// 2
-			new Vector3 (.35f, .5f, .0f),  // 3
+			new Vector3 (.5f, -.5f, .0f), // 0
+			new Vector3 (-.5f, .5f, .0f), // 1
+			new Vector3 (-.5f, -.5f, .0f),// 2
+			new Vector3 (.5f, .5f, .0f),  // 3
 		};
 
 		Vector3[] colors = {

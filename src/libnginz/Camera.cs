@@ -12,7 +12,7 @@ namespace nginz {
 		public float FieldOfView { get; set; }
 		public float AspectRatio {
 			get {
-				return Resolution.Width / Resolution.Height;
+				return (float) Resolution.Width / (float) Resolution.Height;
 			}
 		}
 		public float Near { get; set; }
