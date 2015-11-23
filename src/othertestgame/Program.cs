@@ -32,10 +32,17 @@ namespace othertestgame {
 		};
 
 		Vector3[] colors = {
-			new Vector3 (0.0f, 1.0f, 0.0f), // 0
-			new Vector3 (1.0f, 0.0f, 0.0f), // 1
-			new Vector3 (0.0f, 0.0f, 1.0f), // 2
-			new Vector3 (0.0f, 1.0f, 1.0f), // 3
+			new Vector3 (1.0f, 1.0f, 1.0f), // 0
+			new Vector3 (1.0f, 1.0f, 1.0f), // 1
+			new Vector3 (1.0f, 1.0f, 1.0f), // 2
+			new Vector3 (1.0f, 1.0f, 1.0f), // 3
+		};
+
+		Vector2[] texCoords = {
+			new Vector2 (1.0f, 0.0f), // 0
+			new Vector2 (0.0f, 1.0f), // 1
+			new Vector2 (0.0f, 0.0f), // 2
+			new Vector2 (1.0f, 1.0f), // 3
 		};
 
 		uint[] indices = {
@@ -43,7 +50,8 @@ namespace othertestgame {
 			1, 0, 3, // right
 		};
 
-		Model testModel;
+		TexturedModel testModel;
+		Texture2 testTexture;
 		Camera camera;
 		ShaderProgram program;
 
@@ -58,31 +66,35 @@ namespace othertestgame {
 
 			GraphicsContext.Assert ();
 
-			var vertexShader = BasicShader.FromFile<VertexShader> ("shaders\\passthrough.vs");
-			var fragmentShader = BasicShader.FromFile<FragmentShader> ("shaders\\passthrough.fs");
+			var vertexShader = BasicShader.FromFile<VertexShader> ("shaders\\passTex.vs");
+			var fragmentShader = BasicShader.FromFile<FragmentShader> ("shaders\\passTex.fs");
 			program = new ShaderProgram (vertexShader, fragmentShader);
 
 			program.Link ();
 
 			var v_pos = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, points);
 			var v_col = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, colors);
+			var v_tex = new GLBuffer<Vector2> (GLBufferSettings.StaticDraw2FloatArray, texCoords);
 
 			var ind = new GLBuffer<uint> (GLBufferSettings.Indices, indices);
 
 			var testGeometry = new Geometry (BeginMode.Triangles)
 				.AddBuffer ("v_pos", v_pos)
 				.AddBuffer ("v_col", v_col)
+				.AddBuffer ("v_tex", v_tex)
 				.SetIndices (ind)
 				.Construct (program);
 
-			testModel = new Model (testGeometry);
+			testModel = new TexturedModel (testGeometry);
+
+			testTexture = Texture2.FromFile ("textures\\testWood.jpg");
 
 			camera = new Camera (60f, new Resolution { Width = conf.Width, Height = conf.Height }, 0.1f, 64.0f);
-			camera.SetAbsolutePosition (new Vector3 (0, 0, 1));
+			camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 		}
 		int theTime = 0;
 		protected override void Update (GameTime time) {
-			camera.SetRelativePosition (new Vector3(0, 0, (theTime / 60000f) * time.Elapsed.Milliseconds));
+			//camera.SetRelativePosition (new Vector3(0, 0, (theTime / 60000f) * time.Elapsed.Milliseconds));
 			theTime++;
 			base.Update (time);
 		}
@@ -97,7 +109,7 @@ namespace othertestgame {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			using (program.UseProgram ()) {
-				testModel.Draw (program, camera);
+				testModel.Draw (program, camera, testTexture);
 			}
 
 			base.Draw (time);

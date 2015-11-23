@@ -44,6 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="shaders\passTex.fs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="shaders\passTex.vs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="shaders\passthrough.fs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -60,6 +66,11 @@
       <Project>{C985815A-AAB7-45D2-9427-039101F10B76}</Project>
       <Name>libnginz</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="textures\testWood.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -27,7 +27,7 @@ namespace nginz
 			texture.Bind (TextureUnit.Texture0);
 
 			// Set the texture uniform in the shader program
-			program ["texture"] = 0;
+			program ["tex"] = 0;
 
 			// Draw the geometry
 			base.Draw (program, camera);
