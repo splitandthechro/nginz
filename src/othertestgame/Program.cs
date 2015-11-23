@@ -87,6 +87,11 @@ namespace othertestgame {
 			base.Update (time);
 		}
 
+		public override void Resize (Resolution resolution) {
+			base.Resize (resolution);
+			camera.UpdateCameraMatrix (resolution);
+		}
+
 		protected override void Draw (GameTime time) {
 			GL.ClearColor (.25f, .30f, .35f, 1f);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

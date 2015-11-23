@@ -129,6 +129,10 @@ namespace nginz
 			context.SwapBuffers ();
 		}
 
+		public virtual void Resize (Resolution resolution) {
+			context.Update (window.WindowInfo);
+		}
+
 		/// <summary>
 		/// Run the game.
 		/// </summary>
@@ -143,7 +147,7 @@ namespace nginz
 
 			// Subscribe to the Resize event of the window
 			// to correctly handle resizing of the window
-			window.Resize += (sender, e) => context.Update (window.WindowInfo);
+			window.Resize += (sender, e) => Resize (new Resolution { Width = window.Width, Height = window.Height });
 
 			// Subscribe to the Closing event of the window
 			// to dispose the context when closing the window.
