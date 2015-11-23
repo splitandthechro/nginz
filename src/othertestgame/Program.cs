@@ -9,8 +9,8 @@ namespace othertestgame {
 	class Program {
 		static void Main (string[] args) {
 			var conf = new GameConfiguration {
-				Width = 640,
-				Height = 480,
+				Width = 1280,
+				Height = 720,
 				WindowTitle = "nginz Game",
 				FixedWindow = false,
 				Vsync = VsyncMode.Off,
@@ -25,10 +25,10 @@ namespace othertestgame {
 	class TestGame : Game, ICanLog {
 		
 		Vector3[] points = {
-			new Vector3 (.5f, -.5f, .0f), // 0
-			new Vector3 (-.5f, .5f, .0f), // 1
-			new Vector3 (-.5f, -.5f, .0f),// 2
-			new Vector3 (.5f, .5f, .0f),  // 3
+			new Vector3 (.35f, -.5f, .0f), // 0
+			new Vector3 (-.35f, .5f, .0f), // 1
+			new Vector3 (-.35f, -.5f, .0f),// 2
+			new Vector3 (.35f, .5f, .0f),  // 3
 		};
 
 		Vector3[] colors = {
@@ -43,7 +43,7 @@ namespace othertestgame {
 			1, 0, 3, // right
 		};
 
-		Geometry testGeometry;
+		Model testModel;
 		Camera camera;
 		ShaderProgram program;
 
@@ -69,11 +69,13 @@ namespace othertestgame {
 
 			var ind = new GLBuffer<uint> (GLBufferSettings.Indices, indices);
 
-			testGeometry = new Geometry ()
+			var testGeometry = new Geometry (BeginMode.Triangles)
 				.AddBuffer ("v_pos", v_pos)
 				.AddBuffer ("v_col", v_col)
 				.SetIndices (ind)
 				.Construct (program);
+
+			testModel = new Model (testGeometry);
 
 			camera = new Camera (60f, new Resolution { Width = conf.Width, Height = conf.Height }, 0.1f, 64.0f);
 			camera.SetAbsolutePosition (new Vector3 (0, 0, 1));
@@ -90,7 +92,7 @@ namespace othertestgame {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			using (program.UseProgram ()) {
-				testGeometry.Draw (BeginMode.Triangles, program, Matrix4.Identity, camera);
+				testModel.Draw (program, camera);
 			}
 
 			base.Draw (time);

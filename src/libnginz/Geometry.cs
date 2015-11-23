@@ -28,12 +28,15 @@ namespace nginz {
 		/// </summary>
 		int abo = -1;
 
+		BeginMode mode;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Geometry"/> class.
 		/// </summary>
-		public Geometry () {
+		public Geometry (BeginMode mode) {
 			Buffers = new Dictionary<string, IBuffer<int>> ();
 			abo = GL.GenVertexArray ();
+			this.mode = mode;
 		}
 
 		/// <summary>
@@ -102,7 +105,6 @@ namespace nginz {
 			Unbind (this);
 		}
 
-
 		/// <summary>
 		/// Construct the geometry object.
 		/// </summary>
@@ -117,9 +119,11 @@ namespace nginz {
 		/// <summary>
 		/// Draw the geometry object.
 		/// </summary>
-		/// <param name="mode">Mode.</param>
+		/// <param name="program">Shader Program.</param>
+		/// <param name="Model">Model Matrix.</param>
+		/// <param name="camera">Camera.</param>
 		/// <param name="offset">Offset.</param>
-		public void Draw (BeginMode mode, ShaderProgram program, Matrix4 Model, Camera camera, int offset = 0) {
+		public void Draw (ShaderProgram program, Matrix4 Model, Camera camera, int offset = 0) {
 			Bind ();
 			program["MVP"] = Model * camera.ViewProjectionMatrix;
 			GL.DrawElements (mode, Indices.Buffer.Length, DrawElementsType.UnsignedInt, offset);
