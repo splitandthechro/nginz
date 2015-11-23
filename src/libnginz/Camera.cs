@@ -74,7 +74,7 @@ namespace nginz {
 			}
 		}
 
-		public CameraType Type;
+		public ProjectionType ProjectionType;
 
 		/// <summary>
 		/// Gets the view projection matrix.
@@ -96,8 +96,8 @@ namespace nginz {
 		/// <param name="near">Near plane.</param>
 		/// <param name="far">Far plane.</param>
 		/// <param name="radians">Whether radians should be used instead of degrees.</param>
-		/// <param name="orthographic">Whether the camera should be orthographic instead of perspectivic.</param>
-		public Camera (float fieldOfView, Resolution resolution, float near, float far, bool radians = false, CameraType type = CameraType.ProjectionCamera) {
+		/// <param name="type">The camera type.</param>
+		public Camera (float fieldOfView, Resolution resolution, float near, float far, bool radians = false, ProjectionType type = ProjectionType.Perspective) {
 
 			// Calculate the field of view
 			FieldOfView = radians
@@ -119,18 +119,28 @@ namespace nginz {
 			// Initialize the orientation
 			Orientation = Quaternion.Identity;
 
-			Type = type;
+			// Set the camera projection type
+			ProjectionType = type;
 
 			// Calculate the projection graphics
-			ProjectionMatrix = type == CameraType.OrthographicCamera
+			ProjectionMatrix =
+				type == ProjectionType.Orthographic
 				? Matrix4.CreateOrthographic (Resolution.Width, Resolution.Height, Near, Far)
 				: Matrix4.CreatePerspectiveFieldOfView (FieldOfView, AspectRatio, Near, Far);
 		}
 
+		/// <summary>
+		/// Update the camera matrix.
+		/// </summary>
+		/// <param name="resolution">Resolution.</param>
 		public void UpdateCameraMatrix (Resolution resolution) {
+
+			// Set the resolution
 			Resolution = resolution;
 
-			ProjectionMatrix = Type == CameraType.OrthographicCamera
+			// Resize the projection matrix
+			ProjectionMatrix =
+				ProjectionType == ProjectionType.Orthographic
 				? Matrix4.CreateOrthographic (Resolution.Width, Resolution.Height, Near, Far)
 				: Matrix4.CreatePerspectiveFieldOfView (FieldOfView, AspectRatio, Near, Far);
 		}

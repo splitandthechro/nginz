@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="Buffers\GLBuffer.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="CameraType.cs" />
     <Compile Include="Geometry.cs" />
     <Compile Include="Interfaces\IBuffer.cs" />
     <Compile Include="Model.cs" />
@@ -60,6 +59,7 @@
     <Compile Include="Resolution.cs" />
     <Compile Include="Buffers\GLBufferSettings.cs" />
     <Compile Include="Texture2.cs" />
+    <Compile Include="ProjectionType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
