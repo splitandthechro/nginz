@@ -1,7 +1,5 @@
 ﻿using System;
 using nginz.Common;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System.IO;
 using System.Text;
@@ -19,13 +17,12 @@ namespace nginz
 		/// <param name="type">Type.</param>
 		/// <param name="sources">Sources.</param>
 		public BasicShader (ShaderType type, params string[] sources) : base (type, sources) {
-			this.Compile ();
+			Compile ();
 		}
 
 		/// <summary>
 		/// Create a shader with the specified type.
 		/// </summary>
-		/// <param name="type">Type.</param>
 		/// <param name="sources">Sources.</param>
 		public static Shader Create<Shader> (params string[] sources) where Shader : BasicShader {
 			// Return basic shader
