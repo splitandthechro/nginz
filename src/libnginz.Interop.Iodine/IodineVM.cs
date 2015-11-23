@@ -319,14 +319,6 @@ namespace nginz.Interop.Iodine
 				if (module.HasAttribute (function))
 					count++;
 
-			// Throw if the function is undefined
-			if (count == 0)
-				throw new Exception (string.Format ("Undefined attribute: '{0}'!", function));
-
-			// Throw if the function is defined more than once
-			if (count > 1)
-				throw new Exception (string.Format ("Attribute '{0}' is defined more than once!", function));
-
 			// Invoke the function
 			foreach (var module in modules) {
 				if (module.HasAttribute (function)) {

@@ -45,8 +45,8 @@ namespace testgame
 			0, 1, 3,
 		};
 
-		Geometry square;
-		ShaderProgram program;
+		//Geometry square;
+		//ShaderProgram program;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
@@ -55,7 +55,7 @@ namespace testgame
 
 			// Directories
 			const string mods = "..\\..\\mods\\";
-			const string shaders = "..\\..\\shaders\\";
+			const string shaders = "shaders\\";
 
 			// Create the iodine vm
 			vm = new IodineVM (this);
@@ -72,6 +72,8 @@ namespace testgame
 
 			var vertexShader = BasicShader.FromFile<VertexShader> (shaders + "basic.vs");
 			var fragmentShader = BasicShader.FromFile<FragmentShader> (shaders + "basic.fs");
+			//program = new ShaderProgram (vertexShader, fragmentShader);
+			//program.Link ();
 
 			base.Initialize ();
 		}
