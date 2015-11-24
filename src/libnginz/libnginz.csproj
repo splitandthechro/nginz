@@ -65,6 +65,8 @@
     <Compile Include="Buffers\KeyboardBuffer.cs" />
     <Compile Include="Buffers\KeyState.cs" />
     <Compile Include="Buffers\MouseBuffer.cs" />
+    <Compile Include="ModelLoaders\ObjFileLoader.cs" />
+    <Compile Include="Material.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -88,5 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="ModelLoaders\" />
   </ItemGroup>
 </Project>
