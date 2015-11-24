@@ -1,98 +1,203 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using OpenTK;
 using OpenTK.Input;
 
-namespace nginz {
+namespace nginz
+{
+
+	/// <summary>
+	/// First person camera.
+	/// </summary>
 	public class FPSCamera {
-		public Camera Camera;
 
-		private MouseBuffer mouse;
-		private KeyboardBuffer keyboard;
+		/// <summary>
+		/// The camera.
+		/// </summary>
+		readonly public Camera Camera;
 
+		/// <summary>
+		/// The mouse.
+		/// </summary>
+		readonly MouseBuffer Mouse;
+
+		/// <summary>
+		/// The keyboard.
+		/// </summary>
+		readonly KeyboardBuffer Keyboard;
+
+		/// <summary>
+		/// The mouse rotation.
+		/// </summary>
 		public Vector2 MouseRotation;
+
+		/// <summary>
+		/// The movement.
+		/// </summary>
 		public Vector3 Movement;
 
-		public float Height = 0;
+		/// <summary>
+		/// The height of the camera.
+		/// </summary>
+		public float Height;
 
+		/// <summary>
+		/// Gets or sets the mouse X sensitivity.
+		/// </summary>
+		/// <value>The mouse X sensitivity.</value>
+		public float MouseXSensitivity { get; set; }
+
+		/// <summary>
+		/// Gets or sets the mouse Y sensitivity.
+		/// </summary>
+		/// <value>The mouse Y sensitivity.</value>
+		public float MouseYSensitivity { get; set; }
+
+		/// <summary>
+		/// Gets or sets the speed.
+		/// </summary>
+		/// <value>The speed.</value>
+		public float Speed { get; set; }
+
+		/// <summary>
+		/// Gets or sets the target orientation.
+		/// </summary>
+		/// <value>The target orientation.</value>
+		public Quaternion TargetOrientation { get; set; }
+
+		/// <summary>
+		/// Gets or sets the target orientation y.
+		/// </summary>
+		/// <value>The target orientation y.</value>
+		public Quaternion TargetOrientationY { get; set; }
+
+		/// <summary>
+		/// 90 degrees in radians.
+		/// </summary>
+		const float deg90 = 1.5708f;
+
+		/// <summary>
+		/// 360 degrees in radians.
+		/// </summary>
+		const float deg360 = 6.28319f;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="nginz.FPSCamera"/> class.
+		/// </summary>
+		/// <param name="fieldOfView">Field of view.</param>
+		/// <param name="resolution">Resolution.</param>
+		/// <param name="mouse">Mouse.</param>
+		/// <param name="keyboard">Keyboard.</param>
 		public FPSCamera (float fieldOfView, Resolution resolution, MouseBuffer mouse, KeyboardBuffer keyboard) {
+
+			// Create the base camera
 			Camera = new Camera (fieldOfView, resolution, 0.01f, 64f);
 
-			this.mouse = mouse;
-			this.keyboard = keyboard;
+			// Set the mouse and the keyboard
+			Mouse = mouse;
+			Keyboard = keyboard;
 
-			MouseXSensitivity = 0.1f;
-			MouseYSensitivity = 0.1f;
+			// Initialize the mouse sensitivity
+			MouseXSensitivity = 1f;
+			MouseYSensitivity = 1f;
 
+			// Initialize the actor speed
 			Speed = 5f;
 		}
 
-		float deg90 = MathHelper.DegreesToRadians (90);
-		float deg360 = MathHelper.DegreesToRadians (360);
+		/// <summary>
+		/// Update the camera.
+		/// </summary>
+		/// <param name="time">The game time.</param>
+		public void Update (GameTime time) {
 
-		protected void ClampMouseValues () {
+			// Reset the movement values
+			Movement.X = 0;
+			Movement.Y = 0;
+			Movement.Z = 0;
 
-			if (MouseRotation.Y >= deg90) //90 degrees in radians
-				MouseRotation.Y = deg90;
-			if (MouseRotation.Y <= -deg90)
-				MouseRotation.Y = -deg90;
+			// Get the time value
+			float t = (float)time.Elapsed.TotalSeconds;
 
-			if (MouseRotation.X >= deg360) //360 degrees in radians (or something in radians)
+			// Calculate the movement distance
+			var distance = Speed * t;
+
+			// Check if the w key is down
+			if (Keyboard.IsKeyDown (Key.W))
+
+				// Update the movement accordingly
+				Movement.Z = -distance;
+
+			// Check if the s key is down
+			if (Keyboard.IsKeyDown (Key.S))
+
+				// Update the movement accordingly
+				Movement.Z = distance;
+
+			// Check if the a key is down
+			if (Keyboard.IsKeyDown (Key.A))
+
+				// Update the movement accordingly
+				Movement.X = -distance;
+
+			// Check if the d key is down
+			if (Keyboard.IsKeyDown (Key.D))
+
+				// Update the movement accordingly
+				Movement.X = distance;
+
+			// Update the mouse rotation
+			UpdateMouseRotation (t);
+
+			// Update the camera orientation
+			Camera.Orientation = TargetOrientation;
+
+			// Calculate the updated camera position
+			var trans = Vector3.Transform (Movement, Camera.Orientation.Inverted ());
+			var pos = new Vector3 (trans.X, Height, trans.Z);
+
+			// Update the camera position
+			Camera.SetRelativePosition (pos);
+		}
+
+		/// <summary>
+		/// Update the mouse rotation.
+		/// </summary>
+		/// <param name="time">Time.</param>
+		protected void UpdateMouseRotation (double time) {
+
+			// Update the mouse rotation
+			MouseRotation.X += (float) (Mouse.DeltaX * MouseXSensitivity * time);
+			MouseRotation.Y += (float) (Mouse.DeltaY * MouseYSensitivity * time);
+
+			// Clamp the mouse rotation
+			ClampMouseRotation ();
+
+			// Apply the mouse rotation
+			ApplyRotation ();
+		}
+
+		/// <summary>
+		/// Clamp the mouse rotation.
+		/// </summary>
+		protected void ClampMouseRotation () {
+
+			// Clamp the mouse y rotation
+			MouseRotation.Y = MathHelper.Clamp (MouseRotation.Y, -deg90, deg90);
+
+			// Clamp the mouse x rotation
+			if (MouseRotation.X >= deg360)
 				MouseRotation.X -= deg360;
 			if (MouseRotation.X <= -deg360)
 				MouseRotation.X += deg360;
 		}
 
-		public float MouseYSensitivity { get; set; }
-		public float MouseXSensitivity { get; set; }
-		public float Speed { get; set; }
-
-		public Quaternion TargetOrientation { get; set; }
-		public Quaternion TargetOrientationY { get; set; }
-
+		/// <summary>
+		/// Apply the mouse rotation.
+		/// </summary>
 		protected void ApplyRotation () {
 			TargetOrientationY = Quaternion.FromAxisAngle (Vector3.UnitY, (MathHelper.Pi + MouseRotation.X));
 			TargetOrientation = Quaternion.FromAxisAngle (Vector3.UnitX, MouseRotation.Y) * TargetOrientationY;
 
-		}
-
-		protected void UpdateRotations (double time) {
-			MouseRotation.X += (float) (mouse.DeltaX * MouseXSensitivity * time);
-			MouseRotation.Y += (float) (mouse.DeltaY * MouseYSensitivity * time);
-
-			ClampMouseValues ();
-			ApplyRotation ();
-			Camera.Orientation = TargetOrientation;
-		}
-
-		public void Update (GameTime dtime) {
-			float time = dtime.Elapsed.Milliseconds * .0005f;
-
-			if (keyboard.IsKeyDown(Key.W) && !keyboard.IsKeyDown (Key.S)) {
-				Movement.Z = 0;
-				Movement.Z -= Speed * time;
-			} else if (keyboard.IsKeyDown (Key.S) && !keyboard.IsKeyDown (Key.W)) {
-				Movement.Z = 0;
-				Movement.Z += Speed * time;
-			} else Movement.Z = 0.0f;
-
-			if (keyboard.IsKeyDown (Key.A) && !keyboard.IsKeyDown (Key.D)) {
-				Movement.X = 0.0f;
-				Movement.X -= Speed * time;
-			} else if (keyboard.IsKeyDown (Key.D) && !keyboard.IsKeyDown (Key.A)) {
-				Movement.X = 0.0f;
-				Movement.X += Speed * time;
-			} else
-				Movement.X = 0.0f;
-
-			UpdateRotations (time);
-
-			var pos = Vector3.Transform (Movement, Camera.Orientation.Inverted ());
-			pos = new Vector3 (pos.X, Height, pos.Z);
-
-			Camera.SetRelativePosition (pos);
 		}
 	}
 }

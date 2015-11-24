@@ -30,31 +30,6 @@ namespace nginz
 		public MouseBuffer Mouse;
 
 		/// <summary>
-		/// The state of the current mouse.
-		/// </summary>
-		public MouseState CurrentMouseState;
-
-		/// <summary>
-		/// The state of the previous mouse.
-		/// </summary>
-		public MouseState PreviousMouseState;
-
-		/// <summary>
-		/// Occurs when a key is pressed.
-		/// </summary>
-		public event EventHandler<KeyPressEventArgs> KeyPress;
-
-		/// <summary>
-		/// Occurs when a key is pressed.
-		/// </summary>
-		public event EventHandler<KeyboardKeyEventArgs> KeyDown;
-
-		/// <summary>
-		// Occurs when a key is released.
-		/// </summary>
-		public event EventHandler<KeyboardKeyEventArgs> KeyUp;
-
-		/// <summary>
 		/// The start time.
 		/// </summary>
 		DateTime startTime;
@@ -105,11 +80,6 @@ namespace nginz
 
 			// Initialize the keyboard buffer
 			Keyboard = new KeyboardBuffer ();
-
-			// Register the key event handlers
-			KeyPress += delegate { };
-			KeyDown += Keyboard.RegisterKeyDown;
-			KeyUp += Keyboard.RegisterKeyUp;
 		}
 
 		/// <summary>
@@ -158,21 +128,16 @@ namespace nginz
 			);
 
 			// Register events
-			window.KeyDown += KeyDown;
-			window.KeyUp += KeyUp;
-			window.KeyPress += KeyPress;
+			window.KeyDown += Keyboard.RegisterKeyDown;
+			window.KeyUp += Keyboard.RegisterKeyUp;
+			window.KeyPress += delegate { };
 
 			// Initialize startTime and lastTime
 			startTime = DateTime.UtcNow;
 			lastTime = startTime;
 
-			// Initialize the mouse state
-			CenterMouse ();
-			PreviousMouseState = GLMouse.GetState ();
-			CurrentMouseState = GLMouse.GetState ();
-
 			// Initialize the mouse buffer
-			Mouse = new MouseBuffer (window, CurrentMouseState);
+			Mouse = new MouseBuffer (window);
 		}
 
 		/// <summary>
@@ -187,24 +152,8 @@ namespace nginz
 		/// <param name="time">Time.</param>
 		protected virtual void Update (GameTime time) {
 
-			// Get the current mouse state
-			CurrentMouseState = GLMouse.GetState ();
-
-			// Update the mouse buffer if the window is focused
-			if (window.Focused) {
-				Mouse.DeltaX = CurrentMouseState.X - PreviousMouseState.X;
-				Mouse.DeltaY = CurrentMouseState.Y - PreviousMouseState.Y;
-				Mouse.DeltaZ = CurrentMouseState.WheelPrecise - PreviousMouseState.WheelPrecise;
-				Mouse.Update (CurrentMouseState);
-			}
-
-			// Set the previous mouse state
-			PreviousMouseState = CurrentMouseState;
-
-			// Center the mouse if the window is focused
-			if (window.Focused)
-				CenterMouse ();
-
+			// Update the mouse buffer
+			Mouse.Update ();
 		}
 
 		/// <summary>
@@ -272,21 +221,6 @@ namespace nginz
 
 			// Set exit to true
 			exit = true;
-		}
-
-		/// <summary>
-		/// Center the mouse.
-		/// </summary>
-		void CenterMouse () {
-
-			// Calculate target x position
-			var x = window.Bounds.Left + window.Bounds.Width / 2;
-
-			// Calculate target y position
-			var y = window.Bounds.Top + window.Bounds.Height / 2;
-
-			// Set new mouse position
-			GLMouse.SetPosition(x, y);
 		}
 
 		/// <summary>
