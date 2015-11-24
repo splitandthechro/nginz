@@ -55,7 +55,7 @@ namespace othertestgame {
 
 		TexturedModel testModel;
 		Texture2 testTexture;
-		Camera camera;
+		FPSCamera camera;
 		ShaderProgram program;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
@@ -98,14 +98,15 @@ namespace othertestgame {
 
 			testTexture = Texture2.FromFile (GetAssetPath ("textures", "testWood.jpg"));
 
-			camera = new Camera (60f, new Resolution { Width = Configuration.Width, Height = Configuration.Height }, 0.1f, 64.0f);
-			camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
+			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
+			camera = new FPSCamera (60f, res, Mouse, Keyboard);
+			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 		}
 
 		protected override void Update (GameTime time) {
 			//camera.SetRelativePosition (new Vector3(0, 0, (theTime / 60000f) * time.Elapsed.Milliseconds));
 
-			const float speed = 1f;
+			/*const float speed = 1f;
 			var movement = speed * (float) time.Elapsed.TotalSeconds;
 			var left = new Vector3 (-movement, 0, 0);
 			var up = new Vector3 (0, 0, movement);
@@ -143,7 +144,9 @@ namespace othertestgame {
 
 			// Flip texture if f is pressed
 			if (Keyboard.IsKeyTyped (Key.F))
-				camera.SetRotation (Vector3.UnitZ, flip, relative: true);
+				camera.SetRotation (Vector3.UnitZ, flip, relative: true);*/
+
+			camera.Update (time);
 
 			// Exit if escape is pressed
 			if (Keyboard.IsKeyTyped (Key.Escape))
@@ -154,7 +157,7 @@ namespace othertestgame {
 
 		public override void Resize (Resolution resolution) {
 			base.Resize (resolution);
-			camera.UpdateCameraMatrix (resolution);
+			camera.Camera.UpdateCameraMatrix (resolution);
 		}
 
 		protected override void Draw (GameTime time) {
@@ -162,7 +165,7 @@ namespace othertestgame {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			using (program.UseProgram ()) {
-				testModel.Draw (program, camera, testTexture);
+				testModel.Draw (program, camera.Camera, testTexture);
 			}
 
 			base.Draw (time);
