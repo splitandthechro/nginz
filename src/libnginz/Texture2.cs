@@ -6,7 +6,6 @@ using nginz.Common;
 using OpenTK.Graphics.OpenGL4;
 using GDIPixelFormat = System.Drawing.Imaging.PixelFormat;
 using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
-using System.Collections.Generic;
 
 namespace nginz
 {
@@ -30,7 +29,7 @@ namespace nginz
 		/// <param name = "interpolation">Interpolation mode.</param>
 		public Texture2 (Bitmap bmp, bool mipmapped = false,
 			InterpolationMode interpolation = InterpolationMode.Linear) {
-			
+
 			// Get the texture id
 			TextureId = GL.GenTexture ();
 
