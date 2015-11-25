@@ -30,6 +30,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentManager.cs" />
     <Compile Include="Interfaces\IBind.cs" />
     <Compile Include="Interfaces\IPointTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -54,7 +54,7 @@ namespace othertestgame {
 		};
 
 		TexturedModel testModel;
-		Texture2 testTexture;
+		Texture2D testTexture;
 		FPSCamera camera;
 		ShaderProgram program;
 		Fontmap testFont;
@@ -78,8 +78,8 @@ namespace othertestgame {
 
 			GraphicsContext.Assert ();
 
-			var vertexShader = BasicShader.FromFile<VertexShader> (GetAssetPath ("shaders", "passTex.vs"));
-			var fragmentShader = BasicShader.FromFile<FragmentShader> (GetAssetPath ("shaders", "passTex.fs"));
+			var vertexShader = content.Load<VertexShader> ("passTex.vs");
+			var fragmentShader = content.Load<FragmentShader> ("passTex.fs");
 			program = new ShaderProgram (vertexShader, fragmentShader);
 
 			program.Link ();
@@ -99,7 +99,7 @@ namespace othertestgame {
 
 			testModel = new TexturedModel (testGeometry);
 
-			testTexture = Texture2.FromFile (GetAssetPath ("textures", "testWood.jpg"));
+			testTexture = content.Load<Texture2D> ("testWood.jpg");
 
 			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
@@ -110,48 +110,6 @@ namespace othertestgame {
 		}
 
 		protected override void Update (GameTime time) {
-			//camera.SetRelativePosition (new Vector3(0, 0, (theTime / 60000f) * time.Elapsed.Milliseconds));
-
-			/*const float speed = 1f;
-			var movement = speed * (float) time.Elapsed.TotalSeconds;
-			var left = new Vector3 (-movement, 0, 0);
-			var up = new Vector3 (0, 0, movement);
-			var enlarge = movement;
-			var flip = 180f;
-
-			// Move to the left if Left or A is pressed
-			if (Keyboard.IsAnyKeyDown (Key.Left, Key.A))
-				camera.Position += left;
-
-			// Move to the right if Right or D is pressed
-			if (Keyboard.IsAnyKeyDown (Key.Right, Key.D))
-				camera.Position -= left;
-
-			// Move up if Up or W is pressed
-			if (Keyboard.IsAnyKeyDown (Key.Up, Key.W))
-				camera.Position -= up;
-
-			// Move down if Down or S is pressed
-			if (Keyboard.IsAnyKeyDown (Key.Down, Key.S))
-				camera.Position += up;
-
-			// Scale up if + is pressed
-			if (Keyboard.IsAnyKeyDown (Key.Plus, Key.KeypadPlus))
-				camera.Position -= new Vector3(0, 0, enlarge);
-
-			// Scale down if - is pressed
-			if (Keyboard.IsAnyKeyDown (Key.Minus, Key.KeypadMinus))
-				camera.Position += new Vector3 (0, 0, enlarge);
-
-			if (Keyboard.IsKeyDown (Key.E))
-				camera.SetRotation (Vector3.UnitY, .25f, relative: true);
-			if (Keyboard.IsKeyDown (Key.Q))
-				camera.SetRotation (Vector3.UnitY, -.25f, relative: true);
-
-			// Flip texture if f is pressed
-			if (Keyboard.IsKeyTyped (Key.F))
-				camera.SetRotation (Vector3.UnitZ, flip, relative: true);*/
-
 			camera.Update (time);
 
 			// Exit if escape is pressed

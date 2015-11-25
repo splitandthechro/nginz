@@ -33,7 +33,7 @@ namespace nginz
 		public ShaderProgram program;
 
 		Font font;
-		Texture2 texture;
+		Texture2D texture;
 		Bitmap bitmap;
 		Matrix4 ortho;
 		Geometry geometry;
@@ -173,7 +173,7 @@ namespace nginz
 			areaWidth = areawidth;
 			areaHeight = areaheight;
 			bitmap = new Bitmap (areawidth, areaheight);
-			texture = new Texture2 (bitmap);
+			texture = new Texture2D (bitmap);
 			ortho = Matrix4.CreateOrthographicOffCenter (0, areaWidth, areaHeight, 0, -1, 1);
 			program = new ShaderProgram ();
 			iao = new uint[] {

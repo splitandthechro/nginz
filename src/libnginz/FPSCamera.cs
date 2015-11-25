@@ -97,8 +97,8 @@ namespace nginz
 			Keyboard = keyboard;
 
 			// Initialize the mouse sensitivity
-			MouseXSensitivity = 1f;
-			MouseYSensitivity = 1f;
+			MouseXSensitivity = .1f;
+			MouseYSensitivity = .1f;
 
 			// Initialize the actor speed
 			Speed = 5f;

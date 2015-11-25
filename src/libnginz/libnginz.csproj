@@ -47,6 +47,8 @@
     <Compile Include="GameConfiguration.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="Shading\ShaderProgram.Attributes.cs" />
+    <Compile Include="Shading\ShaderProvider.cs" />
+    <Compile Include="Texture2DProvider.cs" />
     <Compile Include="VsyncMode.cs" />
     <Compile Include="Shading\BasicShader.cs" />
     <Compile Include="Shading\FragmentShader.cs" />
@@ -59,7 +61,7 @@
     <Compile Include="Shading\ShaderProgramHandle.cs" />
     <Compile Include="Resolution.cs" />
     <Compile Include="Buffers\GLBufferSettings.cs" />
-    <Compile Include="Texture2.cs" />
+    <Compile Include="Texture2D.cs" />
     <Compile Include="ProjectionType.cs" />
     <Compile Include="TexturedModel.cs" />
     <Compile Include="InterpolationMode.cs" />

@@ -25,6 +25,11 @@ namespace nginz
 		readonly public KeyboardBuffer Keyboard;
 
 		/// <summary>
+		/// The content manager.
+		/// </summary>
+		public ContentManager content;
+
+		/// <summary>
 		/// The mouse.
 		/// </summary>
 		public MouseBuffer Mouse;
@@ -144,6 +149,12 @@ namespace nginz
 		/// Initialize this instance.
 		/// </summary>
 		protected virtual void Initialize () {
+
+			// Initialize the content manager
+			content = new ContentManager ();
+
+			// Register the built-in assets
+			registerProviders ();
 		}
 
 		/// <summary>
@@ -367,6 +378,24 @@ namespace nginz
 
 			// Dispose of the window
 			window.Dispose ();
+		}
+
+		/// <summary>
+		/// Registers the basic built-in asset providers.
+		/// </summary>
+		void registerProviders () {
+
+			/// Register an asset provider for the vertex shader.
+			content.RegisterAssetProvider<VertexShader> (typeof (ShaderProvider<VertexShader>));
+
+			/// Register an asset provider for the vertex fragment.
+			content.RegisterAssetProvider<FragmentShader> (typeof (ShaderProvider<FragmentShader>));
+
+			/// Register an asset provider for the geometry shader.
+			content.RegisterAssetProvider<GeometryShader> (typeof (ShaderProvider<GeometryShader>));
+
+			/// Register an asset provider for the Texture2D.
+			content.RegisterAssetProvider<Texture2D> (typeof (Texture2DProvider));
 		}
 	}
 }

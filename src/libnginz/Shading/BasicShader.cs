@@ -9,7 +9,7 @@ namespace nginz
 	/// <summary>
 	/// Basic shader.
 	/// </summary>
-	public class BasicShader : Shader, ICanThrow
+	public class BasicShader : Shader, ICanThrow, Asset
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.BasicShader"/> class.

@@ -21,7 +21,7 @@ namespace nginz
 		/// <param name="program">Shader program.</param>
 		/// <param name="camera">Camera.</param>
 		/// <param name="texture">Texture.</param>
-		public void Draw (ShaderProgram program, Camera camera, Texture2 texture) {
+		public void Draw (ShaderProgram program, Camera camera, Texture2D texture) {
 
 			// Bind the texture
 			texture.Bind (TextureUnit.Texture0);

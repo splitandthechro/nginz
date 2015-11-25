@@ -13,7 +13,7 @@ namespace nginz
 	/// <summary>
 	/// 2D Texture.
 	/// </summary>
-	public class Texture2 : ICanThrow, IBind
+	public class Texture2D : ICanThrow, IBind, Asset
 	{
 
 		/// <summary>
@@ -22,12 +22,12 @@ namespace nginz
 		readonly public int TextureId;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="nginz.Texture2"/> class.
+		/// Initializes a new instance of the <see cref="nginz.Texture2D"/> class.
 		/// </summary>
 		/// <param name="bmp">The bitmap.</param>
 		/// <param name = "mipmapped">Whether the texture uses mipmapping.</param>
 		/// <param name = "interpolation">Interpolation mode.</param>
-		public Texture2 (Bitmap bmp, bool mipmapped = false,
+		public Texture2D (Bitmap bmp, bool mipmapped = false,
 			InterpolationMode interpolation = InterpolationMode.Linear) {
 
 			// Get the texture id
@@ -103,7 +103,7 @@ namespace nginz
 		/// </summary>
 		/// <returns>The Texture2D.</returns>
 		/// <param name="path">Path to the texture.</param>
-		public static Texture2 FromFile (string path) {
+		public static Texture2D FromFile (string path) {
 
 			// Throw if the file doesn't exist
 			if (!File.Exists (path))
@@ -116,7 +116,7 @@ namespace nginz
 			var bmp = new Bitmap (img);
 
 			// Return the texture
-			return new Texture2 (bmp);
+			return new Texture2D (bmp);
 		}
 
 		/// <summary>
