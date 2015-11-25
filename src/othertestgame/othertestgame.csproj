@@ -36,6 +36,7 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\opentk-build\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -57,16 +58,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\libnginz.Common\libnginz.Common.csproj">
-      <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
-      <Name>libnginz.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\libnginz\libnginz.csproj">
-      <Project>{C985815A-AAB7-45D2-9427-039101F10B76}</Project>
-      <Name>libnginz</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="textures\testWood.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -79,4 +70,14 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\libnginz\libnginz.csproj">
+      <Project>{C985815A-AAB7-45D2-9427-039101F10B76}</Project>
+      <Name>libnginz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libnginz.Common\libnginz.Common.csproj">
+      <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
+      <Name>libnginz.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

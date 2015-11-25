@@ -68,6 +68,7 @@
     <Compile Include="Buffers\MouseBuffer.cs" />
     <Compile Include="ModelLoaders\ObjFileLoader.cs" />
     <Compile Include="Material.cs" />
+    <Compile Include="Fontmap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

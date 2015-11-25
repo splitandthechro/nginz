@@ -57,6 +57,7 @@ namespace othertestgame {
 		Texture2 testTexture;
 		FPSCamera camera;
 		ShaderProgram program;
+		Fontmap testFont;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
@@ -71,7 +72,9 @@ namespace othertestgame {
 			base.Initialize ();
 
 			GL.CullFace (CullFaceMode.Back);
-			GL.Enable (EnableCap.CullFace);
+
+			// Why do we only cull the face? lol
+			//GL.Enable (EnableCap.CullFace);
 
 			GraphicsContext.Assert ();
 
@@ -101,6 +104,9 @@ namespace othertestgame {
 			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
+
+			testFont = new Fontmap (camera.Camera, "Consolas", 11.25f);
+			testFont.SetText ("Hello, World!");
 		}
 
 		protected override void Update (GameTime time) {
@@ -166,6 +172,10 @@ namespace othertestgame {
 
 			using (program.UseProgram ()) {
 				testModel.Draw (program, camera.Camera, testTexture);
+			}
+
+			using (testFont.program.UseProgram ()) {
+				testFont.Draw ();
 			}
 
 			base.Draw (time);
