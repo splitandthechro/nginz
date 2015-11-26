@@ -71,6 +71,12 @@
     <Compile Include="ModelLoaders\ObjFileLoader.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Fontmap.cs" />
+    <Compile Include="ModelLoaders\ObjFile.cs" />
+    <Compile Include="ModelLoaders\ObjFaceGroup.cs" />
+    <Compile Include="ModelLoaders\ObjFace.cs" />
+    <Compile Include="ModelLoaders\ObjFaceVertex.cs" />
+    <Compile Include="ModelLoaders\ObjLoaderFactory.cs" />
+    <Compile Include="ModelLoaders\ObjSurfaceType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

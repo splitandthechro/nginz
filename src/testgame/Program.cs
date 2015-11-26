@@ -14,7 +14,7 @@ namespace testgame
 				WindowTitle = "nginz Game",
 				FixedWindow = false,
 				Vsync = VsyncMode.Off,
-				FixedFramerate = true,
+				FixedFramerate = false,
 				TargetFramerate = 60,
 			};
 			var game = new TestGame (conf);
@@ -70,10 +70,12 @@ namespace testgame
 				mods + "test.id"
 			);
 
-			var vertexShader = BasicShader.FromFile<VertexShader> (shaders + "basic.vs");
-			var fragmentShader = BasicShader.FromFile<FragmentShader> (shaders + "basic.fs");
+			//var vertexShader = BasicShader.FromFile<VertexShader> (shaders + "basic.vs");
+			//var fragmentShader = BasicShader.FromFile<FragmentShader> (shaders + "basic.fs");
 			//program = new ShaderProgram (vertexShader, fragmentShader);
 			//program.Link ();
+
+			ObjLoaderFactory.LoadFrom ("models\\suzanne.obj");
 
 			base.Initialize ();
 		}

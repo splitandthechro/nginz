@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenTK;
 using OpenTK.Graphics;
 
 namespace nginz
@@ -18,17 +19,17 @@ namespace nginz
 		/// <summary>
 		/// The color of the ambient.
 		/// </summary>
-		public Color4 AmbientColor;
+		public Vector3 AmbientColor;
 
 		/// <summary>
 		/// The color of the diffuse.
 		/// </summary>
-		public Color4 DiffuseColor;
+		public Vector3 DiffuseColor;
 
 		/// <summary>
 		/// The color of the specular.
 		/// </summary>
-		public Color4 SpecularColor;
+		public Vector3 SpecularColor;
 
 		/// <summary>
 		/// The specular coefficient.
