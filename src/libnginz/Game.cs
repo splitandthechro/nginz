@@ -3,8 +3,6 @@ using System.Threading;
 using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Input;
-using GLMouse = OpenTK.Input.Mouse;
 
 namespace nginz
 {
@@ -88,6 +86,32 @@ namespace nginz
 		}
 
 		/// <summary>
+		/// Run the game.
+		/// </summary>
+		public void Run () {
+
+			// Initialize the game
+			InternalInitialize ();
+
+			// Start gameloop in a separate thread
+			var trd = new Thread (EnterGameloop);
+			trd.Start ();
+
+			// Subscribe to the Resize event of the window
+			// to correctly handle resizing of the window
+			window.Resize += (sender, e) => Resize (new Resolution { Width = window.Width, Height = window.Height });
+
+			// Subscribe to the Closing event of the window
+			// to dispose the context when closing the window.
+			window.Closing += (sender, e) => context.Dispose ();
+
+			// Process the message queue
+			this.Log ("Entering message processing loop");
+			while (window.Exists)
+				window.ProcessEvents ();
+		}
+
+		/// <summary>
 		/// Pause the game.
 		/// </summary>
 		public void Pause () {
@@ -103,10 +127,74 @@ namespace nginz
 		}
 
 		/// <summary>
+		/// Exit the game.
+		/// </summary>
+		public void Exit () {
+
+			// Call the BeforeExit function
+			BeforeExit ();
+
+			// Set exit to true
+			exit = true;
+		}
+
+		/// <summary>
+		/// Initialize this instance.
+		/// </summary>
+		protected virtual void Initialize () {
+
+			// Initialize the content manager
+			content = new ContentManager ();
+
+			// Register the built-in assets
+			registerProviders ();
+		}
+
+		/// <summary>
+		/// Update logic like movement, physics etc.
+		/// </summary>
+		/// <param name="time">Time.</param>
+		protected virtual void Update (GameTime time) {
+
+			// Update the mouse buffer
+			Mouse.Update ();
+		}
+
+		/// <summary>
+		/// Draw stuff onto the screen.
+		/// </summary>
+		/// <param name="time">Time.</param>
+		protected virtual void Draw (GameTime time) {
+
+			if (context.IsDisposed)
+				return;
+
+			// Present the rendered scene to the user
+			context.SwapBuffers ();
+		}
+
+		/// <summary>
+		/// Resize the game window.
+		/// </summary>
+		/// <param name="resolution">Resolution.</param>
+		protected virtual void Resize (Resolution resolution) {
+
+			// Update the context
+			context.Update (window.WindowInfo);
+		}
+
+		/// <summary>
+		/// Gets called before the game exits.
+		/// Maybe save the game here and do other stuff
+		/// that needs to be done before the game exits.
+		/// </summary>
+		protected virtual void BeforeExit () { }
+
+		/// <summary>
 		/// Initializes the game internally.
 		/// </summary>
 		void InternalInitialize () {
-			
+
 			// Initialize graphics mode to default
 			graphicsMode = GraphicsMode.Default;
 
@@ -143,95 +231,6 @@ namespace nginz
 
 			// Initialize the mouse buffer
 			Mouse = new MouseBuffer (window);
-		}
-
-		/// <summary>
-		/// Initialize this instance.
-		/// </summary>
-		protected virtual void Initialize () {
-
-			// Initialize the content manager
-			content = new ContentManager ();
-
-			// Register the built-in assets
-			registerProviders ();
-		}
-
-		/// <summary>
-		/// Update logic like movement, physics etc.
-		/// </summary>
-		/// <param name="time">Time.</param>
-		protected virtual void Update (GameTime time) {
-
-			// Update the mouse buffer
-			Mouse.Update ();
-		}
-
-		/// <summary>
-		/// Draw stuff onto the screen.
-		/// </summary>
-		/// <param name="time">Time.</param>
-		protected virtual void Draw (GameTime time) {
-
-			// Present the rendered scene to the user
-			context.SwapBuffers ();
-		}
-
-		/// <summary>
-		/// Resize the game window.
-		/// </summary>
-		/// <param name="resolution">Resolution.</param>
-		public virtual void Resize (Resolution resolution) {
-
-			// Update the context
-			context.Update (window.WindowInfo);
-		}
-
-		/// <summary>
-		/// Gets called before the game exits.
-		/// Maybe save the game here and do other stuff
-		/// that needs to be done before the game exits.
-		/// </summary>
-		public virtual void BeforeExit () {
-		}
-
-		/// <summary>
-		/// Run the game.
-		/// </summary>
-		public void Run () {
-
-			// Initialize the game
-			InternalInitialize ();
-			
-			// Start gameloop in a separate thread
-			var trd = new Thread (EnterGameloop);
-			trd.Start ();
-
-			// Subscribe to the Resize event of the window
-			// to correctly handle resizing of the window
-			window.Resize += (sender, e) => Resize (new Resolution { Width = window.Width, Height = window.Height });
-
-			// Subscribe to the Closing event of the window
-			// to dispose the context when closing the window.
-			window.Closing += (sender, e) => context.Dispose ();
-
-			// Process the message queue
-			this.Log ("Entering message processing loop");
-			while (window.Exists) {
-				window.ProcessEvents ();
-			}
-		}
-
-		/// <summary>
-		/// Exit the game.
-		/// </summary>
-		public void Exit () {
-
-			// Call the BeforeExit function
-			BeforeExit ();
-
-			// Set exit to true
-			exit = true;
 		}
 
 		/// <summary>
@@ -385,17 +384,20 @@ namespace nginz
 		/// </summary>
 		void registerProviders () {
 
-			/// Register an asset provider for the vertex shader.
+			// Register an asset provider for the vertex shader.
 			content.RegisterAssetProvider<VertexShader> (typeof (ShaderProvider<VertexShader>));
 
-			/// Register an asset provider for the vertex fragment.
+			// Register an asset provider for the vertex fragment.
 			content.RegisterAssetProvider<FragmentShader> (typeof (ShaderProvider<FragmentShader>));
 
-			/// Register an asset provider for the geometry shader.
+			// Register an asset provider for the geometry shader.
 			content.RegisterAssetProvider<GeometryShader> (typeof (ShaderProvider<GeometryShader>));
 
-			/// Register an asset provider for the Texture2D.
+			// Register an asset provider for the Texture2D.
 			content.RegisterAssetProvider<Texture2D> (typeof (Texture2DProvider));
+
+			// Register an asset provider for the obj loader.
+			content.RegisterAssetProvider<ObjFile> (typeof (ObjProvider));
 		}
 	}
 }

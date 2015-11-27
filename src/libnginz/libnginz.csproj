@@ -67,7 +67,6 @@
     <Compile Include="Buffers\KeyboardBuffer.cs" />
     <Compile Include="Buffers\KeyState.cs" />
     <Compile Include="Buffers\MouseBuffer.cs" />
-    <Compile Include="ModelLoaders\ObjFileLoader.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Fontmap.cs" />
     <Compile Include="ModelLoaders\ObjFile.cs" />
@@ -78,6 +77,7 @@
     <Compile Include="ModelLoaders\ObjSurfaceType.cs" />
     <Compile Include="AssetProviders\ObjProvider.cs" />
     <Compile Include="AssetProviders\Texture2DProvider.cs" />
+    <Compile Include="ModelLoaders\ObjLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

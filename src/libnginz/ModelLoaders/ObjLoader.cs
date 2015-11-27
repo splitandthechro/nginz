@@ -12,7 +12,7 @@ namespace nginz
 	/// <summary>
 	/// Object file loader.
 	/// </summary>
-	public class ObjFileLoader : ICanLog
+	public class ObjLoader : ICanLog
 	{
 
 		/// <summary>
@@ -46,10 +46,10 @@ namespace nginz
 		string currentGroup;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="nginz.ObjFileLoader"/> class.
+		/// Initializes a new instance of the <see cref="nginz.ObjLoader"/> class.
 		/// </summary>
 		/// <param name="source">Source.</param>
-		public ObjFileLoader (string source) {
+		public ObjLoader (string source) {
 			result = new ObjFile ();
 			src = source;
 			pos = -1;

@@ -119,7 +119,7 @@ namespace othertestgame {
 			base.Update (time);
 		}
 
-		public override void Resize (Resolution resolution) {
+		protected override void Resize (Resolution resolution) {
 			base.Resize (resolution);
 			camera.Camera.UpdateCameraMatrix (resolution);
 		}

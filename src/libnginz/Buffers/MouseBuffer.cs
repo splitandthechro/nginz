@@ -29,6 +29,11 @@ namespace nginz
 		bool suppressUpdate;
 
 		/// <summary>
+		/// Whether the window was unfocused.
+		/// </summary>
+		bool wasUnfocused;
+
+		/// <summary>
 		/// The x position.
 		/// </summary>
 		public float X;
@@ -142,7 +147,7 @@ namespace nginz
 			var mouseClientRect = new Rectangle (mouseClientPoint, new Size (1, 1));
 
 			// Update if the window is focused
-			if (window.Focused && window.ClientRectangle.IntersectsWith (mouseClientRect)) {
+			if (window.Focused && (window.ClientRectangle.IntersectsWith (mouseClientRect) || !wasUnfocused)) {
 
 				// Check if updating the mouse is suppressed
 				if (suppressUpdate) {
@@ -150,6 +155,7 @@ namespace nginz
 					// Don't suppress updating the mouse anymore
 					// if the window was left-clicked
 					suppressUpdate &= !cur.IsButtonDown (MouseButton.Left);
+					wasUnfocused &= !cur.IsButtonDown (MouseButton.Left);
 
 					// Go to the end of the if statement
 					// Yes, the goto is really needed here
@@ -176,7 +182,8 @@ namespace nginz
 				DeltaZ = 0;
 
 				// Suppress updating the mouse
-				suppressUpdate = true;
+				wasUnfocused |= !window.Focused;
+				suppressUpdate |= wasUnfocused;
 			}
 
 			// Jump marker for jumping to the end of the if statement
