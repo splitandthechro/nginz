@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace nginz.Common
 {
@@ -36,7 +37,7 @@ namespace nginz.Common
 		/// <returns>The asset path.</returns>
 		/// <param name="asset">Asset.</param>
 		public string GetAssetPath (string asset) {
-			return Root + AssetRoot + asset;
+			return Path.Combine (Root, AssetRoot, asset);
 		}
 
 		/// <summary>

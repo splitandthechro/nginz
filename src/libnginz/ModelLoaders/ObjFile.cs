@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using nginz.Common;
 using OpenTK;
 
 namespace nginz
 {
-	public class ObjFile
+	public class ObjFile : Asset
 	{
 		readonly public List<Vector3> Vertices;
 		readonly public List<Vector2> Textures;

@@ -48,7 +48,6 @@
     <Compile Include="GameTime.cs" />
     <Compile Include="Shading\ShaderProgram.Attributes.cs" />
     <Compile Include="Shading\ShaderProvider.cs" />
-    <Compile Include="Texture2DProvider.cs" />
     <Compile Include="VsyncMode.cs" />
     <Compile Include="Shading\BasicShader.cs" />
     <Compile Include="Shading\FragmentShader.cs" />
@@ -77,6 +76,8 @@
     <Compile Include="ModelLoaders\ObjFaceVertex.cs" />
     <Compile Include="ModelLoaders\ObjLoaderFactory.cs" />
     <Compile Include="ModelLoaders\ObjSurfaceType.cs" />
+    <Compile Include="AssetProviders\ObjProvider.cs" />
+    <Compile Include="AssetProviders\Texture2DProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -100,5 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="AssetProviders\" />
   </ItemGroup>
 </Project>
