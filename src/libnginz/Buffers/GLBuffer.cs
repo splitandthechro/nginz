@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
+using System.Linq;
 
 namespace nginz {
 
@@ -29,20 +31,20 @@ namespace nginz {
 		/// Gets the size of the element.
 		/// </summary>
 		/// <value>The size of the element.</value>
-		public int ElementSize { get { return BufferSize / Buffer.Length; } }
+		public int ElementSize { get { return BufferSize / Buffer.Count; } }
 
 		/// <summary>
 		/// Gets or sets the buffer.
 		/// </summary>
 		/// <value>The buffer.</value>
-		public T[] Buffer { get; set; }
+		public IList<T> Buffer { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.GLBuffer{T}"/> class.
 		/// </summary>
 		/// <param name="settings">The buffer settings.</param>
 		/// <param name="buffer">The buffer initialization array.</param>
-		public GLBuffer (GLBufferSettings settings, T[] buffer) {
+		public GLBuffer (GLBufferSettings settings, IList<T> buffer) {
 
 			// Set the settings
 			Settings = settings;
@@ -51,7 +53,7 @@ namespace nginz {
 			Buffer = buffer;
 
 			// Calculate the buffer size
-			BufferSize = Marshal.SizeOf (buffer [0]) * Buffer.Length;
+			BufferSize = Marshal.SizeOf (buffer [0]) * Buffer.Count;
 
 			// Generate the buffer
 			BufferId = GL.GenBuffer ();
@@ -60,7 +62,7 @@ namespace nginz {
 			Bind ();
 
 			// Set the buffer data
-			GL.BufferData (Settings.Target, BufferSize, Buffer, Settings.Hint);
+			GL.BufferData (Settings.Target, BufferSize, Buffer.ToArray<T> (), Settings.Hint);
 
 			// Unbind the data
 			Unbind ();

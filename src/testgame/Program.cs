@@ -2,6 +2,7 @@
 using nginz;
 using nginz.Interop.Iodine;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace testgame
 {
@@ -26,28 +27,6 @@ namespace testgame
 	{
 		IodineVM vm;
 
-		Vector3[] points = {
-			new Vector3 (-.5f, .5f, .0f),
-			new Vector3 (.5f, -.5f, .0f),
-			new Vector3 (-.5f, -.5f, .0f),
-			new Vector3 (.5f, .5f, .0f),
-		};
-
-		Vector3[] colors = {
-			new Vector3 (1.0f, .0f, .0f),
-			new Vector3 (.0f, 1.0f, .0f),
-			new Vector3 (.0f, .0f, 1.0f),
-			new Vector3 (.0f, 1.0f, .0f),
-		};
-
-		uint[] indices = {
-			0, 1, 2,
-			0, 1, 3,
-		};
-
-		//Geometry square;
-		//ShaderProgram program;
-
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
@@ -55,7 +34,6 @@ namespace testgame
 
 			// Directories
 			const string mods = "..\\..\\mods\\";
-			const string shaders = "shaders\\";
 
 			// Create the iodine vm
 			vm = new IodineVM (this);
@@ -70,12 +48,11 @@ namespace testgame
 				mods + "test.id"
 			);
 
-			//var vertexShader = BasicShader.FromFile<VertexShader> (shaders + "basic.vs");
-			//var fragmentShader = BasicShader.FromFile<FragmentShader> (shaders + "basic.fs");
-			//program = new ShaderProgram (vertexShader, fragmentShader);
-			//program.Link ();
-
-			ObjLoaderFactory.LoadFrom ("models\\suzanne.obj");
+			var suzanne = ObjLoaderFactory.LoadFrom ("models\\suzanne.obj");
+			var vpos = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, suzanne.Vertices);
+			var geometry = new Geometry (BeginMode.Quads)
+				.AddBuffer ("v_pos", vpos);
+			var model = new Model (geometry);
 
 			base.Initialize ();
 		}

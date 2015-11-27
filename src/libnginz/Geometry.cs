@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -126,7 +125,7 @@ namespace nginz {
 		public void Draw (ShaderProgram program, Matrix4 Model, Camera camera, int offset = 0) {
 			Bind ();
 			program["MVP"] = Model * camera.ViewProjectionMatrix;
-			GL.DrawElements (mode, Indices.Buffer.Length, DrawElementsType.UnsignedInt, offset);
+			GL.DrawElements (mode, Indices.Buffer.Count, DrawElementsType.UnsignedInt, offset);
 			Unbind ();
 		}
 	}
