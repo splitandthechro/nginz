@@ -78,6 +78,9 @@
     <Compile Include="AssetProviders\ObjProvider.cs" />
     <Compile Include="AssetProviders\Texture2DProvider.cs" />
     <Compile Include="ModelLoaders\ObjLoader.cs" />
+    <Compile Include="SpriteBatch.cs" />
+    <Compile Include="Interfaces\IDrawable.cs" />
+    <Compile Include="Interfaces\IUpdatable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
