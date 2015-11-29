@@ -125,7 +125,7 @@ namespace nginz {
 			// Calculate the projection graphics
 			ProjectionMatrix =
 				type == ProjectionType.Orthographic
-				? Matrix4.CreateOrthographic (Resolution.Width, Resolution.Height, Near, Far)
+				? Matrix4.CreateOrthographicOffCenter (0, Resolution.Width, Resolution.Height, 0, Near, Far)
 				: Matrix4.CreatePerspectiveFieldOfView (FieldOfView, AspectRatio, Near, Far);
 		}
 

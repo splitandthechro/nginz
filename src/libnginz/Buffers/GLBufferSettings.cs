@@ -39,6 +39,26 @@ namespace nginz
 		public int Offset;
 
 		/// <summary>
+		/// Standard configuration for statically drawn four-float objects.
+		/// </summary>
+		public static GLBufferSettings StaticDraw4FloatArray = new GLBufferSettings {
+			Target = BufferTarget.ArrayBuffer,
+			Hint = BufferUsageHint.StaticDraw,
+			AttribSize = 4,
+			Type = VertexAttribPointerType.Float
+		};
+
+		/// <summary>
+		/// Standard configuration for streamed four-float objects.
+		/// </summary>
+		public static GLBufferSettings StreamDraw4FloatArray = new GLBufferSettings {
+			Target = BufferTarget.ArrayBuffer,
+			Hint = BufferUsageHint.StreamDraw,
+			AttribSize = 4,
+			Type = VertexAttribPointerType.Float
+		};
+
+		/// <summary>
 		/// Standard configuration for statically drawn three-float objects.
 		/// </summary>
 		public static GLBufferSettings StaticDraw3FloatArray = new GLBufferSettings {
@@ -92,6 +112,14 @@ namespace nginz
 		public static GLBufferSettings StreamIndices = new GLBufferSettings {
 			Target = BufferTarget.ElementArrayBuffer,
 			Hint = BufferUsageHint.StreamDraw
+		};
+
+		/// <summary>
+		/// Standard configuration for dynamic indices.
+		/// </summary>
+		public static GLBufferSettings DynamicIndices = new GLBufferSettings {
+			Target = BufferTarget.ElementArrayBuffer,
+			Hint = BufferUsageHint.DynamicDraw
 		};
 	}
 }

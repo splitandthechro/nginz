@@ -50,8 +50,6 @@ namespace othertestgame {
 
 			// Why do we only cull the face? lol
 			GL.Enable (EnableCap.CullFace);
-			GL.Enable (EnableCap.Blend);
-			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 			GraphicsContext.Assert ();
 			
@@ -78,9 +76,9 @@ namespace othertestgame {
 			base.Update (time);
 		}
 
-		protected override void Resize (Resolution resolution) {
-			base.Resize (resolution);
-			camera.Camera.UpdateCameraMatrix (resolution);
+		protected override void Resize () {
+			base.Resize ();
+			camera.Camera.UpdateCameraMatrix (Resolution);
 		}
 
 		protected override void Draw (GameTime time) {

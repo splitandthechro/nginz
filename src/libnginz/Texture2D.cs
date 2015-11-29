@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using nginz.Common;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using GDIPixelFormat = System.Drawing.Imaging.PixelFormat;
 using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
@@ -115,7 +116,7 @@ namespace nginz
 			Unbind (TextureUnit.Texture0);
 		}
 
-		public void SetData (IntPtr data, Rectangle? rect, GLPixelFormat format = GLPixelFormat.Rgba) {
+		public void SetData (IntPtr data, Rectangle? rect, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) {
 			Rectangle r = rect ?? new Rectangle (0, 0, Width, Height);
 			Bind (TextureUnit.Texture0);
 			GL.TexSubImage2D (
@@ -125,8 +126,25 @@ namespace nginz
 				yoffset: 0,
 				width: r.Width,
 				height: r.Height,
-				format: format,
-				type: PixelType.UnsignedByte,
+				format: pixelFormat,
+				type: pixelType,
+				pixels: data
+			);
+			Unbind (TextureUnit.Texture0);
+		}
+
+		public void SetData (Color4[] data, Rectangle? rect, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) {
+			Rectangle r = rect ?? new Rectangle (0, 0, Width, Height);
+			Bind (TextureUnit.Texture0);
+			GL.TexSubImage2D (
+				target: TextureTarget.Texture2D,
+				level: 0,
+				xoffset: 0,
+				yoffset: 0,
+				width: r.Width,
+				height: r.Height,
+				format: pixelFormat,
+				type: pixelType,
 				pixels: data
 			);
 			Unbind (TextureUnit.Texture0);

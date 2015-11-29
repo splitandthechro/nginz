@@ -3,6 +3,7 @@ using System.Threading;
 using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL4;
 
 namespace nginz
 {
@@ -72,6 +73,8 @@ namespace nginz
 		/// </summary>
 		volatile bool exit;
 
+		public static Resolution Resolution;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Game"/> class.
 		/// </summary>
@@ -99,7 +102,7 @@ namespace nginz
 
 			// Subscribe to the Resize event of the window
 			// to correctly handle resizing of the window
-			window.Resize += (sender, e) => Resize (new Resolution { Width = window.Width, Height = window.Height });
+			window.Resize += (sender, e) => Resize ();
 
 			// Subscribe to the Closing event of the window
 			// to dispose the context when closing the window.
@@ -142,6 +145,8 @@ namespace nginz
 		/// Initialize this instance.
 		/// </summary>
 		protected virtual void Initialize () {
+			GL.Enable (EnableCap.Blend);
+			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 		}
 
 		/// <summary>
@@ -168,8 +173,8 @@ namespace nginz
 		/// Resize the game window.
 		/// </summary>
 		/// <param name="resolution">Resolution.</param>
-		protected virtual void Resize (Resolution resolution) {
-
+		protected virtual void Resize () {
+			Resolution = new Resolution { Width = window.Width, Height = window.Height };
 			// Update the context
 			context.Update (window.WindowInfo);
 		}
@@ -210,6 +215,8 @@ namespace nginz
 				mode: GraphicsMode.Default,
 				device: DisplayDevice.Default
 			);
+
+			Resolution = new Resolution { Width = window.Width, Height = window.Height };
 
 			// Register events
 			window.KeyDown += Keyboard.RegisterKeyDown;

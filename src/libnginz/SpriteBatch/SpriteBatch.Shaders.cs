@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace nginz.SpriteBatch {
+namespace nginz {
 	public partial class SpriteBatch {
 		const string vert_source = @"
 #version 450
@@ -34,7 +34,7 @@ out vec4 frag_color;
 uniform sampler2D tex;
 
 void main () {
-	frag_colo = texture (tex, f_tex) * f_col;
+	frag_color = texture (tex, f_tex) * f_col;
 }
 ";
 	}

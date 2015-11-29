@@ -39,6 +39,7 @@
     <Compile Include="Buffers\GLBuffer.cs" />
     <Compile Include="Buffers\GLBufferDynamic.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="Extensions\TypeHelper.cs" />
     <Compile Include="FPSCamera.cs" />
     <Compile Include="Geometry.cs" />
     <Compile Include="Interfaces\IBuffer.cs" />
@@ -50,7 +51,9 @@
     <Compile Include="Shading\ShaderProgram.Attributes.cs" />
     <Compile Include="Shading\ShaderProgramProvider.cs" />
     <Compile Include="Shading\ShaderProvider.cs" />
+    <Compile Include="SpriteBatch\SpriteBatch.cs" />
     <Compile Include="SpriteBatch\SpriteBatch.Shaders.cs" />
+    <Compile Include="SpriteBatch\Vertex2D.cs" />
     <Compile Include="TextureConfiguration.cs" />
     <Compile Include="VsyncMode.cs" />
     <Compile Include="Shading\BasicShader.cs" />
@@ -106,7 +109,5 @@
       <Name>libnginz.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

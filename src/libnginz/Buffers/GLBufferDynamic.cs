@@ -93,5 +93,20 @@ namespace nginz {
 			// Unbind buffer
 			Unbind ();
 		}
+
+		public void PointTo (int where, params int[] other) {
+
+			// Bind buffer
+			Bind ();
+
+			// Enable vertex attribute array
+			GL.EnableVertexAttribArray (where);
+
+			// Set vertex attribute pointer
+			GL.VertexAttribPointer (where, other[0], Settings.Type, Settings.Normalized, ElementSize, other[1]);
+
+			// Unbind buffer
+			Unbind ();
+		}
 	}
 }
