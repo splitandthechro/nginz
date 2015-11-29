@@ -23,7 +23,7 @@ namespace nginz
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="args">Arguments.</param>
 		public override Texture2D Load (string assetName, params object[] args) {
-			return Texture2D.FromFile (assetName);
+			return Texture2D.FromFile (assetName, args.Length < 1 ? TextureConfiguration.Linear : (TextureConfiguration) args[0]);
 		}
 	}
 }

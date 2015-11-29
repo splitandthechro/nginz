@@ -25,7 +25,7 @@ namespace nginz {
 		/// Gets or sets the size of the buffer.
 		/// </summary>
 		/// <value>The size of the buffer.</value>
-		public int BufferSize { get; private set; }
+		public int BufferSize { get; set; }
 
 		/// <summary>
 		/// Gets the size of the element.

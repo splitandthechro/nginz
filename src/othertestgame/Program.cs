@@ -26,33 +26,6 @@ namespace othertestgame {
 	}
 
 	class TestGame : Game, ICanLog {
-		
-		Vector3[] points = {
-			new Vector3 (+1f, -1f, .0f), // 0
-			new Vector3 (-1f, +1f, .0f), // 1
-			new Vector3 (-1f, -1f, .0f), // 2
-			new Vector3 (+1f, +1f, .0f), // 3
-		};
-
-		Vector3[] colors = {
-			new Vector3 (1.0f, 1.0f, 1.0f), // 0
-			new Vector3 (1.0f, 1.0f, 1.0f), // 1
-			new Vector3 (1.0f, 1.0f, 1.0f), // 2
-			new Vector3 (1.0f, 1.0f, 1.0f), // 3
-		};
-
-		Vector2[] texCoords = {
-			new Vector2 (1.0f, 1.0f), // 0
-			new Vector2 (0.0f, 0.0f), // 1
-			new Vector2 (0.0f, 1.0f), // 2
-			new Vector2 (1.0f, 0.0f), // 3
-		};
-
-		uint[] indices = {
-			0, 1, 2, // left
-			1, 0, 3, // right
-		};
-
 		TexturedModel testModel;
 		Texture2D testTexture;
 		FPSCamera camera;
@@ -74,7 +47,7 @@ namespace othertestgame {
 			GL.CullFace (CullFaceMode.Back);
 
 			// Why do we only cull the face? lol
-			//GL.Enable (EnableCap.CullFace);
+			GL.Enable (EnableCap.CullFace);
 
 			GraphicsContext.Assert ();
 
@@ -84,29 +57,15 @@ namespace othertestgame {
 
 			program.Link ();
 
-			var v_pos = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, points);
-			var v_col = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, colors);
-			var v_tex = new GLBuffer<Vector2> (GLBufferSettings.StaticDraw2FloatArray, texCoords);
-
-			var ind = new GLBuffer<uint> (GLBufferSettings.Indices, indices);
-
-			var testGeometry = new Geometry (BeginMode.Triangles)
-				.AddBuffer ("v_pos", v_pos)
-				.AddBuffer ("v_col", v_col)
-				.AddBuffer ("v_tex", v_tex)
-				.SetIndices (ind)
-				.Construct (program);
-
-			testModel = new TexturedModel (testGeometry);
-
-			testTexture = Content.Load<Texture2D> ("testWood.jpg");
+			testTexture = Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest);
 
 			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 
-			//testFont = new Fontmap (camera.Camera, "Consolas", 11.25f);
-			//testFont.SetText ("Hello, World!");
+			var obj = Content.Load<ObjFile> ("box.obj");
+
+			testModel = new TexturedModel (obj, 0, program);
 		}
 
 		protected override void Update (GameTime time) {
@@ -129,7 +88,6 @@ namespace othertestgame {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			program.Use (() => testModel.Draw (program, camera.Camera, testTexture));
-			//testFont.program.Use (testFont.Draw);
 
 			base.Draw (time);
 		}

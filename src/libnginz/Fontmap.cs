@@ -173,7 +173,7 @@ namespace nginz
 			areaWidth = areawidth;
 			areaHeight = areaheight;
 			bitmap = new Bitmap (areawidth, areaheight);
-			texture = new Texture2D (bitmap);
+			texture = new Texture2D (bitmap, TextureConfiguration.Nearest);
 			ortho = Matrix4.CreateOrthographicOffCenter (0, areaWidth, areaHeight, 0, -1, 1);
 			program = new ShaderProgram ();
 			iao = new uint[] {

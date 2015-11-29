@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace nginz
 {
@@ -65,6 +66,29 @@ namespace nginz
 		/// <param name="geometry">Geometry.</param>
 		public Model (Geometry geometry) {
 			Geometry = geometry;
+			Position = Vector3.Zero;
+			Scale = Vector3.One;
+			Rotation = Vector3.Zero;
+		}
+
+		public Model (ObjFile objModel, int groupNum, ShaderProgram program) {
+			var group = objModel.Groups[groupNum];
+			var tempPos = new List<Vector3> ();
+			var tempTex = new List<Vector2> ();
+			foreach (ObjFace f in group.Faces) {
+				foreach (ObjFaceVertex vert in f.Vertices) {
+					tempPos.Add (objModel.Vertices[vert.VertexIndex - 1]);
+					tempTex.Add (objModel.Textures[vert.TextureIndex - 1]);
+                }
+			}
+			var v_pos = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, tempPos);
+			var v_tex = new GLBuffer<Vector2> (GLBufferSettings.StaticDraw2FloatArray, tempTex);
+			var m_ind = new GLBuffer<uint> (GLBufferSettings.Indices, Array.ConvertAll<int, uint> (Enumerable.Range (0, tempPos.Count).ToArray (), x => (uint) x));
+			Geometry = new Geometry (BeginMode.Quads)
+				.AddBuffer ("v_pos", v_pos)
+				.AddBuffer ("v_tex", v_tex)
+				.Construct (program);
+
 			Position = Vector3.Zero;
 			Scale = Vector3.One;
 			Rotation = Vector3.Zero;

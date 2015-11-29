@@ -48,6 +48,7 @@
     <Compile Include="GameTime.cs" />
     <Compile Include="Shading\ShaderProgram.Attributes.cs" />
     <Compile Include="Shading\ShaderProvider.cs" />
+    <Compile Include="TextureConfiguration.cs" />
     <Compile Include="VsyncMode.cs" />
     <Compile Include="Shading\BasicShader.cs" />
     <Compile Include="Shading\FragmentShader.cs" />
@@ -104,6 +105,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
-    <Folder Include="AssetProviders\" />
   </ItemGroup>
 </Project>

@@ -27,8 +27,7 @@ namespace nginz
 		/// <param name="bmp">The bitmap.</param>
 		/// <param name = "mipmapped">Whether the texture uses mipmapping.</param>
 		/// <param name = "interpolation">Interpolation mode.</param>
-		public Texture2D (Bitmap bmp, bool mipmapped = false,
-			InterpolationMode interpolation = InterpolationMode.Linear) {
+		public Texture2D (Bitmap bmp, TextureConfiguration config) {
 
 			// Get the texture id
 			TextureId = GL.GenTexture ();
@@ -39,15 +38,15 @@ namespace nginz
 			// Choose which filters to use
 			TextureMinFilter minfilter = TextureMinFilter.Linear;
 			TextureMagFilter magfilter = TextureMagFilter.Linear;
-			switch (interpolation) {
+			switch (config.Interpolation) {
 			case InterpolationMode.Linear:
-				minfilter = mipmapped
+				minfilter = config.Mipmap
 					? TextureMinFilter.LinearMipmapLinear
 					: TextureMinFilter.Linear;
 				magfilter = TextureMagFilter.Linear;
 				break;
 			case InterpolationMode.Nearest:
-				minfilter = mipmapped
+				minfilter = config.Mipmap
 					? TextureMinFilter.LinearMipmapNearest
 					: TextureMinFilter.Nearest;
 				magfilter = TextureMagFilter.Nearest;
@@ -69,7 +68,7 @@ namespace nginz
 			);
 
 			// Create a mipmap if requested
-			if (mipmapped)
+			if (config.Mipmap)
 				GL.GenerateMipmap (GenerateMipmapTarget.Texture2D);
 
 			// Build a rectangle representing the bitmap's size
@@ -106,7 +105,7 @@ namespace nginz
 		/// </summary>
 		/// <returns>The Texture2D.</returns>
 		/// <param name="path">Path to the texture.</param>
-		public static Texture2D FromFile (string path) {
+		public static Texture2D FromFile (string path, TextureConfiguration config) {
 
 			// Throw if the file doesn't exist
 			if (!File.Exists (path))
@@ -119,7 +118,7 @@ namespace nginz
 			var bmp = new Bitmap (img);
 
 			// Return the texture
-			return new Texture2D (bmp);
+			return new Texture2D (bmp, config);
 		}
 
 		/// <summary>

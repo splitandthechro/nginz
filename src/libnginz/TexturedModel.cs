@@ -15,6 +15,9 @@ namespace nginz
 		public TexturedModel (Geometry geometry)
 			: base (geometry) { }
 
+		public TexturedModel (ObjFile objModel, int groupNum, ShaderProgram program)
+			: base (objModel, groupNum, program) { }
+
 		/// <summary>
 		/// Draw the model.
 		/// </summary>

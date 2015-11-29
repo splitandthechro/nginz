@@ -20,7 +20,7 @@ namespace nginz {
 		/// <summary>
 		/// The indices.
 		/// </summary>
-		public GLBuffer<uint> Indices;
+		public GLBuffer<uint> Indices = null;
 
 		/// <summary>
 		/// The array buffer.
@@ -76,7 +76,7 @@ namespace nginz {
 		/// <param name="this">This.</param>
 		public static void Bind (Geometry @this) {
 			GL.BindVertexArray (@this.abo);
-			@this.Indices.Bind ();
+			@this.Indices?.Bind ();
 			@this.Buffers.ToList ().ForEach (kvp => kvp.Value.Bind ());
 		}
 
@@ -93,7 +93,7 @@ namespace nginz {
 		/// <param name="this">This.</param>
 		public static void Unbind (Geometry @this) {
 			GL.BindVertexArray (0);
-			@this.Indices.Unbind ();
+			@this.Indices?.Unbind ();
 			@this.Buffers.ToList ().ForEach (kvp => kvp.Value.Unbind ());
 		}
 
@@ -125,7 +125,10 @@ namespace nginz {
 		public void Draw (ShaderProgram program, Matrix4 Model, Camera camera, int offset = 0) {
 			Bind ();
 			program["MVP"] = Model * camera.ViewProjectionMatrix;
-			GL.DrawElements (mode, Indices.Buffer.Count, DrawElementsType.UnsignedInt, offset);
+			if (Indices != null)
+				GL.DrawElements (mode, Indices.Buffer.Count, DrawElementsType.UnsignedInt, offset);
+			else
+				GL.DrawArrays (mode == BeginMode.Triangles ? PrimitiveType.Triangles : PrimitiveType.Quads, 0, Buffers["v_pos"].BufferSize);
 			Unbind ();
 		}
 	}

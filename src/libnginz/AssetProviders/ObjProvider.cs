@@ -23,8 +23,7 @@ namespace nginz
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="args">Arguments.</param>
 		public override ObjFile Load (string assetName, params object[] args) {
-			var path = GetAssetPath (assetName);
-			return ObjLoaderFactory.LoadFrom (path);
+			return ObjLoaderFactory.LoadFrom (assetName);
 		}
 	}
 }
