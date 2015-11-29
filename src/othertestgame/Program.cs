@@ -78,8 +78,8 @@ namespace othertestgame {
 
 			GraphicsContext.Assert ();
 
-			var vertexShader = content.Load<VertexShader> ("passTex.vs");
-			var fragmentShader = content.Load<FragmentShader> ("passTex.fs");
+			var vertexShader = Content.Load<VertexShader> ("passTex.vs");
+			var fragmentShader = Content.Load<FragmentShader> ("passTex.fs");
 			program = new ShaderProgram (vertexShader, fragmentShader);
 
 			program.Link ();
@@ -99,7 +99,7 @@ namespace othertestgame {
 
 			testModel = new TexturedModel (testGeometry);
 
-			testTexture = content.Load<Texture2D> ("testWood.jpg");
+			testTexture = Content.Load<Texture2D> ("testWood.jpg");
 
 			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);

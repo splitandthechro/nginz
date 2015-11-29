@@ -33,7 +33,6 @@ namespace nginz
 		/// Creates a shader from the specified file
 		/// </summary>
 		/// <returns>The shader.</returns>
-		/// <param name="type">Type.</param>
 		/// <param name="path">Path.</param>
 		public static Shader FromFile<Shader>(string path) where Shader : BasicShader {
 

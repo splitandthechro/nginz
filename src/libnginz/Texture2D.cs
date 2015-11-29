@@ -94,6 +94,9 @@ namespace nginz
 			// Unlock the bitmap
 			bmp.UnlockBits (bmpData);
 
+			// Dispose the bitmap
+			bmp.Dispose ();
+
 			// Unbind the texture
 			Unbind (TextureUnit.Texture0);
 		}

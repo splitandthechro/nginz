@@ -1,4 +1,5 @@
 ﻿using System;
+using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -9,10 +10,10 @@ namespace nginz
 	/// <summary>
 	/// Sprite batch.
 	/// </summary>
-	public class SpriteBatch
+	public class SpriteBatch : ICanLog
 	{
 		const string VERTEXSHADER = @"
-		#version 150 core
+		#version 150
 
 		in vec2 position;
 		in vec3 color;
@@ -27,7 +28,7 @@ namespace nginz
 		}";
 
 		const string FRAGMENTSHADER = @"
-		#version 150 core
+		#version 150
 
 		in vec3 Color;
 		in vec2 Texcoord;
@@ -35,13 +36,14 @@ namespace nginz
 		uniform sampler2D tex;
 
 		void main () {
-			outColor = texture (tex, Texcoord);
+			outColor = texture (tex, Texcoord) * vec4 (Color, 1.0);
 		}";
 
 		readonly float[] vertices;
 		readonly int[] indices;
-		readonly GLBuffer<float> vbo;
-		readonly GLBuffer<int> ibo;
+		readonly int vao;
+		readonly int vbo;
+		readonly int ibo;
 		readonly VertexShader vertShader;
 		readonly FragmentShader fragShader;
 		readonly ShaderProgram program;
@@ -52,9 +54,15 @@ namespace nginz
 			// Initialize vertex pointer type
 			pointerType = VertexAttribPointerType.Float;
 
+			// Initialize vertex array object
+			vao = GL.GenVertexArray ();
+			GL.BindVertexArray (vao);
+
 			// Initialize vertices
 			vertices = new [] {
-				
+
+				// Layout: 2x position, 3x color, 2x texcoords
+
 				// top left
 				-0.5f, +0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 				// top right
@@ -72,12 +80,14 @@ namespace nginz
 			};
 
 			// Initialize vertex buffer
-			var vertexSettings = GLBufferSettings.StaticDraw2FloatArray;
-			vbo = new GLBuffer<float> (vertexSettings, vertices);
+			vbo = GL.GenBuffer ();
+			GL.BindBuffer (BufferTarget.ArrayBuffer, vbo);
+			GL.BufferData<float> (BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
 
 			// Initialize index buffer
-			var indexSettings = GLBufferSettings.Indices;
-			ibo = new GLBuffer<int> (indexSettings, indices);
+			ibo = GL.GenBuffer ();
+			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
+			GL.BufferData<int> (BufferTarget.ElementArrayBuffer, indices.Length * sizeof(int), indices, BufferUsageHint.StaticDraw);
 
 			// Initialize vertex shader
 			vertShader = new VertexShader (VERTEXSHADER);
@@ -94,25 +104,51 @@ namespace nginz
 		public void Draw (Texture2D tex) {
 
 			// Bind buffers
-			vbo.Bind ();
-			ibo.Bind ();
+			//vbo.Bind ();
+			//ibo.Bind ();
 
 			// Use the shader program
 			using (program) {
+				
+				var posAttrib = GL.GetAttribLocation (program.ProgramId, "position");
+				this.Log ("posAttrib: {0}", posAttrib);
+				GL.EnableVertexAttribArray (posAttrib);
+				GL.VertexAttribPointer (
+					index: posAttrib,
+					size: 2,
+					type: pointerType,
+					normalized: false,
+					stride: 7 * sizeof(float),
+					offset: 0
+				);
 
-				// Get the attributes
-				var posAttrib = program.Attrib ("position");
-				var colorAttrib = program.Attrib ("color");
-				var texAttrib = program.Attrib ("texcoord"); 
+				var colorAttrib = GL.GetAttribLocation (program.ProgramId, "color");
+				this.Log ("colorAttrib: {0}", colorAttrib);
+				GL.EnableVertexAttribArray (colorAttrib);
+				GL.VertexAttribPointer (
+					index: colorAttrib,
+					size: 3,
+					type: pointerType,
+					normalized: false,
+					stride: 7 * sizeof(float),
+					offset: 2 * sizeof(float)
+				);
 
-				// Setup the vertex attrib pointers
-				VertexAttribPointer (index: posAttrib, size: 2);
-				VertexAttribPointer (index: colorAttrib, size: 3, offset: 2 * sizeof(float));
-				VertexAttribPointer (index: texAttrib, size: 2, offset: 5 * sizeof (float));
+				var texAttrib = program.Attrib ("texcoord");
+				this.Log ("texAttrib: {0}", texAttrib);
+				GL.EnableVertexAttribArray (texAttrib);
+				GL.VertexAttribPointer (
+					index: texAttrib,
+					size: 2,
+					type: pointerType,
+					normalized: false,
+					stride: 7 * sizeof(float),
+					offset: 5 * sizeof(float)
+				);
 
 				// Bind the texture
 				tex.Bind ();
-				GL.Uniform1 ((int) program ["tex"], 1);
+				GL.Uniform1 ((int) program ["tex"], 0);
 
 				// Draw the texture
 				GL.DrawElements (
@@ -127,20 +163,8 @@ namespace nginz
 			}
 
 			// Unbind buffers
-			ibo.Unbind ();
-			vbo.Unbind ();
-		}
-
-		void VertexAttribPointer (int index, int size, int offset = 0) {
-			GL.EnableVertexAttribArray (index);
-			GL.VertexAttribPointer (
-				index: index,
-				size: size,
-				type: pointerType,
-				normalized: false,
-				stride: 7 * sizeof(float),
-				offset: offset
-			);
+			//ibo.Unbind ();
+			//vbo.Unbind ();
 		}
 	}
 }

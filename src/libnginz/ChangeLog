@@ -1,5 +1,11 @@
 2015-11-29  Splitty  <splittydev@gmail.com>
 
+	* Game.cs:
+	* Texture2D.cs:
+	* SpriteBatch.cs: 
+
+2015-11-29  Splitty  <splittydev@gmail.com>
+
 	* SpriteBatch.cs: 
 
 2015-11-28  Splitty  <splittydev@gmail.com>

@@ -22,7 +22,7 @@ namespace nginz {
 			// Check if the attribute cache contains the attribute
 			// If not, add it to the cache
 			if (!attributes.ContainsKey (attribute)) {
-				attributes [attribute] = GL.GetAttribLocation (programId, attribute);
+				attributes.Add (attribute, GL.GetAttribLocation (programId, attribute));
 			}
 
 			// Return the attribute

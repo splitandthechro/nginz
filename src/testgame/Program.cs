@@ -15,7 +15,7 @@ namespace testgame
 				WindowTitle = "nginz Game",
 				FixedWindow = false,
 				Vsync = VsyncMode.Off,
-				FixedFramerate = false,
+				FixedFramerate = true,
 				TargetFramerate = 60,
 			};
 			var game = new TestGame (conf);
@@ -25,45 +25,26 @@ namespace testgame
 
 	class TestGame : Game
 	{
-		IodineVM vm;
+		SpriteBatch batch;
+		Texture2D wood;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
 		protected override void Initialize () {
-
-			// Directories
-			const string mods = "..\\..\\mods\\";
-
-			// Create the iodine vm
-			vm = new IodineVM (this);
-
-			// Load modules
-			vm.LoadModules (
-				mods + "test.id"
-			);
-
-			// Observe modules for live-reload
-			vm.Observe (
-				mods + "test.id"
-			);
-
-			var suzanne = ObjLoaderFactory.LoadFrom ("models\\suzanne.obj");
-			var vpos = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, suzanne.Vertices);
-			var geometry = new Geometry (BeginMode.Quads)
-				.AddBuffer ("v_pos", vpos);
-			var model = new Model (geometry);
-
+			batch = new SpriteBatch ();
+			wood = Content.Load<Texture2D> ("testWood.jpg");
 			base.Initialize ();
 		}
 
 		protected override void Update (GameTime time) {
-			vm.Invoke ("update");
+			if (Keyboard.IsKeyDown (OpenTK.Input.Key.Escape))
+				Exit ();
 			base.Update (time);
 		}
 
 		protected override void Draw (GameTime time) {
-			vm.Invoke ("draw");
+			batch.Draw (wood);
 			base.Draw (time);
 		}
 	}
