@@ -10,7 +10,7 @@ namespace nginz
 	/// <summary>
 	/// Sprite batch.
 	/// </summary>
-	public class SpriteBatch : ICanLog
+	public class SpriteBatch_old : ICanLog
 	{
 		const string VERTEXSHADER = @"
 		#version 150
@@ -49,7 +49,7 @@ namespace nginz
 		readonly ShaderProgram program;
 		readonly VertexAttribPointerType pointerType;
 
-		public SpriteBatch () {
+		public SpriteBatch_old () {
 			
 			// Initialize vertex pointer type
 			pointerType = VertexAttribPointerType.Float;

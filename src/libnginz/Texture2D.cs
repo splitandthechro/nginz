@@ -21,13 +21,12 @@ namespace nginz
 		/// </summary>
 		readonly public int TextureId;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="nginz.Texture2D"/> class.
-		/// </summary>
-		/// <param name="bmp">The bitmap.</param>
-		/// <param name = "mipmapped">Whether the texture uses mipmapping.</param>
-		/// <param name = "interpolation">Interpolation mode.</param>
-		public Texture2D (Bitmap bmp, TextureConfiguration config) {
+		public int Width { get; }
+		public int Height { get; }
+
+		public Texture2D (TextureConfiguration config, int width, int height) {
+			Width = width;
+			Height = height;
 
 			// Get the texture id
 			TextureId = GL.GenTexture ();
@@ -39,18 +38,18 @@ namespace nginz
 			TextureMinFilter minfilter = TextureMinFilter.Linear;
 			TextureMagFilter magfilter = TextureMagFilter.Linear;
 			switch (config.Interpolation) {
-			case InterpolationMode.Linear:
-				minfilter = config.Mipmap
-					? TextureMinFilter.LinearMipmapLinear
-					: TextureMinFilter.Linear;
-				magfilter = TextureMagFilter.Linear;
-				break;
-			case InterpolationMode.Nearest:
-				minfilter = config.Mipmap
-					? TextureMinFilter.LinearMipmapNearest
-					: TextureMinFilter.Nearest;
-				magfilter = TextureMagFilter.Nearest;
-				break;
+				case InterpolationMode.Linear:
+					minfilter = config.Mipmap
+						? TextureMinFilter.LinearMipmapLinear
+						: TextureMinFilter.Linear;
+					magfilter = TextureMagFilter.Linear;
+					break;
+				case InterpolationMode.Nearest:
+					minfilter = config.Mipmap
+						? TextureMinFilter.LinearMipmapNearest
+						: TextureMinFilter.Nearest;
+					magfilter = TextureMagFilter.Nearest;
+					break;
 			}
 
 			// Set the min filter parameter
@@ -71,24 +70,40 @@ namespace nginz
 			if (config.Mipmap)
 				GL.GenerateMipmap (GenerateMipmapTarget.Texture2D);
 
+			// Create the texture
+			GL.TexImage2D (
+				target: TextureTarget.Texture2D,
+				level: 0,
+				internalformat: PixelInternalFormat.Rgba,
+				width: Width,
+				height: Height,
+				border: 0,
+				format: GLPixelFormat.Bgra,
+				type: PixelType.UnsignedByte,
+				pixels: IntPtr.Zero
+			);
+
+			Unbind (TextureUnit.Texture0);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="nginz.Texture2D"/> class.
+		/// </summary>
+		/// <param name="bmp">The bitmap.</param>
+		/// <param name = "mipmapped">Whether the texture uses mipmapping.</param>
+		/// <param name = "interpolation">Interpolation mode.</param>
+		public Texture2D (Bitmap bmp, TextureConfiguration config) 
+			: this (config, bmp.Width, bmp.Height) {
+
 			// Build a rectangle representing the bitmap's size
 			var rect = new Rectangle (0, 0, bmp.Width, bmp.Height);
 
 			// Lock the bitmap
 			var bmpData = bmp.LockBits (rect, ImageLockMode.ReadOnly, GDIPixelFormat.Format32bppArgb);
 
-			// Create the texture
-			GL.TexImage2D (
-				target: TextureTarget.Texture2D,
-				level: 0,
-				internalformat: PixelInternalFormat.Rgba,
-				width: rect.Width,
-				height: rect.Height,
-				border: 0,
-				format: GLPixelFormat.Bgra,
-				type: PixelType.UnsignedByte,
-				pixels: bmpData.Scan0
-			);
+			Bind (TextureUnit.Texture0);
+
+			SetData (bmpData.Scan0, rect, GLPixelFormat.Bgra);
 
 			// Unlock the bitmap
 			bmp.UnlockBits (bmpData);
@@ -97,6 +112,23 @@ namespace nginz
 			bmp.Dispose ();
 
 			// Unbind the texture
+			Unbind (TextureUnit.Texture0);
+		}
+
+		public void SetData (IntPtr data, Rectangle? rect, GLPixelFormat format = GLPixelFormat.Rgba) {
+			Rectangle r = rect ?? new Rectangle (0, 0, Width, Height);
+			Bind (TextureUnit.Texture0);
+			GL.TexSubImage2D (
+				target: TextureTarget.Texture2D,
+				level: 0,
+				xoffset: 0,
+				yoffset: 0,
+				width: r.Width,
+				height: r.Height,
+				format: format,
+				type: PixelType.UnsignedByte,
+				pixels: data
+			);
 			Unbind (TextureUnit.Texture0);
 		}
 
