@@ -44,6 +44,8 @@ namespace testgame
 		}
 
 		protected override void Draw (GameTime time) {
+			GL.ClearColor (0, 0, 0, 1);
+			GL.Clear (ClearBufferMask.ColorBufferBit);
 			batch.Draw (wood);
 			base.Draw (time);
 		}

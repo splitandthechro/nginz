@@ -105,8 +105,8 @@ namespace othertestgame {
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 
-			testFont = new Fontmap (camera.Camera, "Consolas", 11.25f);
-			testFont.SetText ("Hello, World!");
+			//testFont = new Fontmap (camera.Camera, "Consolas", 11.25f);
+			//testFont.SetText ("Hello, World!");
 		}
 
 		protected override void Update (GameTime time) {
@@ -128,13 +128,8 @@ namespace othertestgame {
 			GL.ClearColor (.25f, .30f, .35f, 1f);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			using (program.UseProgram ()) {
-				testModel.Draw (program, camera.Camera, testTexture);
-			}
-
-			using (testFont.program.UseProgram ()) {
-				testFont.Draw ();
-			}
+			program.Use (() => testModel.Draw (program, camera.Camera, testTexture));
+			//testFont.program.Use (testFont.Draw);
 
 			base.Draw (time);
 		}

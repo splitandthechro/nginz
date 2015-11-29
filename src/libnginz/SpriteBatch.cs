@@ -42,8 +42,8 @@ namespace nginz
 		readonly float[] vertices;
 		readonly int[] indices;
 		readonly int vao;
-		readonly int vbo;
-		readonly int ibo;
+		readonly GLBuffer<float> vbo;
+		readonly GLBuffer<int> ibo;
 		readonly VertexShader vertShader;
 		readonly FragmentShader fragShader;
 		readonly ShaderProgram program;
@@ -80,14 +80,10 @@ namespace nginz
 			};
 
 			// Initialize vertex buffer
-			vbo = GL.GenBuffer ();
-			GL.BindBuffer (BufferTarget.ArrayBuffer, vbo);
-			GL.BufferData<float> (BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+			vbo = new GLBuffer<float> (GLBufferSettings.StaticDraw2FloatArray, vertices);
 
 			// Initialize index buffer
-			ibo = GL.GenBuffer ();
-			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
-			GL.BufferData<int> (BufferTarget.ElementArrayBuffer, indices.Length * sizeof(int), indices, BufferUsageHint.StaticDraw);
+			ibo = new GLBuffer<int> (GLBufferSettings.Indices, indices);
 
 			// Initialize vertex shader
 			vertShader = new VertexShader (VERTEXSHADER);
@@ -104,47 +100,20 @@ namespace nginz
 		public void Draw (Texture2D tex) {
 
 			// Bind buffers
-			//vbo.Bind ();
-			//ibo.Bind ();
+			vbo.Bind ();
+			ibo.Bind ();
 
 			// Use the shader program
-			using (program) {
-				
-				var posAttrib = GL.GetAttribLocation (program.ProgramId, "position");
-				this.Log ("posAttrib: {0}", posAttrib);
-				GL.EnableVertexAttribArray (posAttrib);
-				GL.VertexAttribPointer (
-					index: posAttrib,
-					size: 2,
-					type: pointerType,
-					normalized: false,
-					stride: 7 * sizeof(float),
-					offset: 0
-				);
+			program.Use (() => {
 
-				var colorAttrib = GL.GetAttribLocation (program.ProgramId, "color");
-				this.Log ("colorAttrib: {0}", colorAttrib);
-				GL.EnableVertexAttribArray (colorAttrib);
-				GL.VertexAttribPointer (
-					index: colorAttrib,
-					size: 3,
-					type: pointerType,
-					normalized: false,
-					stride: 7 * sizeof(float),
-					offset: 2 * sizeof(float)
-				);
-
+				// Get the attribute locations
+				var posAttrib = program.Attrib ("position");
+				var colorAttrib = program.Attrib ("color");
 				var texAttrib = program.Attrib ("texcoord");
-				this.Log ("texAttrib: {0}", texAttrib);
-				GL.EnableVertexAttribArray (texAttrib);
-				GL.VertexAttribPointer (
-					index: texAttrib,
-					size: 2,
-					type: pointerType,
-					normalized: false,
-					stride: 7 * sizeof(float),
-					offset: 5 * sizeof(float)
-				);
+
+				glVertexAttribPointerEx (posAttrib, 2);
+				glVertexAttribPointerEx (colorAttrib, 3, 2 * sizeof(float));
+				glVertexAttribPointerEx (texAttrib, 2, 5 * sizeof(float));
 
 				// Bind the texture
 				tex.Bind ();
@@ -160,11 +129,23 @@ namespace nginz
 
 				// Unbind the texture
 				tex.Unbind ();
-			}
+			});
 
 			// Unbind buffers
-			//ibo.Unbind ();
-			//vbo.Unbind ();
+			ibo.Unbind ();
+			vbo.Unbind ();
+		}
+
+		void glVertexAttribPointerEx (int index, int size, int offset = 0) {
+			GL.EnableVertexAttribArray (index);
+			GL.VertexAttribPointer (
+				index: index,
+				size: size,
+				type: pointerType,
+				normalized: false,
+				stride: 7 * sizeof(float),
+				offset: offset
+			);
 		}
 	}
 }

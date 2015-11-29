@@ -62,11 +62,16 @@ namespace nginz
 				Attach (shader);
 		}
 
+		public void Use (Action act) {
+			using (UseProgram ())
+				act ();
+		}
+
 		/// <summary>
 		/// Use the shader program.
 		/// </summary>
 		/// <returns>The handle of the previous shader program.</returns>
-		public ShaderProgramHandle UseProgram () {
+		ShaderProgramHandle UseProgram () {
 
 			// Get the handle of the current shader program
 			var handle = new ShaderProgramHandle (CurrentProgramId);
