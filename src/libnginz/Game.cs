@@ -25,7 +25,7 @@ namespace nginz
 		/// <summary>
 		/// The content manager.
 		/// </summary>
-		public ContentManager content;
+		public ContentManager Content;
 
 		/// <summary>
 		/// The mouse.
@@ -142,12 +142,6 @@ namespace nginz
 		/// Initialize this instance.
 		/// </summary>
 		protected virtual void Initialize () {
-
-			// Initialize the content manager
-			content = new ContentManager ();
-
-			// Register the built-in assets
-			registerProviders ();
 		}
 
 		/// <summary>
@@ -231,6 +225,10 @@ namespace nginz
 
 			// Initialize the mouse buffer
 			Mouse = new MouseBuffer (window);
+
+			// Initialize the content manager
+			Content = new ContentManager ();
+			RegisterProviders ();
 		}
 
 		/// <summary>
@@ -382,22 +380,22 @@ namespace nginz
 		/// <summary>
 		/// Registers the basic built-in asset providers.
 		/// </summary>
-		void registerProviders () {
+		void RegisterProviders () {
 
 			// Register an asset provider for the vertex shader.
-			content.RegisterAssetProvider<VertexShader> (typeof (ShaderProvider<VertexShader>));
+			Content.RegisterAssetProvider<VertexShader> (typeof (ShaderProvider<VertexShader>));
 
 			// Register an asset provider for the vertex fragment.
-			content.RegisterAssetProvider<FragmentShader> (typeof (ShaderProvider<FragmentShader>));
+			Content.RegisterAssetProvider<FragmentShader> (typeof (ShaderProvider<FragmentShader>));
 
 			// Register an asset provider for the geometry shader.
-			content.RegisterAssetProvider<GeometryShader> (typeof (ShaderProvider<GeometryShader>));
+			Content.RegisterAssetProvider<GeometryShader> (typeof (ShaderProvider<GeometryShader>));
 
 			// Register an asset provider for the Texture2D.
-			content.RegisterAssetProvider<Texture2D> (typeof (Texture2DProvider));
+			Content.RegisterAssetProvider<Texture2D> (typeof (Texture2DProvider));
 
 			// Register an asset provider for the obj loader.
-			content.RegisterAssetProvider<ObjFile> (typeof (ObjProvider));
+			Content.RegisterAssetProvider<ObjFile> (typeof (ObjProvider));
 		}
 	}
 }
