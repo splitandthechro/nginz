@@ -25,14 +25,14 @@ namespace testgame
 
 	class TestGame : Game
 	{
-		SpriteBatch batch;
+		SpriteBatch_old batch;
 		Texture2D wood;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
 		protected override void Initialize () {
-			batch = new SpriteBatch ();
+			batch = new SpriteBatch_old ();
 			wood = Content.Load<Texture2D> ("testWood.jpg");
 			base.Initialize ();
 		}
@@ -44,7 +44,7 @@ namespace testgame
 		}
 
 		protected override void Draw (GameTime time) {
-			GL.ClearColor (0, 0, 0, 1);
+			GL.ClearColor (1.0f, 1.0f, 1.0f, 1.0f);
 			GL.Clear (ClearBufferMask.ColorBufferBit);
 			batch.Draw (wood);
 			base.Draw (time);

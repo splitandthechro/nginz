@@ -76,7 +76,8 @@ namespace nginz {
 		/// <param name="this">This.</param>
 		public static void Bind (Geometry @this) {
 			GL.BindVertexArray (@this.abo);
-			@this.Indices?.Bind ();
+			if (@this.Indices != null)
+				@this.Indices.Bind ();
 			@this.Buffers.ToList ().ForEach (kvp => kvp.Value.Bind ());
 		}
 
@@ -93,7 +94,8 @@ namespace nginz {
 		/// <param name="this">This.</param>
 		public static void Unbind (Geometry @this) {
 			GL.BindVertexArray (0);
-			@this.Indices?.Unbind ();
+			if (@this.Indices != null)
+				@this.Indices.Unbind ();
 			@this.Buffers.ToList ().ForEach (kvp => kvp.Value.Unbind ());
 		}
 

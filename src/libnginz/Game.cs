@@ -107,7 +107,7 @@ namespace nginz
 
 			// Process the message queue
 			this.Log ("Entering message processing loop");
-			while (window.Exists)
+			while (!exit && window != null && window.Exists)
 				window.ProcessEvents ();
 		}
 
@@ -159,10 +159,7 @@ namespace nginz
 		/// </summary>
 		/// <param name="time">Time.</param>
 		protected virtual void Draw (GameTime time) {
-
-			if (context.IsDisposed)
-				return;
-
+			
 			// Present the rendered scene to the user
 			context.SwapBuffers ();
 		}
@@ -229,6 +226,16 @@ namespace nginz
 			// Initialize the content manager
 			Content = new ContentManager ();
 			RegisterProviders ();
+		}
+
+		void InternalDraw (GameTime time) {
+			if (!exit && !context.IsDisposed && context.IsCurrent) {
+				try {
+					Draw (time);
+				} catch (Exception e) {
+					this.Log (e.Message);
+				}
+			}
 		}
 
 		/// <summary>
@@ -367,7 +374,7 @@ namespace nginz
 				}
 
 				// Draw
-				Draw (gameTime);
+				InternalDraw (gameTime);
 			}
 
 			// Dispose of the context
