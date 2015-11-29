@@ -48,6 +48,8 @@ namespace othertestgame {
 
 			// Why do we only cull the face? lol
 			GL.Enable (EnableCap.CullFace);
+			GL.Enable (EnableCap.Blend);
+			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 			GraphicsContext.Assert ();
 
