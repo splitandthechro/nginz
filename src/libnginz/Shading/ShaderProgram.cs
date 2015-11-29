@@ -8,7 +8,7 @@ namespace nginz
 	/// <summary>
 	/// Shader program.
 	/// </summary>
-	public partial class ShaderProgram : ICanThrow, IDisposable
+	public partial class ShaderProgram : ICanThrow, IDisposable, Asset
 	{
 		/// <summary>
 		/// The current shader program identifier.
@@ -93,7 +93,7 @@ namespace nginz
 		/// <summary>
 		/// Link the program.
 		/// </summary>
-		public void Link () {
+		public ShaderProgram Link () {
 
 			// Link the shader program
 			GL.LinkProgram (programId);
@@ -115,6 +115,8 @@ namespace nginz
 				// Throw an exception
 				this.Throw ("Could not link program: {0}", error);
 			}
+
+			return this;
 		}
 
 		/// <summary>

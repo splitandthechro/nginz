@@ -83,7 +83,7 @@ namespace nginz
 			}
 			var v_pos = new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, tempPos);
 			var v_tex = new GLBuffer<Vector2> (GLBufferSettings.StaticDraw2FloatArray, tempTex);
-			var m_ind = new GLBuffer<uint> (GLBufferSettings.Indices, Array.ConvertAll<int, uint> (Enumerable.Range (0, tempPos.Count).ToArray (), x => (uint) x));
+			var m_ind = new GLBuffer<uint> (GLBufferSettings.StaticIndices, Array.ConvertAll<int, uint> (Enumerable.Range (0, tempPos.Count).ToArray (), x => (uint) x));
 			Geometry = new Geometry (BeginMode.Quads)
 				.AddBuffer ("v_pos", v_pos)
 				.AddBuffer ("v_tex", v_tex)

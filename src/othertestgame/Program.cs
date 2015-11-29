@@ -54,12 +54,8 @@ namespace othertestgame {
 			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 			GraphicsContext.Assert ();
-
-			var vertexShader = Content.Load<VertexShader> ("passTex.vs");
-			var fragmentShader = Content.Load<FragmentShader> ("passTex.fs");
-			program = new ShaderProgram (vertexShader, fragmentShader);
-
-			program.Link ();
+			
+			program = Content.Load <ShaderProgram> ("passTex");
 
 			testTexture = Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest);
 

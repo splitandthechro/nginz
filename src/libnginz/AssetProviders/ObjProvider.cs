@@ -14,8 +14,8 @@ namespace nginz
 		/// Initializes a new instance of the <see cref="nginz.ObjProvider"/> class.
 		/// </summary>
 		/// <param name="root">Root.</param>
-		public ObjProvider (string root)
-			: base (root, "models") { }
+		public ObjProvider (string root, ContentManager manager)
+			: base (manager, root, "models") { }
 
 		/// <summary>
 		/// Load the specified asset.

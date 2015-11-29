@@ -83,7 +83,7 @@ namespace nginz
 			vbo = new GLBuffer<float> (GLBufferSettings.StaticDraw2FloatArray, vertices);
 
 			// Initialize index buffer
-			ibo = new GLBuffer<int> (GLBufferSettings.Indices, indices);
+			ibo = new GLBuffer<int> (GLBufferSettings.StaticIndices, indices);
 
 			// Initialize vertex shader
 			vertShader = new VertexShader (VERTEXSHADER);

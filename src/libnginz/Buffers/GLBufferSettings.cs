@@ -49,6 +49,16 @@ namespace nginz
 		};
 
 		/// <summary>
+		/// Standard configuration for streamed three-float objects.
+		/// </summary>
+		public static GLBufferSettings StreamDraw3FloatArray = new GLBufferSettings {
+			Target = BufferTarget.ArrayBuffer,
+			Hint = BufferUsageHint.StreamDraw,
+			AttribSize = 3,
+			Type = VertexAttribPointerType.Float
+		};
+
+		/// <summary>
 		/// Standard configuration for statically drawn two-float objects.
 		/// </summary>
 		public static GLBufferSettings StaticDraw2FloatArray = new GLBufferSettings {
@@ -59,11 +69,29 @@ namespace nginz
 		};
 
 		/// <summary>
-		/// Standard configuration for indices.
+		/// Standard configuration for streamed two-float objects.
 		/// </summary>
-		public static GLBufferSettings Indices = new GLBufferSettings {
+		public static GLBufferSettings StreamDraw2FloatArray = new GLBufferSettings {
+			Target = BufferTarget.ArrayBuffer,
+			Hint = BufferUsageHint.StreamDraw,
+			AttribSize = 2,
+			Type = VertexAttribPointerType.Float
+		};
+
+		/// <summary>
+		/// Standard configuration for static indices.
+		/// </summary>
+		public static GLBufferSettings StaticIndices = new GLBufferSettings {
 			Target = BufferTarget.ElementArrayBuffer,
 			Hint = BufferUsageHint.StaticDraw
+		};
+
+		/// <summary>
+		/// Standard configuration for streamed indices.
+		/// </summary>
+		public static GLBufferSettings StreamIndices = new GLBufferSettings {
+			Target = BufferTarget.ElementArrayBuffer,
+			Hint = BufferUsageHint.StreamDraw
 		};
 	}
 }

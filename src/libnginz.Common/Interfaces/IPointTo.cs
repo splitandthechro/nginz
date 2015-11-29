@@ -6,5 +6,6 @@ using System.Text;
 namespace nginz.Common {
 	public interface IPointTo<T> {
 		void PointTo (T where);
+		void PointTo (T where, T offset);
 	}
 }

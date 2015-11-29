@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buffers\GLBuffer.cs" />
+    <Compile Include="Buffers\GLBufferDynamic.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="FPSCamera.cs" />
     <Compile Include="Geometry.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="GameConfiguration.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="Shading\ShaderProgram.Attributes.cs" />
+    <Compile Include="Shading\ShaderProgramProvider.cs" />
     <Compile Include="Shading\ShaderProvider.cs" />
     <Compile Include="TextureConfiguration.cs" />
     <Compile Include="VsyncMode.cs" />

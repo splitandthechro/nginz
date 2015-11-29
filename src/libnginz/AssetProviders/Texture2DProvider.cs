@@ -14,8 +14,8 @@ namespace nginz
 		/// Initializes a new instance of the <see cref="nginz.Texture2DProvider"/> class.
 		/// </summary>
 		/// <param name="root">Root.</param>
-		public Texture2DProvider (string root)
-			: base (root, "textures") { }
+		public Texture2DProvider (string root, ContentManager manager)
+			: base (manager, root, "textures") { }
 
 		/// <summary>
 		/// Load the specified asset.

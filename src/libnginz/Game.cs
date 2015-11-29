@@ -396,6 +396,9 @@ namespace nginz
 
 			// Register an asset provider for the obj loader.
 			Content.RegisterAssetProvider<ObjFile> (typeof (ObjProvider));
+
+			// Register an asset provider for the shader program.
+			Content.RegisterAssetProvider<ShaderProgram> (typeof (ShaderProgramProvider));
 		}
 	}
 }

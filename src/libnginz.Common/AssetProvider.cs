@@ -20,15 +20,18 @@ namespace nginz.Common
 		/// </summary>
 		/// <value>The asset root.</value>
 		public string AssetRoot { get; private set; }
+		
+		public ContentManager Manager { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Common.AssetProvider{T}"/> class.
 		/// </summary>
 		/// <param name="root">Root.</param>
 		/// <param name="assetRoot">Asset root.</param>
-		protected AssetProvider (string root, string assetRoot) {
+		protected AssetProvider (ContentManager manager, string root, string assetRoot) {
 			Root = root;
 			AssetRoot = assetRoot;
+			Manager = manager;
 		}
 
 		/// <summary>

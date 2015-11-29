@@ -180,7 +180,7 @@ namespace nginz
 				0, 1, 2, // left
 				1, 0, 3, // right
 			};
-			ibo = new GLBuffer<uint> (GLBufferSettings.Indices, iao);
+			ibo = new GLBuffer<uint> (GLBufferSettings.StaticIndices, iao);
 			vao = new [] {
 				new Vector2 (0, 0),
 				new Vector2 (1, 0),

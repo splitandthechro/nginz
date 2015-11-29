@@ -62,7 +62,7 @@ namespace nginz {
 			Bind ();
 
 			// Set the buffer data
-			GL.BufferData (Settings.Target, BufferSize, Buffer.ToArray<T> (), Settings.Hint);
+			GL.BufferData (Settings.Target, BufferSize, Buffer.ToArray (), Settings.Hint);
 
 			// Unbind the data
 			Unbind ();
@@ -82,6 +82,21 @@ namespace nginz {
 
 			// Set vertex attribute pointer
 			GL.VertexAttribPointer (index, Settings.AttribSize, Settings.Type, Settings.Normalized, ElementSize, Settings.Offset);
+
+			// Unbind buffer
+			Unbind ();
+		}
+
+		public void PointTo (int where, int offset) {
+
+			// Bind buffer
+			Bind ();
+
+			// Enable vertex attribute array
+			GL.EnableVertexAttribArray (where);
+
+			// Set vertex attribute pointer
+			GL.VertexAttribPointer (where, Settings.AttribSize, Settings.Type, Settings.Normalized, ElementSize, offset);
 
 			// Unbind buffer
 			Unbind ();
