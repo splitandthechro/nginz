@@ -25,7 +25,7 @@ namespace nginz {
 		/// Gets the size of the element.
 		/// </summary>
 		/// <value>The size of the element.</value>
-		public int ElementSize { get; }
+		public int ElementSize { get; private set; }
 
 		public GLBufferDynamic (GLBufferSettings settings, int elementSize, int startCapacity = 8192) {
 			Settings = settings;

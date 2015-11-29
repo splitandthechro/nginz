@@ -21,8 +21,8 @@ namespace nginz
 		/// </summary>
 		readonly public int TextureId;
 
-		public int Width { get; }
-		public int Height { get; }
+		public int Width { get; private set; }
+		public int Height { get; private set; }
 
 		public Texture2D (TextureConfiguration config, int width, int height) {
 			Width = width;
