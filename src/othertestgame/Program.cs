@@ -44,6 +44,8 @@ namespace othertestgame {
 		protected override void Initialize () {
 			base.Initialize ();
 
+			Mouse.ShouldCenterMouse = true;
+
 			GL.CullFace (CullFaceMode.Back);
 
 			// Why do we only cull the face? lol

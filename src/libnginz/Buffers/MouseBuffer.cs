@@ -88,6 +88,12 @@ namespace nginz
 		}
 
 		/// <summary>
+		/// Should mouse be centered each update.
+		/// </summary>
+		/// <value>Center state.</value>
+		public bool ShouldCenterMouse { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.MouseBuffer"/> class.
 		/// </summary>
 		public MouseBuffer (NativeWindow window) {
@@ -110,6 +116,9 @@ namespace nginz
 
 			// Initialize mouse state
 			State = Mouse.GetState ();
+
+			// Initial mouse centered state
+			ShouldCenterMouse = false;
 		}
 
 		/// <summary>
@@ -168,7 +177,8 @@ namespace nginz
 				DeltaZ = cur.WheelPrecise - State.WheelPrecise;
 
 				// Center the mouse
-				CenterMouse ();
+				if (ShouldCenterMouse)
+					CenterMouse ();
 
 				// Update the mouse coordinates
 				X = MathHelper.Clamp (X + DeltaX, 0, window.Width);
