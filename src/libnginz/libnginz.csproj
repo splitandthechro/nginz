@@ -87,7 +87,6 @@
     <Compile Include="ModelLoaders\ObjLoader.cs" />
     <Compile Include="Interfaces\IDrawable.cs" />
     <Compile Include="Interfaces\IUpdatable.cs" />
-    <Compile Include="OldSpriteBatch.cs" />
     <Compile Include="SpriteBatch\SpriteEffects.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
