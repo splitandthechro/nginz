@@ -13,6 +13,19 @@ namespace nginz
 	/// </summary>
 	public class Game : ICanLog, ICanThrow
 	{
+
+		/// <summary>
+		/// The sync root.
+		/// </summary>
+		static object syncRoot;
+
+		/// <summary>
+		/// Initializes the <see cref="nginz.Game"/> class.
+		/// </summary>
+		static Game () {
+			syncRoot = new object ();
+		}
+
 		/// <summary>
 		/// The game configuration.
 		/// </summary>
@@ -51,7 +64,7 @@ namespace nginz
 		/// <summary>
 		/// Game window and also the drawing surface.
 		/// </summary>
-		NativeWindow window;
+		volatile NativeWindow window;
 
 		/// <summary>
 		/// Graphics context.
@@ -73,6 +86,14 @@ namespace nginz
 		/// </summary>
 		volatile bool exit;
 
+		/// <summary>
+		/// Whether the game is currently drawing.
+		/// </summary>
+		volatile bool updating;
+
+		/// <summary>
+		/// The resolution.
+		/// </summary>
 		public static Resolution Resolution;
 
 		/// <summary>
@@ -96,22 +117,37 @@ namespace nginz
 			// Initialize the game
 			InternalInitialize ();
 
-			// Start gameloop in a separate thread
-			var trd = new Thread (EnterGameloop);
-			trd.Start ();
-
 			// Subscribe to the Resize event of the window
 			// to correctly handle resizing of the window
 			window.Resize += (sender, e) => Resize ();
 
 			// Subscribe to the Closing event of the window
 			// to dispose the context when closing the window.
-			window.Closing += (sender, e) => context.Dispose ();
+			window.Closing += (sender, e) => {
+				this.Log ("Window::Closing event fired");
+				this.Log ("Requesting exit");
+				Exit ();
+				e.Cancel = true;
+			};
+
+			// Start gameloop in a separate thread
+			var trd = new Thread (EnterGameloop);
+			trd.Start ();
 
 			// Process the message queue
 			this.Log ("Entering message processing loop");
-			while (!exit && window != null && window.Exists)
+			while (!exit && window != null && window.Exists) {
 				window.ProcessEvents ();
+			}
+
+			this.Log ("Waiting for updates to finish");
+			while (updating) { }
+
+			// Dispose of the context
+			context.Dispose ();
+
+			// Dispose of the window
+			window.Dispose ();
 		}
 
 		/// <summary>
@@ -166,15 +202,18 @@ namespace nginz
 		protected virtual void Draw (GameTime time) {
 			
 			// Present the rendered scene to the user
-			context.SwapBuffers ();
+			if (!context.IsDisposed)
+				context.SwapBuffers ();
 		}
 
 		/// <summary>
 		/// Resize the game window.
 		/// </summary>
-		/// <param name="resolution">Resolution.</param>
 		protected virtual void Resize () {
+
+			// Update the resolution
 			Resolution = new Resolution { Width = window.Width, Height = window.Height };
+
 			// Update the context
 			context.Update (window.WindowInfo);
 		}
@@ -190,7 +229,7 @@ namespace nginz
 		/// Initializes the game internally.
 		/// </summary>
 		void InternalInitialize () {
-
+			
 			// Initialize graphics mode to default
 			graphicsMode = GraphicsMode.Default;
 
@@ -233,16 +272,6 @@ namespace nginz
 			// Initialize the content manager
 			Content = new ContentManager ();
 			RegisterProviders ();
-		}
-
-		void InternalDraw (GameTime time) {
-			if (!exit && !context.IsDisposed && context.IsCurrent) {
-				try {
-					Draw (time);
-				} catch (Exception e) {
-					this.Log (e.Message);
-				}
-			}
 		}
 
 		/// <summary>
@@ -309,6 +338,9 @@ namespace nginz
 
 			// Enter the actual game loop
 			while (!exit) {
+
+				// Set updating to true
+				updating = true;
 
 				// Set the paused variable to true
 				// if the game should be paused and continue
@@ -381,14 +413,11 @@ namespace nginz
 				}
 
 				// Draw
-				InternalDraw (gameTime);
+				Draw (gameTime);
+
+				// Set updating to false
+				updating = false;
 			}
-
-			// Dispose of the context
-			context.Dispose ();
-
-			// Dispose of the window
-			window.Dispose ();
 		}
 
 		/// <summary>

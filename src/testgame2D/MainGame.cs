@@ -8,11 +8,11 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
+using nginz.Common;
 
 namespace testgame2D {
 	class MainGame : Game {
-
-		ShaderProgram shader;
+		
 		SpriteBatch batch;
 		Texture2D test;
 
@@ -23,8 +23,7 @@ namespace testgame2D {
 			base.Initialize ();
 
 			batch = new SpriteBatch ();
-
-			test = Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest);
+			test = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 		}
 
 		protected override void Resize () {
@@ -45,7 +44,7 @@ namespace testgame2D {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			batch.Begin ();
-			batch.Draw (test, Vector2.Zero, Color4.White, new Vector2 (2));
+			batch.Draw (test, Vector2.Zero, Color4.White, Vector2.One);
 			batch.End ();
 
 			base.Draw (time);
