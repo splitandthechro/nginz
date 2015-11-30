@@ -24,7 +24,7 @@ namespace testgame2D {
 
 			batch = new SpriteBatch ();
 
-			test = Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest);
+			test = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 		}
 
 		protected override void Resize () {
@@ -45,7 +45,7 @@ namespace testgame2D {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			batch.Begin ();
-			batch.Draw (test, Vector2.Zero, Color4.White, new Vector2 (2));
+			batch.Draw (test, Vector2.Zero, Color4.White, Vector2.One);
 			batch.End ();
 
 			base.Draw (time);

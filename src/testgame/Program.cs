@@ -1,7 +1,6 @@
 ﻿using System;
 using nginz;
 using nginz.Interop.Iodine;
-using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace testgame
@@ -25,14 +24,14 @@ namespace testgame
 
 	class TestGame : Game
 	{
-		SpriteBatch_old batch;
+		SpriteBatch batch;
 		Texture2D wood;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
 		protected override void Initialize () {
-			batch = new SpriteBatch_old ();
+			batch = new SpriteBatch ();
 			wood = Content.Load<Texture2D> ("testWood.jpg");
 			base.Initialize ();
 		}
@@ -46,7 +45,6 @@ namespace testgame
 		protected override void Draw (GameTime time) {
 			GL.ClearColor (1.0f, 1.0f, 1.0f, 1.0f);
 			GL.Clear (ClearBufferMask.ColorBufferBit);
-			batch.Draw (wood);
 			base.Draw (time);
 		}
 	}

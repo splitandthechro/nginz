@@ -13,6 +13,19 @@ namespace nginz
 	/// </summary>
 	public class Game : ICanLog, ICanThrow
 	{
+
+		/// <summary>
+		/// The sync root.
+		/// </summary>
+		static object syncRoot;
+
+		/// <summary>
+		/// Initializes the <see cref="nginz.Game"/> class.
+		/// </summary>
+		static Game () {
+			syncRoot = new object ();
+		}
+
 		/// <summary>
 		/// The game configuration.
 		/// </summary>
@@ -51,7 +64,7 @@ namespace nginz
 		/// <summary>
 		/// Game window and also the drawing surface.
 		/// </summary>
-		NativeWindow window;
+		volatile NativeWindow window;
 
 		/// <summary>
 		/// Graphics context.
@@ -110,8 +123,12 @@ namespace nginz
 
 			// Process the message queue
 			this.Log ("Entering message processing loop");
-			while (!exit && window != null && window.Exists)
-				window.ProcessEvents ();
+			while (!exit && window != null && window.Exists) {
+				lock (window) {
+					if (window != null && window.Exists && window.WindowInfo.Handle != IntPtr.Zero)
+						window.ProcessEvents ();
+				}
+			}
 		}
 
 		/// <summary>
