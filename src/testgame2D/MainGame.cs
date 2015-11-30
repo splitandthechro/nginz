@@ -28,7 +28,7 @@ namespace testgame2D {
 			batch = new SpriteBatch ();
 			font = new Fontmap (Resolution, "Source Sans Pro", 20.25f)
 				.SetColor (Color4.White)
-				.SetText ("nginz alpha v{0}", version.ToString (3));
+				.SetText ("nginz alpha v{0}", version.ToString (4));
 			tex = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 		}
 

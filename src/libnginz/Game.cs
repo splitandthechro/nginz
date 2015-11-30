@@ -4,6 +4,7 @@ using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
+using System.Reflection;
 
 namespace nginz
 {
@@ -270,7 +271,8 @@ namespace nginz
 			Mouse = new MouseBuffer (window);
 
 			// Initialize the content manager
-			Content = new ContentManager ();
+			var contentRoot = AppDomain.CurrentDomain.BaseDirectory;
+			Content = new ContentManager (contentRoot);
 			RegisterProviders ();
 		}
 
