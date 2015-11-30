@@ -9,12 +9,14 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using nginz.Common;
+using System.Reflection;
 
 namespace testgame2D {
 	class MainGame : Game {
 		
 		SpriteBatch batch;
-		Texture2D test;
+		Texture2D tex;
+		Fontmap font;
 
 		public MainGame (GameConfiguration conf) 
 			: base (conf) { }
@@ -22,8 +24,12 @@ namespace testgame2D {
 		protected override void Initialize () {
 			base.Initialize ();
 
+			var version = Assembly.GetEntryAssembly ().GetName ().Version;
 			batch = new SpriteBatch ();
-			test = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
+			font = new Fontmap (Resolution, "Source Sans Pro", 20.25f)
+				.SetColor (Color4.White)
+				.SetText ("nginz alpha v{0}", version.ToString (3));
+			tex = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 		}
 
 		protected override void Resize () {
@@ -44,7 +50,8 @@ namespace testgame2D {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			batch.Begin ();
-			batch.Draw (test, Vector2.Zero, Color4.White, Vector2.One);
+			batch.Draw (tex, Vector2.Zero, Color4.White, Vector2.One);
+			font.Draw (batch);
 			batch.End ();
 
 			base.Draw (time);

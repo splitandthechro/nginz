@@ -91,10 +91,16 @@ namespace nginz
 		/// Initializes a new instance of the <see cref="nginz.Texture2D"/> class.
 		/// </summary>
 		/// <param name="bmp">The bitmap.</param>
-		/// <param name = "mipmapped">Whether the texture uses mipmapping.</param>
-		/// <param name = "interpolation">Interpolation mode.</param>
-		public Texture2D (Bitmap bmp, TextureConfiguration config) 
+		/// <param name = "config">The configuration.</param>
+		/// <param name = "preserveBitmap">Whether the bitmap should be disposed.</param>
+		public Texture2D (Bitmap bmp, TextureConfiguration config, bool preserveBitmap = false) 
 			: this (config, bmp.Width, bmp.Height) {
+
+			// Update the texture data
+			Update (bmp: bmp, preserveBitmap: preserveBitmap);
+		}
+
+		public void Update (Bitmap bmp, bool preserveBitmap = false) {
 
 			// Build a rectangle representing the bitmap's size
 			var rect = new Rectangle (0, 0, bmp.Width, bmp.Height);
@@ -102,15 +108,18 @@ namespace nginz
 			// Lock the bitmap
 			var bmpData = bmp.LockBits (rect, ImageLockMode.ReadOnly, GDIPixelFormat.Format32bppArgb);
 
+			// Bind the texture
 			Bind (TextureUnit.Texture0);
 
+			// Set the texture data
 			SetData (bmpData.Scan0, rect, GLPixelFormat.Bgra);
 
 			// Unlock the bitmap
 			bmp.UnlockBits (bmpData);
 
 			// Dispose the bitmap
-			bmp.Dispose ();
+			if (!preserveBitmap)
+				bmp.Dispose ();
 
 			// Unbind the texture
 			Unbind (TextureUnit.Texture0);
@@ -155,6 +164,7 @@ namespace nginz
 		/// </summary>
 		/// <returns>The Texture2D.</returns>
 		/// <param name="path">Path to the texture.</param>
+		/// <param name = "config">The texture configuration.</param>
 		public static Texture2D FromFile (string path, TextureConfiguration config) {
 
 			// Throw if the file doesn't exist
