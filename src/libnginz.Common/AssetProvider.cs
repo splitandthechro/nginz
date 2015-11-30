@@ -26,6 +26,7 @@ namespace nginz.Common
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Common.AssetProvider{T}"/> class.
 		/// </summary>
+		/// <param name="manager">Content manager.</param>
 		/// <param name="root">Root.</param>
 		/// <param name="assetRoot">Asset root.</param>
 		protected AssetProvider (ContentManager manager, string root, string assetRoot) {
