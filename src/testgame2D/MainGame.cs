@@ -22,6 +22,7 @@ namespace testgame2D {
 			: base (conf) { }
 
 		protected override void Initialize () {
+			ContentRoot = "../../assets";
 			base.Initialize ();
 
 			var version = Assembly.GetEntryAssembly ().GetName ().Version;

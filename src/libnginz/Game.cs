@@ -97,6 +97,8 @@ namespace nginz
 		/// </summary>
 		public static Resolution Resolution;
 
+		public string ContentRoot = null;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Game"/> class.
 		/// </summary>
@@ -184,6 +186,9 @@ namespace nginz
 		protected virtual void Initialize () {
 			GL.Enable (EnableCap.Blend);
 			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+			Content = new ContentManager (ContentRoot ?? AppDomain.CurrentDomain.BaseDirectory);
+			RegisterProviders ();
 		}
 
 		/// <summary>
@@ -269,11 +274,6 @@ namespace nginz
 
 			// Initialize the mouse buffer
 			Mouse = new MouseBuffer (window);
-
-			// Initialize the content manager
-			var contentRoot = AppDomain.CurrentDomain.BaseDirectory;
-			Content = new ContentManager (contentRoot);
-			RegisterProviders ();
 		}
 
 		/// <summary>
