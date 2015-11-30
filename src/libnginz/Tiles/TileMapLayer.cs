@@ -11,11 +11,11 @@ namespace nginz.Tiles {
 
 		public int Width;
 		public int Height;
-		public int Scale;
+		public float Scale;
 
 		public int[] Layer;
 
-		public TileMapLayer (SpriteSheet2D sheet, int width, int height, int scale) {
+		public TileMapLayer (SpriteSheet2D sheet, int width, int height, float scale) {
 			Sheet = sheet;
 
 			Width = width;
@@ -34,14 +34,14 @@ namespace nginz.Tiles {
 			Layer[x + y * Width] = tileX + tileY * Sheet.TilesY;
 		}
 
-		public void Draw (SpriteBatch batch) {
+		public void Draw (SpriteBatch batch, Vector2 position) {
 			for (int y = 0; y < Height; y++)
 				for (int x = 0; x < Width; x++) {
 					var tile = Layer[x + y * Width];
 					if (tile != -1) {
 						var xPos = x * Sheet.TileWidth * Scale;
 						var yPos = y * Sheet.TileHeight * Scale;
-						batch.Draw (Sheet.Texture, Sheet[tile], new Vector2 (xPos, yPos), Color4.White, scale: new Vector2 (Scale));
+						batch.Draw (Sheet.Texture, Sheet[tile], position + new Vector2 (xPos, yPos), Color4.White, scale: new Vector2 (Scale));
 					}
 				}
 		}
