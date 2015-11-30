@@ -8,11 +8,11 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
+using nginz.Common;
 
 namespace testgame2D {
 	class MainGame : Game {
-
-		ShaderProgram shader;
+		
 		SpriteBatch batch;
 		Texture2D test;
 
@@ -23,7 +23,6 @@ namespace testgame2D {
 			base.Initialize ();
 
 			batch = new SpriteBatch ();
-
 			test = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 		}
 

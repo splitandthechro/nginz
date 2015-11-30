@@ -1,6 +1,7 @@
 ﻿using System;
 using Iodine.Runtime;
 using nginz.Common;
+using nginz.Interop.Iodine;
 using OpenTK.Graphics.OpenGL4;
 
 namespace nginz.Interop.Iodine.nginzcore
