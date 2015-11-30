@@ -539,8 +539,8 @@ namespace nginz
 
 				// Unbind the array buffer object
 				GL.BindVertexArray (0);
-				// Unbind the current texture from texture unit 0
-				CurrentTexture.Unbind (TextureUnit.Texture0);
+
+				Array.Clear (Vertices, 0, Vertices.Length);
 
 				// Reset the vertex and index counts
 				vertexCount = 0;
