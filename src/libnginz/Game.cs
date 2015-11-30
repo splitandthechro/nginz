@@ -285,7 +285,7 @@ namespace nginz
 				mode: graphicsMode,
 				window: window.WindowInfo,
 				major: 4,
-				minor: 5,
+				minor: 0,
 				flags: GraphicsContextFlags.ForwardCompatible
 			);
 
