@@ -9,7 +9,7 @@ namespace nginz
 	public partial class SpriteBatch
 	{
 		const string vert_source = @"
-		#version 450
+		#version 400
 		in vec3 v_pos;
 		in vec4 v_col;
 		in vec2 v_tex;
@@ -27,7 +27,7 @@ namespace nginz
 		}";
 
 		const string frag_source = @"
-		#version 450
+		#version 400
 		in vec4 f_col;
 		in	vec2 f_tex;
 

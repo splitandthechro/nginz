@@ -50,7 +50,6 @@
     <Compile Include="GameTime.cs" />
     <Compile Include="Shading\ShaderProgram.Attributes.cs" />
     <Compile Include="Shading\ShaderProgramProvider.cs" />
-    <Compile Include="Shading\ShaderProvider.cs" />
     <Compile Include="SpriteBatch\SpriteBatch.cs" />
     <Compile Include="SpriteBatch\SpriteBatch.Shaders.cs" />
     <Compile Include="SpriteBatch\Vertex2D.cs" />
@@ -88,6 +87,7 @@
     <Compile Include="Interfaces\IDrawable.cs" />
     <Compile Include="Interfaces\IUpdatable.cs" />
     <Compile Include="SpriteBatch\SpriteEffects.cs" />
+    <Compile Include="AssetProviders\ShaderProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
