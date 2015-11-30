@@ -10,6 +10,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using nginz.Common;
 using System.Reflection;
+using nginz.Staging;
 
 namespace testgame2D {
 	class MainGame : Game {
@@ -17,6 +18,8 @@ namespace testgame2D {
 		SpriteBatch batch;
 		Texture2D tex;
 		Fontmap font;
+
+		Stage stage;
 
 		public MainGame (GameConfiguration conf) 
 			: base (conf) { }
@@ -31,6 +34,9 @@ namespace testgame2D {
 				.SetColor (Color4.White)
 				.SetText ("nginz alpha v{0}", version.ToString (4));
 			tex = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
+
+			stage = new Stage (this);
+			stage.AddActor (new MascotActor ());
 		}
 
 		protected override void Resize () {
@@ -43,6 +49,8 @@ namespace testgame2D {
 			if (Keyboard.IsKeyTyped (Key.Escape))
 				Exit ();
 
+			stage.Act (time);
+
 			base.Update (time);
 		}
 
@@ -53,6 +61,7 @@ namespace testgame2D {
 			batch.Begin ();
 			batch.Draw (tex, Vector2.Zero, Color4.White, Vector2.One);
 			font.Draw (batch);
+			stage.Draw (time, batch);
 			batch.End ();
 
 			base.Draw (time);
