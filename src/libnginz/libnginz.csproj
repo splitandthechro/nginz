@@ -56,7 +56,6 @@
     <Compile Include="SpriteBatch\SpriteBatch.cs" />
     <Compile Include="SpriteBatch\SpriteBatch.Shaders.cs" />
     <Compile Include="SpriteBatch\Vertex2D.cs" />
-    <Compile Include="Staging\Interfaces\IAct.cs" />
     <Compile Include="Staging\Interfaces\IAction.cs" />
     <Compile Include="Staging\Interfaces\IActor.cs" />
     <Compile Include="Staging\Interfaces\IDraw.cs" />

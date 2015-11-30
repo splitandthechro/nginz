@@ -5,7 +5,7 @@ using System.Text;
 using nginz.Common;
 
 namespace nginz.Staging.Interfaces {
-	public interface IActor : IAct, IDraw {
+	public interface IActor : IAction, IDraw {
 		void Initialize (ContentManager content);
 	}
 }

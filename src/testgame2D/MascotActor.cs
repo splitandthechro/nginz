@@ -10,13 +10,10 @@ using OpenTK.Graphics;
 using OpenTK.Input;
 
 namespace testgame2D {
-	public class MascotActor : IActor, IAction {
+	public class MascotActor : IActor {
 		public Texture2D MascotTexture;
 		public Vector2 Position = Vector2.Zero;
-
-		public void Act (GameTime time) {
-		}
-
+		
 		public void Action (GameTime time, KeyboardBuffer keyboard, MouseBuffer mouse) {
 			if (keyboard.IsKeyDown (Key.W))
 				Position.Y -= 1;
