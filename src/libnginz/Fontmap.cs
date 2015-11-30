@@ -6,10 +6,11 @@ using GDIColor = System.Drawing.Color;
 using GDIPixelFormat = System.Drawing.Imaging.PixelFormat;
 using GLColor = OpenTK.Graphics.Color4;
 using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
+using SharpFont;
 
 namespace nginz
 {
-
+	
 	/// <summary>
 	/// Fontmap.
 	/// </summary>
