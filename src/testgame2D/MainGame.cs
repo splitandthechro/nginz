@@ -11,6 +11,7 @@ using OpenTK.Input;
 using nginz.Common;
 using System.Reflection;
 using nginz.Staging;
+using nginz.Tiles;
 
 namespace testgame2D {
 	class MainGame : Game {
@@ -18,6 +19,9 @@ namespace testgame2D {
 		SpriteBatch batch;
 		Texture2D tex;
 		Fontmap font;
+
+		SpriteSheet2D testSheet;
+		TileMapLayer testLayer;
 
 		Stage stage;
 
@@ -35,8 +39,18 @@ namespace testgame2D {
 				.SetText ("nginz alpha v{0}", version.ToString (4));
 			tex = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 
+			testSheet = new SpriteSheet2D (Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest), 23, 16);
+			testLayer = new TileMapLayer (testSheet, 32, 32, 2);
+
+			testLayer.SetTile (0, 1, 0);
+			testLayer.SetTile (1, 1, 1);
+			testLayer.SetTile (2, 1, 2);
+			testLayer.SetTile (3, 1, 3);
+
 			stage = new Stage (this);
-			stage.AddActor (new MascotActor ());
+			var mascot = new MascotActor ();
+			stage.AddActor (mascot);
+			stage.AddAction (mascot);
 		}
 
 		protected override void Resize () {
@@ -60,6 +74,7 @@ namespace testgame2D {
 
 			batch.Begin ();
 			batch.Draw (tex, Vector2.Zero, Color4.White, Vector2.One);
+			testLayer.Draw (batch);
 			font.Draw (batch);
 			stage.Draw (time, batch);
 			batch.End ();

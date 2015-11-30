@@ -10,6 +10,7 @@ namespace nginz.Staging {
 		public List<IAct> Acts = new List<IAct> ();
 		public List<IDraw> Drawings = new List<IDraw> ();
 		public List<IActor> Actors = new List<IActor> ();
+		public List<IAction> Actions = new List<IAction> ();
 
 		Game game;
 
@@ -21,16 +22,20 @@ namespace nginz.Staging {
 			actor.Initialize (game.Content);
 			Actors.Add (actor);
 		}
-		public void AddAction (IAct action) {
-			Acts.Add (action);
+		public void AddAct (IAct act) {
+			Acts.Add (act);
 		}
 		public void AddDrawing (IDraw drawing) {
 			Drawings.Add (drawing);
+		}
+		public void AddAction (IAction action) {
+			Actions.Add (action);
 		}
 
 		public void Act (GameTime time) {
 			Acts.ForEach (x => x.Act (time));
 			Actors.ForEach (x => x.Act (time));
+			Actions.ForEach (x => x.Action (time, game.Keyboard, game.Mouse));
 		}
 		public void Draw (GameTime time, SpriteBatch batch) {
 			Drawings.ForEach (x => x.Draw (time, batch));

@@ -57,10 +57,14 @@
     <Compile Include="SpriteBatch\SpriteBatch.Shaders.cs" />
     <Compile Include="SpriteBatch\Vertex2D.cs" />
     <Compile Include="Staging\Interfaces\IAct.cs" />
+    <Compile Include="Staging\Interfaces\IAction.cs" />
     <Compile Include="Staging\Interfaces\IActor.cs" />
     <Compile Include="Staging\Interfaces\IDraw.cs" />
     <Compile Include="Staging\Stage.cs" />
+    <Compile Include="SpriteSheet2D.cs" />
     <Compile Include="TextureConfiguration.cs" />
+    <Compile Include="Tiles\TileMap.cs" />
+    <Compile Include="Tiles\TileMapLayer.cs" />
     <Compile Include="VsyncMode.cs" />
     <Compile Include="Shading\BasicShader.cs" />
     <Compile Include="Shading\FragmentShader.cs" />
