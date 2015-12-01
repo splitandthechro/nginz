@@ -24,8 +24,7 @@ namespace testgame2D {
 			: base (conf) { }
 
 		protected override void Initialize () {
-			ContentRoot = "../../assets";
-			base.Initialize ();
+			Content.ContentRoot = "../../assets";
 
 			var version = Assembly.GetEntryAssembly ().GetName ().Version;
 			batch = new SpriteBatch ();
@@ -47,6 +46,8 @@ namespace testgame2D {
 			var mascot = new MascotActor ();
 			stage.AddActor (mascot);
 			stage.AddAction (mascot);
+
+			base.Initialize ();
 		}
 
 		protected override void Resize () {

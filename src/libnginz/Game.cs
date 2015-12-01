@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
-using System.Reflection;
 
 namespace nginz
 {
@@ -36,6 +36,16 @@ namespace nginz
 		/// The keyboard.
 		/// </summary>
 		readonly public KeyboardBuffer Keyboard;
+
+		/// <summary>
+		/// The actions.
+		/// </summary>
+		readonly public ConcurrentQueue<Action> Actions;
+
+		/// <summary>
+		/// The sprite batch.
+		/// </summary>
+		public SpriteBatch SpriteBatch;
 
 		/// <summary>
 		/// The content manager.
@@ -97,7 +107,10 @@ namespace nginz
 		/// </summary>
 		public static Resolution Resolution;
 
-		public string ContentRoot = null;
+		/// <summary>
+		/// The content root.
+		/// </summary>
+		public string ContentRoot;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Game"/> class.
@@ -110,6 +123,9 @@ namespace nginz
 
 			// Initialize the keyboard buffer
 			Keyboard = new KeyboardBuffer ();
+
+			// Initialize the actions
+			Actions = new ConcurrentQueue<Action> ();
 		}
 
 		/// <summary>
@@ -181,14 +197,19 @@ namespace nginz
 		}
 
 		/// <summary>
+		/// Ensures that the specified action is called in the context thread.
+		/// </summary>
+		/// <param name="act">The action.</param>
+		public void EnsureContextThread (Action act) {
+			Actions.Enqueue (act);
+		}
+
+		/// <summary>
 		/// Initialize this instance.
 		/// </summary>
 		protected virtual void Initialize () {
 			GL.Enable (EnableCap.Blend);
 			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
-			Content = new ContentManager (ContentRoot ?? AppDomain.CurrentDomain.BaseDirectory);
-			RegisterProviders ();
 		}
 
 		/// <summary>
@@ -274,6 +295,9 @@ namespace nginz
 
 			// Initialize the mouse buffer
 			Mouse = new MouseBuffer (window);
+
+			Content = new ContentManager (ContentRoot ?? AppDomain.CurrentDomain.BaseDirectory);
+			RegisterProviders ();
 		}
 
 		/// <summary>
@@ -315,6 +339,9 @@ namespace nginz
 			this.Log ("Loading OpenGL entry points");
 			context.LoadAll ();
 
+			// Initialize the sprite batch
+			SpriteBatch = new SpriteBatch ();
+
 			// Initialize the game
 			this.Log ("Initializing game");
 			Initialize ();
@@ -343,6 +370,13 @@ namespace nginz
 
 				// Set updating to true
 				updating = true;
+
+				// Invoke waiting actions
+				for (var i = 0; i < Actions.Count; i++) {
+					Action action;
+					if (Actions.TryDequeue (out action))
+						action ();
+				}
 
 				// Set the paused variable to true
 				// if the game should be paused and continue

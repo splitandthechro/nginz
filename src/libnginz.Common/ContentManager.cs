@@ -10,12 +10,23 @@ namespace nginz.Common
 	/// </summary>
 	public class ContentManager: ICanLog
 	{
+		/// <summary>
+		/// The content root.
+		/// </summary>
+		string contentRoot;
 
 		/// <summary>
 		/// Gets or sets the content root.
 		/// </summary>
 		/// <value>The content root.</value>
-		public string ContentRoot { get; set; }
+		public string ContentRoot {
+			get { return contentRoot; }
+			set {
+				contentRoot = value
+					.Replace ('/', Path.DirectorySeparatorChar)
+					.Replace ('\\', Path.DirectorySeparatorChar);
+			}
+		}
 
 		/// <summary>
 		/// The asset providers.
@@ -37,7 +48,7 @@ namespace nginz.Common
 		/// <param name="type">Type.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void RegisterAssetProvider<T> (Type type) {
-			AssetProviders[typeof (T)] = Activator.CreateInstance (type, new object[] { ContentRoot, this });
+			AssetProviders[typeof (T)] = Activator.CreateInstance (type, new object[] { this });
 			this.Log ("Registered: {0}", typeof (T).Name);
 		}
 

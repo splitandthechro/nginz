@@ -30,7 +30,6 @@ namespace othertestgame {
 		Texture2D testTexture;
 		FPSCamera camera;
 		ShaderProgram program;
-		Fontmap testFont;
 
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}

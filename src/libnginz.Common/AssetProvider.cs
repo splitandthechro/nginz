@@ -8,13 +8,6 @@ namespace nginz.Common
 	/// </summary>
 	public abstract class AssetProvider<T> where T : Asset
 	{
-
-		/// <summary>
-		/// Gets the root.
-		/// </summary>
-		/// <value>The root.</value>
-		public string Root { get; private set; }
-
 		/// <summary>
 		/// Gets the asset root.
 		/// </summary>
@@ -27,10 +20,8 @@ namespace nginz.Common
 		/// Initializes a new instance of the <see cref="nginz.Common.AssetProvider{T}"/> class.
 		/// </summary>
 		/// <param name="manager">Content manager.</param>
-		/// <param name="root">Root.</param>
 		/// <param name="assetRoot">Asset root.</param>
-		protected AssetProvider (ContentManager manager, string root, string assetRoot) {
-			Root = root;
+		protected AssetProvider (ContentManager manager, string assetRoot) {
 			AssetRoot = assetRoot;
 			Manager = manager;
 		}
@@ -41,7 +32,7 @@ namespace nginz.Common
 		/// <returns>The asset path.</returns>
 		/// <param name="asset">Asset.</param>
 		public string GetAssetPath (string asset) {
-			return Path.Combine (Root, AssetRoot, asset);
+			return Path.Combine (Manager.ContentRoot, AssetRoot, asset);
 		}
 
 		/// <summary>

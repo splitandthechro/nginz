@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testgame2D", "testgame2D\te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Lua", "libnginz.Interop.Lua\libnginz.Interop.Lua.csproj", "{6C0CED4A-73BB-4BF7-933C-5A21B2632D0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "luatestgame", "luatestgame\luatestgame.csproj", "{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,14 @@ Global
 		{C985815A-AAB7-45D2-9427-039101F10B76}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C985815A-AAB7-45D2-9427-039101F10B76}.Release|x86.ActiveCfg = Release|Any CPU
 		{C985815A-AAB7-45D2-9427-039101F10B76}.Release|x86.Build.0 = Release|Any CPU
+		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Debug|x86.Build.0 = Debug|Any CPU
+		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
