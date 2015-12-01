@@ -5,13 +5,21 @@ namespace nginz.Common
 {
 	public class Script : Asset
 	{
-		readonly public string FilePath;
-		readonly public string Source;
+		public string FilePath;
+		public string Source;
 
 		public bool HasValidPath { get { return FilePath != null; } }
 
+		public Script () {
+			Source = string.Empty;
+		}
+
 		public Script (string path, string source) {
 			FilePath = path;
+			Source = source;
+		}
+
+		public void SetSource (string source) {
 			Source = source;
 		}
 
@@ -22,16 +30,20 @@ namespace nginz.Common
 			);
 		}
 
-		public static Script FromFile (string path) {
+		public void SetFile (string path) {
 			path = Path.GetFullPath (path);
 			string source;
 			using (var file = File.Open (path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			using (var reader = new StreamReader (file))
 				source = reader.ReadToEnd ();
-			return new Script (
-				path: path,
-				source: source
-			);
+			FilePath = path;
+			Source = source;
+		}
+
+		public static Script FromFile (string path) {
+			var script = new Script ();
+			script.SetFile (path);
+			return script;
 		}
 	}
 }

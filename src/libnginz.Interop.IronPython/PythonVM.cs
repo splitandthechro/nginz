@@ -40,7 +40,6 @@ namespace nginz.Interop.IronPython
 			AddReference ("OpenTK");
 			AddReference ("libnginz");
 			AddReference ("libnginz.Common");
-			ImportFrom ("nginz", "*");
 			Scope.SetVariable ("game", Game);
 		}
 

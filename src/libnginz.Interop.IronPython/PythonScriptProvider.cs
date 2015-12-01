@@ -12,7 +12,9 @@ namespace nginz.Interop.IronPython
 			var filename = assetName.EndsWith (".py")
 				? assetName
 				: string.Format ("{0}.py", assetName);
-			return (PythonScript) Script.FromFile (filename);
+			var script = new PythonScript ();
+			script.SetFile (filename);
+			return script;
 		}
 	}
 }
