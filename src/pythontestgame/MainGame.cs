@@ -16,14 +16,11 @@ namespace pythontestgame
 			// Set asset directory
 			Content.ContentRoot = "../../assets";
 
-			// Register python script asset provider
-			Content.RegisterAssetProvider<PythonScript> (typeof (PythonScriptProvider));
-
 			// Create the python vm
 			python = new PythonVM (this);
 
 			// Load the python script
-			python.Load (Content.Load<PythonScript> ("animation"));
+			python.Load (Content.Load<PythonScript> ("animation"), true);
 			python ["init"] ();
 
 			base.Initialize ();

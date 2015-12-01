@@ -42,7 +42,7 @@
     <Compile Include="AssetProvider.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="AssetProviders\ScriptProvider.cs" />
-    <Compile Include="Interfaces\IScriptHost.cs" />
+    <Compile Include="ScriptEvents.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

@@ -21,11 +21,11 @@ namespace luatestgame
 			lua = new LuaVM (this);
 
 			// Subscribe to events
-			lua.LoadScript += script => lua.Call ("load");
-			lua.UnloadScript += script => lua.Call ("unload");
+			ScriptEvents.LoadScript += script => lua.Call ("load");
+			ScriptEvents.UnloadScript += script => lua.Call ("unload");
 
 			// Load the lua script
-			lua.Load (Content.Load<Script> ("animation"), true);
+			lua.Load (Content.Load<LuaScript> ("animation"), true);
 
 			base.Initialize ();
 		}

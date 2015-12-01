@@ -3,7 +3,7 @@ from OpenTK import Vector2
 from OpenTK.Graphics import Color4
 from OpenTK.Graphics.OpenGL4 import *
 
-speed = 5
+speed = 10
 forward = True
 backwardFinished = False
 
@@ -44,7 +44,7 @@ def update ():
                 backwardFinished = False
 
 def draw ():
-    GL.ClearColor (0.4, 0.0, 1.0, 1.0)
+    GL.ClearColor (0.3, 0, 0.8, 1)
     GL.Clear (ClearBufferMask.ColorBufferBit)
     game.SpriteBatch.Begin ()
     game.SpriteBatch.Draw (tex, Vector2 (x1, centery), Color4.White)

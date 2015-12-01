@@ -29,27 +29,12 @@ namespace nginz.Interop.Lua
 		/// <summary>
 		/// The livereload watchers.
 		/// </summary>
-		List<FileSystemWatcher> livereloadWatchers;
+		readonly List<FileSystemWatcher> livereloadWatchers;
 
 		/// <summary>
 		/// The livereload files.
 		/// </summary>
-		List<NginzScript> livereloadFiles;
-
-		/// <summary>
-		/// Script state changed event arguments.
-		/// </summary>
-		public delegate void ScriptStateChangedEventArgs (NginzScript script);
-
-		/// <summary>
-		/// Occurs when a script gets loaded.
-		/// </summary>
-		public event ScriptStateChangedEventArgs LoadScript;
-
-		/// <summary>
-		/// Occurs when a script gets unloaded.
-		/// </summary>
-		public event ScriptStateChangedEventArgs UnloadScript;
+		readonly List<NginzScript> livereloadFiles;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Interop.Lua.LuaVM"/> class.
@@ -62,10 +47,6 @@ namespace nginz.Interop.Lua
 			livereloadFiles = new List<NginzScript> ();
 			livereloadWatchers = new List<FileSystemWatcher> ();
 			RegisterGlobals ();
-			for (var i = 0; i < Script.Globals.Length; i++)
-				this.Log ("Lua global: {0}", Script.Globals [i].ToString ());
-			LoadScript += delegate { };
-			UnloadScript += delegate { };
 		}
 
 		/// <summary>
@@ -76,7 +57,7 @@ namespace nginz.Interop.Lua
 		public LuaVM Load (NginzScript script, bool liveReload = false) {
 			try {
 				Script.DoString (script.Source);
-				LoadScript (script);
+				ScriptEvents.Load (script);
 			} catch (InvalidOperationException) {
 			} catch (Exception e) {
 				this.Log ("Syntax error: {0}", e.Message);
@@ -214,7 +195,7 @@ namespace nginz.Interop.Lua
 				Game.Pause ();
 
 				// Unload the script before reloading it
-				UnloadScript (livereloadFiles.First (s => s.FilePath == e.FullPath));
+				ScriptEvents.Unload (livereloadFiles.First (s => s.FilePath == e.FullPath));
 
 				// Reload the module
 				Load (NginzScript.FromFile (e.FullPath));
