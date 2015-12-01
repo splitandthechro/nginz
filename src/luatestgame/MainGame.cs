@@ -1,5 +1,6 @@
 ﻿using System;
 using nginz;
+using nginz.Common;
 using nginz.Interop.Lua;
 
 namespace luatestgame
@@ -16,9 +17,6 @@ namespace luatestgame
 			// Set asset directory
 			Content.ContentRoot = "../../assets";
 
-			// Register lua script asset provider
-			Content.RegisterAssetProvider<LuaScript> (typeof (LuaScriptProvider));
-
 			// Create the lua vm
 			lua = new LuaVM (this);
 
@@ -27,7 +25,7 @@ namespace luatestgame
 			lua.UnloadScript += script => lua.Call ("unload");
 
 			// Load the lua script
-			lua.Load (Content.Load<LuaScript> ("animation"), true);
+			lua.Load (Content.Load<Script> ("animation"), true);
 
 			base.Initialize ();
 		}

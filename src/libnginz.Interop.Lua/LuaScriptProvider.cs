@@ -12,7 +12,7 @@ namespace nginz.Interop.Lua
 			var filename = assetName.EndsWith (".lua")
 				? assetName
 				: string.Format ("{0}.lua", assetName);
-			return LuaScript.FromFile (filename);
+			return (LuaScript) Script.FromFile (filename);
 		}
 	}
 }

@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using MoonSharp.Interpreter;
 using nginz.Common;
+using NginzScript = nginz.Common.Script;
+using HostedLuaScript = MoonSharp.Interpreter.Script;
 
 namespace nginz.Interop.Lua
 {
@@ -22,7 +24,7 @@ namespace nginz.Interop.Lua
 		/// <summary>
 		/// The lua script.
 		/// </summary>
-		readonly Script Script;
+		readonly HostedLuaScript Script;
 
 		/// <summary>
 		/// The livereload watchers.
@@ -32,12 +34,12 @@ namespace nginz.Interop.Lua
 		/// <summary>
 		/// The livereload files.
 		/// </summary>
-		List<LuaScript> livereloadFiles;
+		List<NginzScript> livereloadFiles;
 
 		/// <summary>
 		/// Script state changed event arguments.
 		/// </summary>
-		public delegate void ScriptStateChangedEventArgs (LuaScript script);
+		public delegate void ScriptStateChangedEventArgs (NginzScript script);
 
 		/// <summary>
 		/// Occurs when a script gets loaded.
@@ -55,8 +57,9 @@ namespace nginz.Interop.Lua
 		/// <param name="game">Game.</param>
 		public LuaVM (Game game) {
 			Game = game;
-			Script = new Script ();
-			livereloadFiles = new List<LuaScript> ();
+			Game.Content.RegisterAssetProvider<LuaScript> (typeof(LuaScriptProvider));
+			Script = new HostedLuaScript ();
+			livereloadFiles = new List<NginzScript> ();
 			livereloadWatchers = new List<FileSystemWatcher> ();
 			RegisterGlobals ();
 			for (var i = 0; i < Script.Globals.Length; i++)
@@ -70,7 +73,7 @@ namespace nginz.Interop.Lua
 		/// </summary>
 		/// <param name="script">Script.</param>
 		/// <param name="liveReload">Whether the script should live-reload on changes.</param>
-		public LuaVM Load (LuaScript script, bool liveReload = false) {
+		public LuaVM Load (NginzScript script, bool liveReload = false) {
 			try {
 				Script.DoString (script.Source);
 				LoadScript (script);
@@ -133,7 +136,7 @@ namespace nginz.Interop.Lua
 		/// Observe the specified file.
 		/// </summary>
 		/// <param name="script">Lua script.</param>
-		void WatchFile (LuaScript script) {
+		void WatchFile (NginzScript script) {
 
 			// The full path of the file
 			var filepath = Path.GetFullPath (script.FilePath);
@@ -214,7 +217,7 @@ namespace nginz.Interop.Lua
 				UnloadScript (livereloadFiles.First (s => s.FilePath == e.FullPath));
 
 				// Reload the module
-				Load (LuaScript.FromFile (e.FullPath));
+				Load (NginzScript.FromFile (e.FullPath));
 
 				// Resume the game
 				Game.Resume ();

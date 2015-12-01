@@ -17,6 +17,7 @@ namespace nginz.Interop.IronPython
 
 		public PythonVM (Game game) {
 			Game = game;
+			Game.Content.RegisterAssetProvider<PythonScript> (typeof(PythonScriptProvider));
 			Engine = Python.CreateEngine ();
 			Scope = Engine.CreateScope ();
 			SetupGlobals ();

@@ -461,23 +461,26 @@ namespace nginz
 		/// </summary>
 		void RegisterProviders () {
 
-			// Register an asset provider for the vertex shader.
+			// Register an asset provider for the vertex shaders.
 			Content.RegisterAssetProvider<VertexShader> (typeof (ShaderProvider<VertexShader>));
 
-			// Register an asset provider for the vertex fragment.
+			// Register an asset provider for fragment shaders.
 			Content.RegisterAssetProvider<FragmentShader> (typeof (ShaderProvider<FragmentShader>));
 
-			// Register an asset provider for the geometry shader.
+			// Register an asset provider for geometry shaders.
 			Content.RegisterAssetProvider<GeometryShader> (typeof (ShaderProvider<GeometryShader>));
 
-			// Register an asset provider for the Texture2D.
+			// Register an asset provider for 2D textures.
 			Content.RegisterAssetProvider<Texture2D> (typeof (Texture2DProvider));
 
-			// Register an asset provider for the obj loader.
+			// Register an asset provider for the object files.
 			Content.RegisterAssetProvider<ObjFile> (typeof (ObjProvider));
 
-			// Register an asset provider for the shader program.
+			// Register an asset provider for shader programs.
 			Content.RegisterAssetProvider<ShaderProgram> (typeof (ShaderProgramProvider));
+
+			// Register an asset provider for scripts.
+			Content.RegisterAssetProvider<Script> (typeof(ScriptProvider));
 		}
 	}
 }

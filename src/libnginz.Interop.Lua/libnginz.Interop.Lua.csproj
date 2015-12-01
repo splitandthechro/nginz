@@ -42,13 +42,13 @@
     <Compile Include="Wrappers\OpenTK\Vector2.cs" />
     <Compile Include="Wrappers\OpenTK\Vector3.cs" />
     <Compile Include="Wrappers\OpenTK\GL.cs" />
-    <Compile Include="LuaScriptProvider.cs" />
-    <Compile Include="LuaScript.cs" />
     <Compile Include="Wrappers\nginz\Content.cs" />
     <Compile Include="Wrappers\nginz\Nginz.cs" />
     <Compile Include="Wrappers\nginz\SpriteBatch.cs" />
     <Compile Include="Wrappers\nginz\Texture2D.cs" />
     <Compile Include="Wrappers\OpenTK\Color.cs" />
+    <Compile Include="LuaScript.cs" />
+    <Compile Include="LuaScriptProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

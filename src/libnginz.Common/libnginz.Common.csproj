@@ -40,6 +40,9 @@
     <Compile Include="TypeSwitch.cs" />
     <Compile Include="Asset.cs" />
     <Compile Include="AssetProvider.cs" />
+    <Compile Include="Script.cs" />
+    <Compile Include="AssetProviders\ScriptProvider.cs" />
+    <Compile Include="Interfaces\IScriptHost.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
@@ -48,5 +51,8 @@
       <Project>{7A5BFF77-C783-4D40-AF7F-4C673C20E48B}</Project>
       <Name>libIodine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AssetProviders\" />
   </ItemGroup>
 </Project>
