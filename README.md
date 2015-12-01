@@ -7,12 +7,27 @@ The engine is currently highly unstable and in active development.
 If you try to use it and it suddenly decides to eat your cat, don't blame it on us.  
 As Eminem said: With great power comes absolutely no responsibility.
 
+# Features
+- Easy to use scene management
+- A nice dynamic content pipeline
+- 2D functionality with a fairly optimized SpriteBatch
+- 3D functionality with builtin Camera and Model support
+- Dynamic scripting (Python, Lua, Iodine)
+- See the effects of your changes live as you edit the scripts
+
+# Planned
+- UI framework
+- Particle framework
+- JavaScript scripting
+
 # Technology
 nginz is built on top of [OpenTK].
 
 nginz also uses the following libraries:
 - [Iodine]
 - [SharpFont]
+- [MoonSharp]
+- [IronPython]
 
 Some nginz code is roughly based on the following libraries:
 - [ObjLoader]
@@ -22,4 +37,6 @@ Some nginz code is roughly based on the following libraries:
 [OpenTK]: https://github.com/OpenTK/OpenTK "OpenTK"
 [Iodine]: https://github.com/IodineLang/Iodine "Iodine"
 [SharpFont]: https://github.com/Robmaister/SharpFont "SharpFont"
+[MoonSharp]: https://github.com/xanathar/moonsharp "MoonSharp"
+[IronPython]: https://ironpython.codeplex.com "IronPython"
 [ObjLoader]: https://github.com/Real-Serious-Games/ObjLoader "ObjLoader"
