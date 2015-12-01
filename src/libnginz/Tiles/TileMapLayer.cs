@@ -33,6 +33,11 @@ namespace nginz.Tiles {
 		public void SetTile (int x, int y, int tileX, int tileY) {
 			Layer[x + y * Width] = tileX + tileY * Sheet.TilesY;
 		}
+		public int GetTile (int x, int y) {
+			if (x < 0 || y < 0 || x >= Width || y >= Width)
+				return -1;
+			return Layer[x + y * Width];
+		}
 
 		public void Draw (SpriteBatch batch, Vector2 position) {
 			for (int y = 0; y < Height; y++)

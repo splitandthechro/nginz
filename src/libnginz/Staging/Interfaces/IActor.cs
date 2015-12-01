@@ -6,6 +6,8 @@ using nginz.Common;
 
 namespace nginz.Staging.Interfaces {
 	public interface IActor : IAction, IDraw {
+		dynamic Stage { get; set; }
+
 		void Initialize (ContentManager content);
 	}
 }
