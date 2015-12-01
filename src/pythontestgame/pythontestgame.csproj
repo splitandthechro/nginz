@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E2E8B124-2B79-4051-9CEE-CA45B569B3E4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>pythontestgame</RootNamespace>
+    <AssemblyName>pythontestgame</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MainGame.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\libnginz\libnginz.csproj">
+      <Project>{C985815A-AAB7-45D2-9427-039101F10B76}</Project>
+      <Name>libnginz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libnginz.Common\libnginz.Common.csproj">
+      <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
+      <Name>libnginz.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libnginz.Interop.IronPython\libnginz.Interop.IronPython.csproj">
+      <Project>{13523E0E-ADEC-4E45-9EB2-80A402934F2A}</Project>
+      <Name>libnginz.Interop.IronPython</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
