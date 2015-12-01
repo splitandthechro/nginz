@@ -7,7 +7,7 @@ The engine is currently highly unstable and in active development.
 If you try to use it and it suddenly decides to eat your cat, don't blame it on us.  
 As Eminem said: With great power comes absolutely no responsibility.
 
-# Features
+## Features
 - Easy to use scene management
 - A nice dynamic content pipeline
 - 2D functionality with a fairly optimized SpriteBatch
@@ -15,12 +15,12 @@ As Eminem said: With great power comes absolutely no responsibility.
 - Dynamic scripting (Python, Lua, Iodine)
 - See the effects of your changes live as you edit the scripts
 
-# Planned
+## Planned
 - UI framework
 - Particle framework
 - JavaScript scripting
 
-# Technology
+## Technology
 nginz is built on top of [OpenTK].
 
 nginz also uses the following libraries:
