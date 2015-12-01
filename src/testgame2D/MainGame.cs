@@ -18,7 +18,7 @@ namespace testgame2D {
 		SpriteSheet2D testSheet;
 		TileMap testMap;
 
-		Stage stage;
+		dynamic stage;
 
 		public MainGame (GameConfiguration conf) 
 			: base (conf) { }
@@ -34,7 +34,7 @@ namespace testgame2D {
 			tex = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 
 			testSheet = new SpriteSheet2D (Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest), 23, 16);
-			testMap = new TileMap (32, 32, 2);
+			testMap = new TileMap (new Vector2 (128, 256), 32, 32, new Vector2(32, 32), 2);
 			testMap.AddLayer ("testLayer", testSheet);
 
 			testMap.SetTile ("testLayer", 0, 1, 0);
@@ -46,6 +46,7 @@ namespace testgame2D {
 			var mascot = new MascotActor ();
 			stage.AddActor (mascot);
 			stage.AddAction (mascot);
+			stage.TileMap = testMap;
 
 			base.Initialize ();
 		}
@@ -71,7 +72,7 @@ namespace testgame2D {
 
 			batch.Begin ();
 			batch.Draw (tex, Vector2.Zero, Color4.White, Vector2.One);
-			testMap.Draw (batch, new Vector2 (128, 256));
+			testMap.Draw (batch);
 			font.Draw (batch);
 			stage.Draw (time, batch);
 			batch.End ();

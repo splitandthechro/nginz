@@ -29,6 +29,9 @@ namespace nginz.Tiles
 		/// </summary>
 		public float Scale;
 
+		public Vector2 Position;
+		public Vector2 TileSize;
+
 		/// <summary>
 		/// The layers.
 		/// </summary>
@@ -48,10 +51,12 @@ namespace nginz.Tiles
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		/// <param name="scale">Scale.</param>
-		public TileMap (int width, int height, float scale) {
+		public TileMap (Vector2 position, int width, int height, Vector2 tileSize, float scale) {
 			Width = width;
 			Height = height;
 			Scale = scale;
+			Position = position;
+			TileSize = tileSize;
 		}
 
 		/// <summary>
@@ -98,13 +103,17 @@ namespace nginz.Tiles
 			GetLayer (name).SetTile (x, y, tileX, tileY);
 		}
 
+		public int GetTile (string name, int x, int y) {
+			return GetLayer (name).GetTile (x, y);
+		}
+
 		/// <summary>
 		/// Draw the tiles.
 		/// </summary>
 		/// <param name="batch">Batch.</param>
 		/// <param name="position">Position.</param>
-		public void Draw (SpriteBatch batch, Vector2? position = null) {
-			Layers.Values.ToList ().ForEach (x => x.Draw (batch, position ?? Vector2.Zero));
+		public void Draw (SpriteBatch batch) {
+			Layers.Values.ToList ().ForEach (x => x.Draw (batch, Position));
 		}
 	}
 }
