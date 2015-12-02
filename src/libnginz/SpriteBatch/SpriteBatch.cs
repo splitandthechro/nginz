@@ -11,7 +11,7 @@ namespace nginz
 	/// <summary>
 	/// Sprite batch.
 	/// </summary>
-	public partial class SpriteBatch : ICanThrow
+	public partial class SpriteBatch : ICanThrow, IDisposable
 	{
 
 		/// <summary>
@@ -547,5 +547,20 @@ namespace nginz
 				indexCount = 0;
 			});
 		}
+
+		#region IDisposable implementation
+
+		/// <summary>
+		/// Releases all resource used by the <see cref="nginz.SpriteBatch"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="nginz.SpriteBatch"/>. The
+		/// <see cref="Dispose"/> method leaves the <see cref="nginz.SpriteBatch"/> in an unusable state. After calling
+		/// <see cref="Dispose"/>, you must release all references to the <see cref="nginz.SpriteBatch"/> so the garbage
+		/// collector can reclaim the memory that the <see cref="nginz.SpriteBatch"/> was occupying.</remarks>
+		public void Dispose () {
+			Program.Dispose ();
+		}
+
+		#endregion
 	}
 }

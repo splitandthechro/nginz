@@ -3,14 +3,15 @@ using nginz.Common;
 
 namespace nginz
 {
-	public class ShaderProvider<Shader> : AssetProvider<Shader> where Shader: BasicShader
+	[CLSCompliant (false)]
+	public class ShaderProvider<TShader> : AssetProvider<TShader> where TShader: BasicShader
 	{
 		public ShaderProvider (ContentManager manager)
 			: base (manager, "shaders") {
 		}
 
-		public override Shader Load (string assetName, params object[] args) {
-			return BasicShader.FromFile<Shader> (assetName);
+		public override TShader Load (string assetName, params object[] args) {
+			return BasicShader.FromFile<TShader> (assetName);
 		}
 	}
 }

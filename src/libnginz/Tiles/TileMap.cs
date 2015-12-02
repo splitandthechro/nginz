@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using nginz.Common;
 using OpenTK;
 
-namespace nginz.Tiles
+namespace nginz
 {
 
 	/// <summary>

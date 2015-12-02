@@ -59,7 +59,7 @@ namespace nginz.Common
 		/// <param name="args">Arguments.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T Load<T> (string asset, params object[] args)
-			where T : Asset {
+			where T : IAsset {
 
 			// Check if there is an asset provider for the specified asset type
 			if (AssetProviders.ContainsKey (typeof (T))) {
@@ -87,7 +87,7 @@ namespace nginz.Common
 		/// <param name="args">Arguments.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T LoadFrom<T> (string path, params object[] args)
-			where T : Asset {
+			where T : IAsset {
 
 			// Check if there is an asset provider for the specified asset type
 			if (AssetProviders.ContainsKey (typeof (T))) {

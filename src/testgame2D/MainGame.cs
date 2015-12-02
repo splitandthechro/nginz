@@ -5,8 +5,6 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using System.Reflection;
-using nginz.Staging;
-using nginz.Tiles;
 
 namespace testgame2D {
 	class MainGame : Game {

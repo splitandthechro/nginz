@@ -14,7 +14,7 @@ namespace nginz
 	/// <summary>
 	/// 2D Texture.
 	/// </summary>
-	public class Texture2D : ICanThrow, IBind, Asset
+	public class Texture2D : ICanThrow, IBind, IAsset
 	{
 
 		/// <summary>
@@ -171,14 +171,18 @@ namespace nginz
 			if (!File.Exists (path))
 				LogExtensions.ThrowStatic ("Could not find file '{0}'", path);
 
-			// Load the image
-			var img = Image.FromFile (path);
+			Texture2D tex;
 
-			// Load the image as bitmap
-			var bmp = new Bitmap (img);
+			// Load the image
+			using (var img = Image.FromFile (path))
+			using (var bmp = new Bitmap (img)) {
+
+				// Create the texture
+				tex = new Texture2D (bmp, config, true);
+			}
 
 			// Return the texture
-			return new Texture2D (bmp, config);
+			return tex;
 		}
 
 		/// <summary>

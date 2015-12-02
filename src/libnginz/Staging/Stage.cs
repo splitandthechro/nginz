@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
+using System.Runtime.InteropServices;
 using nginz.Common;
-using nginz.Staging.Interfaces;
 
-namespace nginz.Staging {
-	public class Stage : DynamicObject, ICanThrow {
-		public List<IDraw> Drawings = new List<IDraw> ();
+namespace nginz
+{
+	[ComVisible (false)]
+	public class Stage : DynamicObject, ICanThrow
+	{
+		
+		public List<IDrawable2D> Drawings = new List<IDrawable2D> ();
+
+		[CLSCompliant (false)]
 		public List<IActor> Actors = new List<IActor> ();
+
 		public List<IAction> Actions = new List<IAction> ();
 
 		public Dictionary<string, object> Properties = new Dictionary<string, object> ();
@@ -20,12 +25,13 @@ namespace nginz.Staging {
 			this.game = game;
 		}
 
+		[CLSCompliant (false)]
 		public void AddActor (IActor actor) {
 			actor.Stage = this;
 			actor.Initialize (game.Content);
 			Actors.Add (actor);
 		}
-		public void AddDrawing (IDraw drawing) {
+		public void AddDrawing (IDrawable2D drawing) {
 			Drawings.Add (drawing);
 		}
 		public void AddAction (IAction action) {

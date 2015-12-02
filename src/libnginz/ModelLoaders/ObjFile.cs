@@ -9,7 +9,7 @@ namespace nginz
 	/// <summary>
 	/// Object file.
 	/// </summary>
-	public class ObjFile : Asset
+	public class ObjFile : IAsset
 	{
 
 		/// <summary>

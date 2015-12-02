@@ -17,7 +17,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <NoWarn>IDE0002</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -56,9 +55,6 @@
     <Compile Include="SpriteBatch\SpriteBatch.cs" />
     <Compile Include="SpriteBatch\SpriteBatch.Shaders.cs" />
     <Compile Include="SpriteBatch\Vertex2D.cs" />
-    <Compile Include="Staging\Interfaces\IAction.cs" />
-    <Compile Include="Staging\Interfaces\IActor.cs" />
-    <Compile Include="Staging\Interfaces\IDraw.cs" />
     <Compile Include="Staging\Stage.cs" />
     <Compile Include="SpriteSheet2D.cs" />
     <Compile Include="TextureConfiguration.cs" />
@@ -99,6 +95,9 @@
     <Compile Include="SpriteBatch\SpriteEffects.cs" />
     <Compile Include="AssetProviders\ShaderProvider.cs" />
     <Compile Include="AssetProviders\ShaderProgramProvider.cs" />
+    <Compile Include="Interfaces\IAction.cs" />
+    <Compile Include="Interfaces\IActor.cs" />
+    <Compile Include="Interfaces\IDrawable2D.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />

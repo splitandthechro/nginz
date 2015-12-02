@@ -201,7 +201,7 @@ namespace nginz
 		/// </summary>
 		/// <returns>The face vertex.</returns>
 		/// <param name="vertexStr">The vertex string.</param>
-		static ObjFaceVertex ExtractFaceVertex (string vertexStr) {
+		ObjFaceVertex ExtractFaceVertex (string vertexStr) {
 			var vertices = ReadVertexGroup (vertexStr);
 			var face = new ObjFaceVertex {
 				VertexIndex = 0,
@@ -275,10 +275,13 @@ namespace nginz
 		/// </summary>
 		/// <returns>The int.</returns>
 		/// <param name="str">String.</param>
-		static int ParseInt (string str) {
+		int ParseInt (string str) {
 			var format = NumberFormatInfo.InvariantInfo;
 			var styles = NumberStyles.Integer;
-			return int.Parse (str, styles, format);
+			int parsed;
+			if (!int.TryParse (str, styles, format, out parsed))
+				LogExtensions.ThrowStatic ("Invalid obj file: Expected integer at line {0}:{1}", line, linepos);
+			return parsed;
 		}
 
 		/// <summary>
@@ -295,10 +298,13 @@ namespace nginz
 		/// </summary>
 		/// <returns>The float.</returns>
 		/// <param name="str">String.</param>
-		static float ParseFloat (string str) {
+		float ParseFloat (string str) {
 			var format = NumberFormatInfo.InvariantInfo;
 			var styles = NumberStyles.Float;
-			return float.Parse (str, styles, format);
+			float parsed;
+			if (!float.TryParse (str, styles, format, out parsed))
+				LogExtensions.ThrowStatic ("Invalid obj file: Expected float at line {0}:{1}", line, linepos);
+			return parsed;
 		}
 
 		/// <summary>

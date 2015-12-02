@@ -6,7 +6,7 @@ namespace nginz.Common
 	/// <summary>
 	/// Asset provider.
 	/// </summary>
-	public abstract class AssetProvider<T> where T : Asset
+	public abstract class AssetProvider<T> where T : IAsset
 	{
 		/// <summary>
 		/// Gets the asset root.

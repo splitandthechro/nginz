@@ -3,7 +3,7 @@ using System.IO;
 
 namespace nginz.Common
 {
-	public class Script : Asset
+	public class Script : IAsset
 	{
 		public string FilePath;
 		public string Source;
