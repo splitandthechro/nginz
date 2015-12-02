@@ -20,7 +20,7 @@ namespace pythontestgame
 			python = new PythonVM (this);
 
 			// Load the python script
-			python.Load (Content.Load<PythonScript> ("animation"), true);
+			python.LoadLive (Content.Load<PythonScript> ("animation"));
 			python ["init"] ();
 
 			base.Initialize ();

@@ -43,6 +43,7 @@
     <Compile Include="AssetProviders\ScriptProvider.cs" />
     <Compile Include="ScriptEvents.cs" />
     <Compile Include="Interfaces\IAsset.cs" />
+    <Compile Include="ScriptReloader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

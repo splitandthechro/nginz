@@ -96,7 +96,7 @@ namespace nginz
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.MouseBuffer"/> class.
 		/// </summary>
-		public MouseBuffer (NativeWindow window) {
+		public MouseBuffer (NativeWindow window, bool shouldCenterMouse = false) {
 
 			// Set the window
 			this.window = window;
@@ -111,14 +111,15 @@ namespace nginz
 			X = window.Width / 2f;
 			Y = window.Height / 2f;
 
-			// Center the mouse
-			CenterMouse ();
-
 			// Initialize mouse state
 			State = Mouse.GetState ();
 
 			// Initial mouse centered state
-			ShouldCenterMouse = false;
+			ShouldCenterMouse = shouldCenterMouse;
+
+			// Center the mouse
+			if (shouldCenterMouse)
+				CenterMouse ();
 		}
 
 		/// <summary>

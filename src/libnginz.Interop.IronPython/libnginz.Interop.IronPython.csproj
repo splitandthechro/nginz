@@ -59,6 +59,7 @@
     <Compile Include="PythonVM.cs" />
     <Compile Include="PythonScript.cs" />
     <Compile Include="PythonScriptProvider.cs" />
+    <Compile Include="PythonGame.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

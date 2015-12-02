@@ -25,7 +25,7 @@ namespace luatestgame
 			ScriptEvents.UnloadScript += script => lua.Call ("unload");
 
 			// Load the lua script
-			lua.Load (Content.Load<LuaScript> ("animation"), true);
+			lua.LoadLive (Content.Load<LuaScript> ("animation"));
 
 			base.Initialize ();
 		}
