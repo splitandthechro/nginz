@@ -1,4 +1,5 @@
 [![License: zlib-libpng license][licenseimg]][licenseurl]
+![Coverity][coverityimg]
 
 # nginz
 A cross-platform 3D game engine with its own odd style.  
@@ -34,6 +35,7 @@ Some nginz code is roughly based on the following libraries:
 
 [licenseurl]: https://tldrlegal.com/license/zlib-libpng-license-(zlib)
 [licenseimg]: https://img.shields.io/badge/license-zlib--libpng-blue.svg?style=flat-square
+[coverityimg]: https://img.shields.io/coverity/scan/7166.svg?style=flat-square
 [OpenTK]: https://github.com/OpenTK/OpenTK "OpenTK"
 [Iodine]: https://github.com/IodineLang/Iodine "Iodine"
 [SharpFont]: https://github.com/Robmaister/SharpFont "SharpFont"
