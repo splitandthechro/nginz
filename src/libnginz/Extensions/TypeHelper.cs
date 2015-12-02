@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
-using System.Text;
 
-namespace nginz {
-	public static class TypeHelper {
-		public static int SizeOf<T>(T? obj) where T : struct {
+namespace nginz
+{
+	[CLSCompliant (false)]
+	public static class TypeHelper
+	{
+		public static int SizeOf<T> (T? obj) where T : struct {
 			if (obj == null) throw new ArgumentNullException ("obj");
 			return SizeOf (typeof (T?));
 		}
 
-		public static int SizeOf<T>(T obj) {
+		public static int SizeOf<T> (T obj) {
+			// Analysis disable once CompareNonConstrainedGenericWithNull
 			if (obj == null) throw new ArgumentNullException ("obj");
 			return SizeOf (obj.GetType ());
 		}

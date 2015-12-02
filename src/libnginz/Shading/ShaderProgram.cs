@@ -8,7 +8,7 @@ namespace nginz
 	/// <summary>
 	/// Shader program.
 	/// </summary>
-	public partial class ShaderProgram : ICanThrow, IDisposable, Asset
+	public partial class ShaderProgram : ICanThrow, IDisposable, IAsset
 	{
 		/// <summary>
 		/// The current shader program identifier.
@@ -145,23 +145,6 @@ namespace nginz
 			}
 		}
 
-		/// <summary>
-		/// Detach all shaders
-		/// </summary>
-		void DetachAll () {
-
-			// Detach all shaders from the program
-			// and clear the shaderObjects list
-			foreach (var shader in shaderObjects) {
-
-				// Detach the shader
-				GL.DetachShader (programId, shader.ShaderId);
-
-				// Remove the shader
-				shaderObjects.Remove (shader);
-			}
-		}
-
 		#region IDisposable implementation
 
 		/// <summary>
@@ -173,12 +156,24 @@ namespace nginz
 		/// collector can reclaim the memory that the <see cref="nginz.ShaderProgram"/> was occupying.</remarks>
 		public void Dispose () {
 
+			// Detach all shaders from the program
+			foreach (var shader in shaderObjects) {
+
+				// Detach the shader
+				GL.DetachShader (programId, shader.ShaderId);
+
+				// Remove the shader
+				shaderObjects.Remove (shader);
+
+				// Dispose the shader
+				shader.Dispose ();
+			}
+
 			// Delete the program if its id is not -1
 			if (programId != -1)
 				GL.DeleteProgram (programId);
 
-			// Clear shaders
-			// TODO: Check if detaching the shaders is needed
+			// Clear remaining shaders, just in case
 			shaderObjects.Clear ();
 
 			// Set the program id to -1

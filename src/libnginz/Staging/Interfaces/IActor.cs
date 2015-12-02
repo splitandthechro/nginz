@@ -5,6 +5,8 @@ using System.Text;
 using nginz.Common;
 
 namespace nginz.Staging.Interfaces {
+
+	[CLSCompliant (false)]
 	public interface IActor : IAction, IDraw {
 		dynamic Stage { get; set; }
 

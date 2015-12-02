@@ -9,7 +9,7 @@ namespace nginz
 	/// <summary>
 	/// Basic shader.
 	/// </summary>
-	public class BasicShader : Shader, ICanThrow, Asset
+	public class BasicShader : Shader, ICanThrow, IAsset
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.BasicShader"/> class.
@@ -17,7 +17,9 @@ namespace nginz
 		/// <param name="type">Type.</param>
 		/// <param name="sources">Sources.</param>
 		public BasicShader (ShaderType type, params string[] sources) : base (type, sources) {
+			// Analysis disable DoNotCallOverridableMethodsInConstructor
 			Compile ();
+			// Analysis restore DoNotCallOverridableMethodsInConstructor
 		}
 
 		/// <summary>
@@ -56,7 +58,7 @@ namespace nginz
 		public override void Compile () {
 
 			// Create the shader
-			shaderId = GL.CreateShader (shaderType);
+			internalShaderId = GL.CreateShader (shaderType);
 
 			var lengths = new int[shaderSources.Length];
 			for (var i = 0; i < lengths.Length; i++)
@@ -64,19 +66,19 @@ namespace nginz
 
 			// Load the shader sources
 			GL.ShaderSource (
-				shader: shaderId,
+				shader: internalShaderId,
 				count: shaderSources.Length,
 				@string: shaderSources,
 				length: ref lengths [0]
 			);
 
 			// Compile the shader
-			GL.CompileShader (shaderId);
+			GL.CompileShader (internalShaderId);
 
 			// Get the shader compile status
 			int status;
 			GL.GetShader (
-				shader: shaderId,
+				shader: internalShaderId,
 				pname: ShaderParameter.CompileStatus,
 				@params: out status
 			);
@@ -85,7 +87,7 @@ namespace nginz
 			if (status == 0) {
 
 				// Get the error message
-				var error = GL.GetShaderInfoLog (shaderId);
+				var error = GL.GetShaderInfoLog (internalShaderId);
 
 				// Throw an exception
 				this.Throw ("Could not compile {0}: {1}", shaderType, error);

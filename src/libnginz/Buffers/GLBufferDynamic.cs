@@ -40,6 +40,10 @@ namespace nginz {
 
 		public void UploadData (IList<T> data) {
 
+			// Check if data is null
+			if (data == null)
+				this.Throw ("Cannot upload data: data is null");
+
 			// Calculate the buffer size
 			var bufferSize = Marshal.SizeOf (data[0]) * data.Count;
 
@@ -49,10 +53,20 @@ namespace nginz {
 		}
 
 		public static void Bind<BuffType> (GLBufferDynamic<BuffType> buffer) where BuffType : struct {
+
+			// Check if buffer is null
+			if (buffer == null)
+				LogExtensions.ThrowStatic ("Cannot bind buffer: buffer is null");
+			
 			GL.BindBuffer (buffer.Settings.Target, buffer.BufferId);
 		}
 
 		public static void Unbind<BuffType>(GLBufferDynamic<BuffType> buffer) where BuffType : struct {
+			
+			// Check if buffer is null
+			if (buffer == null)
+				LogExtensions.ThrowStatic ("Cannot unbind buffer: buffer is null");
+
 			GL.BindBuffer (buffer.Settings.Target, 0);
 		}
 
@@ -95,6 +109,14 @@ namespace nginz {
 		}
 
 		public void PointTo (int where, params int[] other) {
+
+			// Check if the other parameter is null
+			if (other == null)
+				this.Throw ("Cannot set attribute pointer: other is null");
+
+			// Check if other contains at least two elements
+			if (other.Length < 2)
+				this.Throw ("Cannot set attribute pointer: other contains less than two elements");
 
 			// Bind buffer
 			Bind ();

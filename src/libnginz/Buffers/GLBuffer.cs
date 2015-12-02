@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using OpenTK.Graphics.OpenGL4;
 using System.Linq;
+using System.Runtime.InteropServices;
+using nginz.Common;
+using OpenTK.Graphics.OpenGL4;
 
 namespace nginz {
 
 	/// <summary>
 	/// OpenGL Buffer.
 	/// </summary>
-	public class GLBuffer<T> : IBuffer<int> where T : struct {
+	public class GLBuffer<T> : ICanThrow, IBuffer<int> where T : struct {
 
 		/// <summary>
 		/// The buffer identifier.
@@ -104,6 +105,14 @@ namespace nginz {
 
 		public void PointTo (int where, params int[] other) {
 
+			// Check if the other parameter is null
+			if (other == null)
+				this.Throw ("Cannot set attribute pointer: other is null");
+
+			// Check if other contains at least two elements
+			if (other.Length < 2)
+				this.Throw ("Cannot set attribute pointer: other contains less than two elements");
+
 			// Bind buffer
 			Bind ();
 
@@ -111,7 +120,7 @@ namespace nginz {
 			GL.EnableVertexAttribArray (where);
 
 			// Set vertex attribute pointer
-			GL.VertexAttribPointer (where, other[0], Settings.Type, Settings.Normalized, ElementSize, other[1]);
+			GL.VertexAttribPointer (where, other [0], Settings.Type, Settings.Normalized, ElementSize, other [1]);
 
 			// Unbind buffer
 			Unbind ();
@@ -124,6 +133,10 @@ namespace nginz {
 		/// <typeparam name="BuffType">The 1st type parameter.</typeparam>
 		public static void Bind<BuffType> (GLBuffer<BuffType> buffer) where BuffType : struct {
 
+			// Check if the buffer is null
+			if (buffer == null)
+				LogExtensions.ThrowStatic ("Cannot bind buffer: buffer is null");
+			
 			// Bind the buffer
 			GL.BindBuffer (buffer.Settings.Target, buffer.BufferId);
 		}
@@ -143,6 +156,10 @@ namespace nginz {
 		/// <param name="buffer">Buffer.</param>
 		/// <typeparam name="BuffType">The 1st type parameter.</typeparam>
 		public static void Unbind<BuffType>(GLBuffer<BuffType> buffer) where BuffType : struct {
+
+			// Check if the buffer is null
+			if (buffer == null)
+				LogExtensions.ThrowStatic ("Cannot unbind buffer: buffer is null");
 
 			// Unbind the buffer
 			GL.BindBuffer (buffer.Settings.Target, 0);

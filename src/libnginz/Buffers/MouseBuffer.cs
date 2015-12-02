@@ -108,8 +108,8 @@ namespace nginz
 			DeltaZ = 0.0f;
 
 			// Initialize mouse coordinates
-			X = window.Width / 2;
-			Y = window.Height / 2;
+			X = window.Width / 2f;
+			Y = window.Height / 2f;
 
 			// Center the mouse
 			CenterMouse ();

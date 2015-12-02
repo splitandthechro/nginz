@@ -2,6 +2,6 @@
 
 namespace nginz.Common
 {
-	public interface Asset { }
+	public interface IAsset { }
 }
 

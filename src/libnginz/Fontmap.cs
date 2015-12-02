@@ -6,7 +6,6 @@ using GDIColor = System.Drawing.Color;
 using GDIPixelFormat = System.Drawing.Imaging.PixelFormat;
 using GLColor = OpenTK.Graphics.Color4;
 using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
-using SharpFont;
 
 namespace nginz
 {
@@ -14,7 +13,7 @@ namespace nginz
 	/// <summary>
 	/// Fontmap.
 	/// </summary>
-	public class Fontmap
+	public class Fontmap : IDisposable
 	{
 
 		/// <summary>
@@ -171,6 +170,22 @@ namespace nginz
 			if (Texture != null)
 				batch.Draw (Texture, Vector2.Zero, GLColor.White);
 		}
+
+		#region IDisposable implementation
+
+		/// <summary>
+		/// Releases all resource used by the <see cref="nginz.Fontmap"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="nginz.Fontmap"/>. The <see cref="Dispose"/>
+		/// method leaves the <see cref="nginz.Fontmap"/> in an unusable state. After calling <see cref="Dispose"/>, you must
+		/// release all references to the <see cref="nginz.Fontmap"/> so the garbage collector can reclaim the memory that the
+		/// <see cref="nginz.Fontmap"/> was occupying.</remarks>
+		public void Dispose () {
+			Bitmap.Dispose ();
+			Font.Dispose ();
+		}
+
+		#endregion
 	}
 }
 

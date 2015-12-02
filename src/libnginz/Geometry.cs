@@ -20,6 +20,7 @@ namespace nginz {
 		/// <summary>
 		/// The indices.
 		/// </summary>
+		[CLSCompliant (false)]
 		public GLBuffer<uint> Indices = null;
 
 		/// <summary>
@@ -44,6 +45,7 @@ namespace nginz {
 		/// <returns>The buffer.</returns>
 		/// <param name="name">Name.</param>
 		/// <param name="buffer">Buffer.</param>
+		[CLSCompliant (false)]
 		public Geometry AddBuffer (string name, IBuffer<int> buffer) {
 			Buffers[name] = buffer;
 			return this;
@@ -55,7 +57,7 @@ namespace nginz {
 		/// <param name="program">Program.</param>
 		/// <param name="name">Name.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public Geometry Attribute<T> (ShaderProgram program, string name) where T : struct{
+		public Geometry Attribute<T> (ShaderProgram program, string name) where T : struct {
 			((GLBuffer<T>) Buffers[name]).PointTo (program.Attrib (name));
 			return this;
 		}
@@ -65,6 +67,7 @@ namespace nginz {
 		/// </summary>
 		/// <returns>The indices.</returns>
 		/// <param name="indices">Indices.</param>
+		[CLSCompliant (false)]
 		public Geometry SetIndices (GLBuffer<uint> indices) {
 			Indices = indices;
 			return this;

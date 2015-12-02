@@ -21,13 +21,13 @@ namespace nginz
 		/// <summary>
 		/// The shader identifier.
 		/// </summary>
-		protected int shaderId;
+		protected int internalShaderId;
 
 		/// <summary>
 		/// Gets the shader identifier.
 		/// </summary>
 		/// <value>The shader identifier.</value>
-		public int ShaderId { get { return shaderId; } }
+		public int ShaderId { get { return internalShaderId; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Shader"/> class.
@@ -53,11 +53,11 @@ namespace nginz
 		public virtual void Dispose () {
 
 			// Delete the shader if its id is not -1
-			if (shaderId != -1)
-				GL.DeleteShader (shaderId);
+			if (internalShaderId != -1)
+				GL.DeleteShader (internalShaderId);
 
 			// Set the shader id to -1
-			shaderId = -1;
+			internalShaderId = -1;
 		}
 
 		#endregion

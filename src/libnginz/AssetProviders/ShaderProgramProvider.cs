@@ -4,8 +4,12 @@ using System.Linq;
 using System.Text;
 using nginz.Common;
 
-namespace nginz {
-	public class ShaderProgramProvider : AssetProvider<ShaderProgram> {
+namespace nginz
+{
+	
+	[CLSCompliant (false)]
+	public class ShaderProgramProvider : AssetProvider<ShaderProgram>
+	{
 		public ShaderProgramProvider (ContentManager manager)
 			: base (manager, "shaders") { }
 

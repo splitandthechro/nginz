@@ -12,7 +12,7 @@ namespace nginz
 	/// <summary>
 	/// Game.
 	/// </summary>
-	public class Game : ICanLog, ICanThrow
+	public class Game : ICanLog, ICanThrow, IDisposable
 	{
 
 		/// <summary>
@@ -50,6 +50,7 @@ namespace nginz
 		/// <summary>
 		/// The content manager.
 		/// </summary>
+		[CLSCompliant (false)]
 		public ContentManager Content;
 
 		/// <summary>
@@ -57,15 +58,22 @@ namespace nginz
 		/// </summary>
 		public MouseBuffer Mouse;
 
-		/// <summary>
-		/// The start time.
-		/// </summary>
+		// No XML doc for those since they are not
+		// used anywhere except in the gameloop.
+		#region Timing values
+		GameTime gameTime;
 		DateTime startTime;
-
-		/// <summary>
-		/// DateTime of the last update.
-		/// </summary>
 		DateTime lastTime;
+		DateTime currentTime;
+		TimeSpan totalTime;
+		TimeSpan elapsedTime;
+		double updateTime;
+		double updateNewTime;
+		double updateFrameTime;
+		double updateAccumTime;
+		double updateDeltaTime;
+		double updateCurrentTime;
+		#endregion
 
 		/// <summary>
 		/// The graphics mode.
@@ -159,6 +167,7 @@ namespace nginz
 				window.ProcessEvents ();
 			}
 
+			// Wait till all updates finished
 			this.Log ("Waiting for updates to finish");
 			while (updating) { }
 
@@ -239,7 +248,7 @@ namespace nginz
 		protected virtual void Resize () {
 
 			// Update the resolution
-			Resolution = new Resolution { Width = window.Width, Height = window.Height };
+			UpdateResolution ();
 
 			// Update the context
 			context.Update (window.WindowInfo);
@@ -251,6 +260,13 @@ namespace nginz
 		/// that needs to be done before the game exits.
 		/// </summary>
 		protected virtual void BeforeExit () { }
+
+		/// <summary>
+		/// Update the resolution.
+		/// </summary>
+		void UpdateResolution () {
+			Resolution = new Resolution { Width = window.Width, Height = window.Height };
+		}
 
 		/// <summary>
 		/// Initializes the game internally.
@@ -282,7 +298,8 @@ namespace nginz
 				device: DisplayDevice.Default
 			);
 
-			Resolution = new Resolution { Width = window.Width, Height = window.Height };
+			// Update the resolution
+			UpdateResolution ();
 
 			// Register events
 			window.KeyDown += Keyboard.RegisterKeyDown;
@@ -298,6 +315,87 @@ namespace nginz
 
 			Content = new ContentManager (ContentRoot ?? AppDomain.CurrentDomain.BaseDirectory);
 			RegisterProviders ();
+		}
+
+		/// <summary>
+		/// Setup up vsync.
+		/// </summary>
+		void SetupVsync () {
+			this.Log ("Setting VSync mode: {0}", Configuration.Vsync);
+			switch (Configuration.Vsync) {
+			case VsyncMode.Adaptive:
+				context.SwapInterval = -1;
+				break;
+			case VsyncMode.Off:
+				context.SwapInterval = 0;
+				break;
+			case VsyncMode.On:
+				context.SwapInterval = 1;
+				break;
+			}
+		}
+
+		void PrepareTiming (int targetFramerate) {
+			currentTime = DateTime.UtcNow;
+			gameTime = GameTime.ZeroTime;
+			updateTime = 0d;
+			updateAccumTime = 0d;
+			updateDeltaTime = 1d / (double) targetFramerate;
+			updateCurrentTime = currentTime.Subtract (startTime).TotalSeconds;
+		}
+
+		void InternalUpdate (DateTime now) {
+			
+			// Use fixed framerate if requested
+			if (Configuration.FixedFramerate) {
+
+				// Calculate timing data
+				updateNewTime = now.Subtract (startTime).TotalSeconds;
+				updateFrameTime = updateNewTime - updateCurrentTime;
+				updateCurrentTime = updateNewTime;
+				updateAccumTime += updateFrameTime;
+
+				// Update according to calculated timing data
+				while (updateAccumTime >= updateDeltaTime) {
+
+					// Calculate total and elapsed time
+					totalTime = now.Subtract (startTime);
+					elapsedTime = now.Subtract (lastTime);
+					lastTime = now;
+
+					// Create GameTime from calculated time values
+					gameTime = new GameTime (
+						total: totalTime,
+						elapsed: elapsedTime
+					);
+
+					// Update
+					Update (gameTime);
+
+					// Update timing data
+					updateAccumTime -= updateDeltaTime;
+					updateTime += updateDeltaTime;
+				}
+			}
+
+			// Use variable framerate
+			else {
+
+				// Calculate total and elapsed time
+				totalTime = now.Subtract (startTime);
+				elapsedTime = now.Subtract (lastTime);
+				lastTime = now;
+
+				// Create GameTime from calculated time values
+				gameTime = new GameTime (
+					total: totalTime,
+					elapsed: elapsedTime
+				);
+
+				// Update
+				Update (gameTime);
+			}
+
 		}
 
 		/// <summary>
@@ -322,18 +420,7 @@ namespace nginz
 			GraphicsContext.Assert ();
 
 			// Set vsync mode
-			this.Log ("Setting VSync mode: {0}", Configuration.Vsync);
-			switch (Configuration.Vsync) {
-			case VsyncMode.Adaptive:
-				context.SwapInterval = -1;
-				break;
-			case VsyncMode.Off:
-				context.SwapInterval = 0;
-				break;
-			case VsyncMode.On:
-				context.SwapInterval = 1;
-				break;
-			}
+			SetupVsync ();
 
 			// Load OpenGL entry points
 			this.Log ("Loading OpenGL entry points");
@@ -351,16 +438,7 @@ namespace nginz
 			var framerate = Configuration.TargetFramerate > 0 ? Configuration.TargetFramerate : 60;
 
 			// Prepare timing variables
-			TimeSpan totalTime;
-			TimeSpan elapsedTime;
-			double updateNewTime;
-			double updateFrameTime;
-			var now = DateTime.UtcNow;
-			var gameTime = GameTime.ZeroTime;
-			var updateTime = 0d;
-			var updateAccumTime = 0d;
-			var updateDeltaTime = 1d / (double) framerate;
-			var updateCurrentTime = now.Subtract (startTime).TotalSeconds;
+			PrepareTiming (framerate);
 
 			// Present the window to the user
 			window.Visible = true;
@@ -396,57 +474,10 @@ namespace nginz
 				}
 
 				// Update current time
-				now = DateTime.UtcNow;
+				currentTime = DateTime.UtcNow;
 
-				// Use fixed framerate if requested
-				if (Configuration.FixedFramerate) {
-
-					// Calculate timing data
-					updateNewTime = now.Subtract (startTime).TotalSeconds;
-					updateFrameTime = updateNewTime - updateCurrentTime;
-					updateCurrentTime = updateNewTime;
-					updateAccumTime += updateFrameTime;
-
-					// Update according to calculated timing data
-					while (updateAccumTime >= updateDeltaTime) {
-
-						// Calculate total and elapsed time
-						totalTime = now.Subtract (startTime);
-						elapsedTime = now.Subtract (lastTime);
-						lastTime = now;
-
-						// Create GameTime from calculated time values
-						gameTime = new GameTime (
-							total: totalTime,
-							elapsed: elapsedTime
-						);
-
-						// Update
-						Update (gameTime);
-
-						// Update timing data
-						updateAccumTime -= updateDeltaTime;
-						updateTime += updateDeltaTime;
-					}
-				}
-
-				// Use variable framerate
-				else {
-
-					// Calculate total and elapsed time
-					totalTime = now.Subtract (startTime);
-					elapsedTime = now.Subtract (lastTime);
-					lastTime = now;
-
-					// Create GameTime from calculated time values
-					gameTime = new GameTime (
-						total: totalTime,
-						elapsed: elapsedTime
-					);
-
-					// Update
-					Update (gameTime);
-				}
+				// Update
+				InternalUpdate (currentTime);
 
 				// Draw
 				Draw (gameTime);
@@ -482,6 +513,33 @@ namespace nginz
 			// Register an asset provider for scripts.
 			Content.RegisterAssetProvider<Script> (typeof(ScriptProvider));
 		}
+
+		#region IDisposable implementation
+
+		/// <summary>
+		/// Releases all resource used by the <see cref="nginz.Game"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="nginz.Game"/>. The <see cref="Dispose"/>
+		/// method leaves the <see cref="nginz.Game"/> in an unusable state. After calling <see cref="Dispose"/>, you must
+		/// release all references to the <see cref="nginz.Game"/> so the garbage collector can reclaim the memory that the
+		/// <see cref="nginz.Game"/> was occupying.</remarks>
+		public void Dispose () {
+
+			// Exit the game
+			if (!exit)
+				Exit ();
+
+			// Wait till the game stops updating
+			while (updating) { }
+
+			// Dispose the window
+			window.Dispose ();
+
+			// Dispose the context
+			context.Dispose ();
+		}
+
+		#endregion
 	}
 }
 
