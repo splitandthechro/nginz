@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using nginz;
 using nginz.Common;
-using nginz.Staging;
-using nginz.Staging.Interfaces;
-using nginz.Tiles;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
 
-namespace testgame2D {
-	public class MascotActor : IActor {
+namespace testgame2D
+{
+	public class MascotActor : IActor
+	{
 		public Texture2D MascotTexture;
 		public Vector2 Position = Vector2.Zero;
 

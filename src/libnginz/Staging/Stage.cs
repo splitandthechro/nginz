@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Runtime.InteropServices;
 using nginz.Common;
-using nginz.Staging.Interfaces;
 
-namespace nginz.Staging
+namespace nginz
 {
 	[ComVisible (false)]
 	public class Stage : DynamicObject, ICanThrow
 	{
 		
-		public List<IDraw> Drawings = new List<IDraw> ();
+		public List<IDrawable2D> Drawings = new List<IDrawable2D> ();
 
 		[CLSCompliant (false)]
 		public List<IActor> Actors = new List<IActor> ();
@@ -32,7 +31,7 @@ namespace nginz.Staging
 			actor.Initialize (game.Content);
 			Actors.Add (actor);
 		}
-		public void AddDrawing (IDraw drawing) {
+		public void AddDrawing (IDrawable2D drawing) {
 			Drawings.Add (drawing);
 		}
 		public void AddAction (IAction action) {
