@@ -1,5 +1,4 @@
 [![License: zlib-libpng license][licenseimg]][licenseurl]
-![Coverity][coverityimg]
 [![Build Status][travisimg]][travisurl]
 
 # nginz
