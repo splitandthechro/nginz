@@ -49,7 +49,6 @@ namespace nginz.Common
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void RegisterAssetProvider<T> (Type type) {
 			AssetProviders[typeof (T)] = Activator.CreateInstance (type, new object[] { this });
-			this.Log ("Registered: {0}", typeof (T).Name);
 		}
 
 		/// <summary>

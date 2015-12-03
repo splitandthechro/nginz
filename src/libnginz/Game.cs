@@ -63,6 +63,10 @@ namespace nginz
 		/// </summary>
 		public MouseBuffer Mouse;
 
+		public bool IsRunningInScriptedEnvironment;
+		public bool HasCrashed;
+		public string ErrorMessage;
+
 		// No XML doc for those since they are not
 		// used anywhere except in the gameloop.
 		#region Timing values
@@ -111,6 +115,11 @@ namespace nginz
 		volatile bool exit;
 
 		/// <summary>
+		/// Whether the game has exited.
+		/// </summary>
+		volatile bool exited;
+
+		/// <summary>
 		/// Whether the game is currently drawing.
 		/// </summary>
 		volatile bool updating;
@@ -140,6 +149,7 @@ namespace nginz
 			// Initialize the actions
 			ContextActions = new ConcurrentQueue<Action> ();
 			UIActions = new ConcurrentQueue<Action> ();
+			IsRunningInScriptedEnvironment = false;
 		}
 
 		/// <summary>
@@ -175,8 +185,22 @@ namespace nginz
 			};
 
 			// Start gameloop in a separate thread
-			var trd = new Thread (EnterGameloop);
-			trd.Start ();
+			if (!IsRunningInScriptedEnvironment) {
+				var trd = new Thread (EnterGameloop);
+				trd.Start ();
+			} else {
+				var trd = new Thread (() => {
+					try {
+						EnterGameloop ();
+					} catch (Exception e) {
+						Exit ();
+						while (!exited) { }
+						HasCrashed = true;
+						ErrorMessage = e.Message;
+					}
+				});
+				trd.Start ();
+			}
 
 			// Process the message queue
 			this.Log ("Entering message processing loop");
@@ -199,12 +223,7 @@ namespace nginz
 			// Wait till all updates finished
 			this.Log ("Waiting for updates to finish");
 			while (updating) { }
-
-			// Dispose of the context
-			context.Dispose ();
-
-			// Dispose of the window
-			window.Dispose ();
+			exited = true;
 		}
 
 		/// <summary>

@@ -41,13 +41,11 @@ namespace nginz.Interop.IronPython
 
 		public void RunLoop (string className, GameConfiguration conf) {
 			hasExited = false;
-			while (continueLoop && !exitLoop) {
-				RunOnce (className, conf);
-			}
+			while (!exitLoop && RunOnce (className, conf)) { }
 			hasExited = true;
 		}
 
-		void RunOnce (string className, GameConfiguration conf) {
+		bool RunOnce (string className, GameConfiguration conf) {
 			try {
 				Python.Load (Content.LoadFrom<PythonScript> (scriptPath));
 			} catch (Exception e) {
@@ -56,7 +54,7 @@ namespace nginz.Interop.IronPython
 				Console.ReadKey (true);
 				ClearScope ();
 				Python.Shutdown ();
-				continueLoop = true;
+				return true;
 			}
 			if (!Python.Scope.ContainsVariable (className)) {
 				this.Log ("Variable not found: {0}", className);
@@ -64,18 +62,19 @@ namespace nginz.Interop.IronPython
 				Console.ReadKey (true);
 				ClearScope ();
 				Python.Shutdown ();
-				continueLoop = true;
+				return true;
 			}
 			var game = Python.Scope.GetVariable (className);
 			try {
 				instance = game (conf);
+				instance.IsRunningInScriptedEnvironment = true;
 			} catch (Exception e) {
 				this.Log (e.Message);
 				this.Log ("Please fix that issue and press any key to restart the game.");
 				Console.ReadKey (true);
 				ClearScope ();
 				Python.Shutdown ();
-				continueLoop = true;
+				return true;
 			}
 			Python.CallInstance (instance, "Run");
 			if (Python.GetLastError () != string.Empty) {
@@ -84,9 +83,18 @@ namespace nginz.Interop.IronPython
 				Console.ReadKey (true);
 				ClearScope ();
 				Python.Shutdown ();
-				continueLoop = true;
+				return true;
 			}
-			continueLoop = false;
+			if (instance.HasCrashed) {
+				this.Log ("============================================================");
+				this.Log ("The game has crashed. Sadface.");
+				this.Log ("Reason: {0}", (string) instance.ErrorMessage);
+				this.Log ("Please fix your code and press any key to make magic happen.");
+				this.Log ("============================================================");
+				Console.ReadKey (true);
+				return true;
+			}
+			return false;
 		}
 
 		void ClearScope () {
