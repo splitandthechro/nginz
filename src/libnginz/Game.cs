@@ -38,9 +38,14 @@ namespace nginz
 		readonly public KeyboardBuffer Keyboard;
 
 		/// <summary>
-		/// The actions.
+		/// Queue of actions that should be invoked in the context thread.
 		/// </summary>
-		readonly public ConcurrentQueue<Action> Actions;
+		readonly public ConcurrentQueue<Action> ContextActions;
+
+		/// <summary>
+		/// Queue of actions that should be invoked in the UI thread.
+		/// </summary>
+		readonly public ConcurrentQueue<Action> UIActions;
 
 		/// <summary>
 		/// The sprite batch.
@@ -133,7 +138,8 @@ namespace nginz
 			Keyboard = new KeyboardBuffer ();
 
 			// Initialize the actions
-			Actions = new ConcurrentQueue<Action> ();
+			ContextActions = new ConcurrentQueue<Action> ();
+			UIActions = new ConcurrentQueue<Action> ();
 		}
 
 		/// <summary>
@@ -164,7 +170,18 @@ namespace nginz
 			// Process the message queue
 			this.Log ("Entering message processing loop");
 			while (!exit && window != null && window.Exists) {
+				
+				// Invoke waiting actions
+				for (var i = 0; i < UIActions.Count; i++) {
+					Action action;
+					if (UIActions.TryDequeue (out action))
+						action ();
+				}
+
+				// Center the mouse
 				Mouse.CenterMouse ();
+
+				// Process window events
 				window.ProcessEvents ();
 			}
 
@@ -211,7 +228,15 @@ namespace nginz
 		/// </summary>
 		/// <param name="act">The action.</param>
 		public void EnsureContextThread (Action act) {
-			Actions.Enqueue (act);
+			ContextActions.Enqueue (act);
+		}
+
+		/// <summary>
+		/// Ensures that the specified action is called in the UI thread.
+		/// </summary>
+		/// <param name="act">The action.</param>
+		public void EnsureUIThread (Action act) {
+			UIActions.Enqueue (act);
 		}
 
 		/// <summary>
@@ -312,8 +337,9 @@ namespace nginz
 			lastTime = startTime;
 
 			// Initialize the mouse buffer
-			Mouse = new MouseBuffer (window);
+			Mouse = new MouseBuffer (window, this);
 
+			// Initialize the context manager
 			Content = new ContentManager (ContentRoot ?? AppDomain.CurrentDomain.BaseDirectory);
 			RegisterProviders ();
 		}
@@ -454,9 +480,9 @@ namespace nginz
 				updating = true;
 
 				// Invoke waiting actions
-				for (var i = 0; i < Actions.Count; i++) {
+				for (var i = 0; i < ContextActions.Count; i++) {
 					Action action;
-					if (Actions.TryDequeue (out action))
+					if (ContextActions.TryDequeue (out action))
 						action ();
 				}
 

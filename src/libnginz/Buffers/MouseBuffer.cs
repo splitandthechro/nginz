@@ -19,6 +19,11 @@ namespace nginz
 		readonly NativeWindow window;
 
 		/// <summary>
+		/// The game.
+		/// </summary>
+		readonly Game game;
+
+		/// <summary>
 		/// The mouse state.
 		/// </summary>
 		MouseState State;
@@ -94,12 +99,34 @@ namespace nginz
 		public bool ShouldCenterMouse { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether the cursor is visible.
+		/// </summary>
+		/// <value><c>true</c> if the cursor is visible; otherwise, <c>false</c>.</value>
+		public bool CursorVisible {
+			get {
+				bool visible = false;
+				if (game != null)
+					game.EnsureContextThread (() => visible = window.CursorVisible);
+				else
+					visible = window.CursorVisible;
+				return visible;
+			}
+			set {
+				if (game != null)
+					game.EnsureUIThread (() => window.CursorVisible = value);
+				else
+					window.CursorVisible = value;
+			}
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.MouseBuffer"/> class.
 		/// </summary>
-		public MouseBuffer (NativeWindow window, bool shouldCenterMouse = false) {
+		public MouseBuffer (NativeWindow window, Game game = null, bool shouldCenterMouse = false, bool mouseVisible = true) {
 
 			// Set the window
 			this.window = window;
+			this.game = game;
 
 			// Initialize wheel and delta values
 			Wheel = 0.0f;
@@ -114,8 +141,11 @@ namespace nginz
 			// Initialize mouse state
 			State = Mouse.GetState ();
 
-			// Initial mouse centered state
+			// Set mouse centered state
 			ShouldCenterMouse = shouldCenterMouse;
+
+			// Set mouse visible state
+			CursorVisible = mouseVisible;
 
 			// Center the mouse
 			CenterMouse ();

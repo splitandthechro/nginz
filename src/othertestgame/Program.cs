@@ -37,6 +37,7 @@ namespace othertestgame {
 		protected override void Initialize () {
 			Content.ContentRoot = "../../assets";
 			Mouse.ShouldCenterMouse = true;
+			Mouse.CursorVisible = false;
 			GL.CullFace (CullFaceMode.Back);
 			GL.Enable (EnableCap.CullFace);
 			program = Content.Load <ShaderProgram> ("passTex");
