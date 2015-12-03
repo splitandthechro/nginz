@@ -34,35 +34,20 @@ namespace othertestgame {
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
-		static string GetAssetPath (string directory, string asset) {
-			var location = Assembly.GetEntryAssembly ().Location;
-			var directoryName = Path.GetDirectoryName (location);
-			return Path.Combine (directoryName, directory, asset);
-		}
-
 		protected override void Initialize () {
-			base.Initialize ();
-
+			Content.ContentRoot = "../../assets";
 			Mouse.ShouldCenterMouse = true;
-
 			GL.CullFace (CullFaceMode.Back);
-
-			// Why do we only cull the face? lol
 			GL.Enable (EnableCap.CullFace);
-
-			GraphicsContext.Assert ();
-			
 			program = Content.Load <ShaderProgram> ("passTex");
-
-			testTexture = Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest);
-
+			testTexture = Content.Load<Texture2D> ("testWood.jpg", TextureConfiguration.Nearest);
 			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
-
+			camera.MouseRotation.X = MathHelper.DegreesToRadians (180);
 			var obj = Content.Load<ObjFile> ("box.obj");
-
 			testModel = new TexturedModel (obj, 0, program);
+			base.Initialize ();
 		}
 
 		protected override void Update (GameTime time) {

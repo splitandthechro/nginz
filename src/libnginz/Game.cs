@@ -164,6 +164,7 @@ namespace nginz
 			// Process the message queue
 			this.Log ("Entering message processing loop");
 			while (!exit && window != null && window.Exists) {
+				Mouse.CenterMouse ();
 				window.ProcessEvents ();
 			}
 
@@ -362,6 +363,9 @@ namespace nginz
 					totalTime = now.Subtract (startTime);
 					elapsedTime = now.Subtract (lastTime);
 					lastTime = now;
+
+					// Not sure if this does anything. Testing needed
+					now = DateTime.UtcNow;
 
 					// Create GameTime from calculated time values
 					gameTime = new GameTime (

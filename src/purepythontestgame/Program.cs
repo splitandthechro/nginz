@@ -8,13 +8,14 @@ namespace purepythontestgame
 	{
 		public static void Main (string[] args) {
 			var conf = new GameConfiguration {
-				FixedFramerate = false,
+				FixedFramerate = true,
+				TargetFramerate = 60,
 				FixedWindow = true,
 				Fullscreen = false,
-				Width = 640,
-				Height = 480,
+				Width = 1280,
+				Height = 720,
 				Vsync = VsyncMode.Off,
-				WindowTitle = "nginz :: Pure python testgame"
+				WindowTitle = "nginz :: Game"
 			};
 			PythonGame
 				.Create ("../../assets")

@@ -118,8 +118,7 @@ namespace nginz
 			ShouldCenterMouse = shouldCenterMouse;
 
 			// Center the mouse
-			if (shouldCenterMouse)
-				CenterMouse ();
+			CenterMouse ();
 		}
 
 		/// <summary>
@@ -178,8 +177,8 @@ namespace nginz
 				DeltaZ = cur.WheelPrecise - State.WheelPrecise;
 
 				// Center the mouse
-				if (ShouldCenterMouse)
-					CenterMouse ();
+				//if (ShouldCenterMouse)
+				//	CenterMouse ();
 
 				// Update the mouse coordinates
 				X = MathHelper.Clamp (X + DeltaX, 0, window.Width);
@@ -209,6 +208,9 @@ namespace nginz
 		/// Center the mouse.
 		/// </summary>
 		internal void CenterMouse () {
+
+			if (!ShouldCenterMouse)
+				return;
 
 			// Calculate target x position
 			var x = window.Bounds.Left + window.Bounds.Width / 2;
