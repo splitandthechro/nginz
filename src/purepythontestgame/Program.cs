@@ -12,14 +12,14 @@ namespace purepythontestgame
 				TargetFramerate = 60,
 				FixedWindow = true,
 				Fullscreen = false,
-				Width = 1280,
-				Height = 720,
+				Width = 640,
+				Height = 480,
 				Vsync = VsyncMode.Off,
 				WindowTitle = "nginz :: Game"
 			};
 			PythonGame
 				.Create ("../../assets")
-				.Load ("game")
+				.Load ("game2")
 				.Run ("MainGame", conf);
 		}
 	}

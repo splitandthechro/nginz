@@ -3,6 +3,8 @@ using System.IO;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using nginz.Common;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace nginz.Interop.IronPython
 {
@@ -10,12 +12,14 @@ namespace nginz.Interop.IronPython
 	{
 		readonly public ScriptEngine Engine;
 		readonly public ScriptScope Scope;
+		readonly public ScriptReloader Reloader;
 
 		readonly Game Game;
-		readonly ScriptReloader Reloader;
+
+		string currentError;
 
 		public dynamic this [string name] {
-			get { return Call (name); }
+			get { return CallDynamic (name); }
 		}
 
 		public PythonVM (Game game = null) {
@@ -29,6 +33,7 @@ namespace nginz.Interop.IronPython
 				Reloader.ResumeGame = Game.Resume;
 				Game.Content.RegisterAssetProvider<PythonScript> (typeof(PythonScriptProvider));
 			}
+			currentError = string.Empty;
 			SetupGlobals ();
 		}
 
@@ -53,9 +58,57 @@ namespace nginz.Interop.IronPython
 			return this;
 		}
 
-		public dynamic Call (string name) {
-			var func = Scope.GetVariable (name);
-			return func;
+		public dynamic CallDynamic (string name) {
+			return Scope.GetVariable (name);
+		}
+
+		public object Call (string name, params object[] args) {
+			try {
+				var func = Scope.GetVariable<PythonFunction> (name);
+				var result = PythonCalls.Call (func, args);
+				currentError = string.Empty;
+				return result;
+			} catch (Exception e) {
+				if (currentError != e.Message)
+					this.Log (e.Message);
+				currentError = e.Message;
+			}
+			return null;
+		}
+
+		public object CallInstance (object instance, string name, params object[] args) {
+			try {
+				var result = instance.GetType ().InvokeMember (name, System.Reflection.BindingFlags.InvokeMethod, null, instance, args);
+				currentError = string.Empty;
+				return result;
+			} catch (Exception e) {
+				if (currentError != e.Message)
+					this.Log (e.Message);
+				currentError = e.Message;
+			}
+			return null;
+		}
+
+		public T Call<T> (string name, params object[] args) {
+			return (T) Call (name, args);
+		}
+
+		public T CallInstance<T> (object instance, string name, params object[] args) {
+			return (T) CallInstance (instance, name, args);
+		}
+
+		public string GetLastError () {
+			return currentError;
+		}
+
+		public dynamic CreateInstance (string name, params object[] args) {
+			if (!Scope.ContainsVariable (name))
+				this.Throw ("Cannot find type: {0}", name);
+			return Engine.Operations.CreateInstance (name, args);
+		}
+
+		public void Shutdown () {
+			Engine.Operations.Engine.Runtime.Shutdown ();
 		}
 
 		void SetupGlobals () {

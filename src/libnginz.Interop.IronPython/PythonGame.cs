@@ -6,18 +6,23 @@ namespace nginz.Interop.IronPython
 	public class PythonGame : ICanLog
 	{
 		readonly PythonVM Python;
-		readonly ScriptReloader Reloader;
 		readonly ContentManager Content;
+		string scriptPath;
+		dynamic instance;
+		volatile bool continueLoop;
+		volatile bool exitLoop;
+		volatile bool hasExited;
 
 		PythonGame (string assetRoot) {
 			var root = assetRoot == string.Empty
 				? AppDomain.CurrentDomain.BaseDirectory
 				: assetRoot;
 			Python = new PythonVM ();
-			Reloader = new ScriptReloader ("*.py");
-			Reloader.LoadScript = new Action<Script> (script => Load (script.FilePath));
 			Content = new ContentManager (root);
 			Content.RegisterAssetProvider<PythonScript> (typeof(PythonScriptProvider));
+			continueLoop = true;
+			exitLoop = false;
+			hasExited = false;
 		}
 
 		public static PythonGame Create (string assetRoot = "") {
@@ -25,25 +30,69 @@ namespace nginz.Interop.IronPython
 		}
 
 		public PythonGame Load (string asset) {
-			Python.Load (Content.Load<PythonScript> (asset));
+			scriptPath = Content.Load<PythonScript> (asset).FilePath;
 			return this;
 		}
 
 		public PythonGame Run (string className, GameConfiguration conf) {
+			RunLoop (className, conf);
+			return this;
+		}
+
+		public void RunLoop (string className, GameConfiguration conf) {
+			hasExited = false;
+			while (continueLoop && !exitLoop) {
+				RunOnce (className, conf);
+			}
+			hasExited = true;
+		}
+
+		void RunOnce (string className, GameConfiguration conf) {
+			try {
+				Python.Load (Content.LoadFrom<PythonScript> (scriptPath));
+			} catch (Exception e) {
+				this.Log (e.Message);
+				this.Log ("Please fix that issue and press any key to restart the game.");
+				Console.ReadKey (true);
+				ClearScope ();
+				Python.Shutdown ();
+				continueLoop = true;
+			}
 			if (!Python.Scope.ContainsVariable (className)) {
-				this.Log ("Class not found: {0}", className);
-				return this;
+				this.Log ("Variable not found: {0}", className);
+				this.Log ("Please fix that issue and press any key to restart the game.");
+				Console.ReadKey (true);
+				ClearScope ();
+				Python.Shutdown ();
+				continueLoop = true;
 			}
 			var game = Python.Scope.GetVariable (className);
 			try {
-				var instance = game (conf);
-				Reloader.PauseGame = Python.Engine.Operations.GetMember<Action> (instance, "Pause");
-				Reloader.ResumeGame = Python.Engine.Operations.GetMember<Action> (instance, "Resume");
-				instance.Run ();
+				instance = game (conf);
 			} catch (Exception e) {
 				this.Log (e.Message);
+				this.Log ("Please fix that issue and press any key to restart the game.");
+				Console.ReadKey (true);
+				ClearScope ();
+				Python.Shutdown ();
+				continueLoop = true;
 			}
-			return this;
+			Python.CallInstance (instance, "Run");
+			if (Python.GetLastError () != string.Empty) {
+				this.Log (Python.GetLastError ());
+				this.Log ("Please fix that issue and press any key to restart the game.");
+				Console.ReadKey (true);
+				ClearScope ();
+				Python.Shutdown ();
+				continueLoop = true;
+			}
+			continueLoop = false;
+		}
+
+		void ClearScope () {
+			foreach (var item in Python.Scope.GetItems ()) {
+				Python.Scope.RemoveVariable (item.Key);
+			}
 		}
 	}
 }

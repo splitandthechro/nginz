@@ -49,8 +49,8 @@ namespace testgame2D {
 			base.Initialize ();
 		}
 
-		protected override void Resize () {
-			base.Resize ();
+		protected override void OnResize () {
+			base.OnResize ();
 		}
 
 		protected override void Update (GameTime time) {

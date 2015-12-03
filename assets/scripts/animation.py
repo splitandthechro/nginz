@@ -3,15 +3,18 @@ from OpenTK import Vector2
 from OpenTK.Graphics import Color4
 from OpenTK.Graphics.OpenGL4 import *
 
+# Speed of the animation
 speed = 10
+
+# Some flags for the animation control
+# Automatically set by the program
 forward = True
 backwardFinished = False
 
-width = game.Resolution.Width
-height = game.Resolution.Height
-
-def init ():
-    global tex, x1, x2, y1, y2, centerx, centery
+def initialize (game):
+    global width, height, tex, x1, x2, y1, y2, centerx, centery
+    width = game.Resolution.Width
+    height = game.Resolution.Height
     tex = game.Content.Load[Texture2D]("nginz.png")
     x1 = -tex.Width
     x2 = width
@@ -19,8 +22,9 @@ def init ():
     y2 = -tex.Height
     centerx = (width / 2.0) - (tex.Width / 2.0)
     centery = (height / 2.0) - (tex.Height / 2.0)
+    game.Resize (640, 480)
 
-def update ():
+def update (game, gameTime):
     global tex, forward, backwardFinished
     global x1, x2, y1, y2, centerx, centery
     if forward:
@@ -43,7 +47,7 @@ def update ():
                 forward = True
                 backwardFinished = False
 
-def draw ():
+def draw (game, gameTime):
     GL.ClearColor (0.3, 0, 0.8, 1)
     GL.Clear (ClearBufferMask.ColorBufferBit)
     game.SpriteBatch.Begin ()

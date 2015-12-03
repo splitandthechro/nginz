@@ -11,7 +11,9 @@ class MainGame (Game):
     def Initialize (self):
         self.LoadContent ()
         self.Mouse.ShouldCenterMouse = True
+        self.Mouse.CursorVisible = True
         GL.CullFace (CullFaceMode.Back)
+        GL.Enable (EnableCap.CullFace)
         self.camera = FPSCamera (60, self.Resolution, self.Mouse, self.Keyboard)
         self.camera.Camera.SetAbsolutePosition (Vector3 (0, 0, 2))
         self.camera.MouseRotation = Vector2 (MathHelper.DegreesToRadians (180), 0)
@@ -20,7 +22,7 @@ class MainGame (Game):
     def LoadContent (self):
         self.Content.ContentRoot = "../../assets"
         self.program = self.Content.Load [ShaderProgram] ("passTex")
-        self.tex = self.Content.Load [Texture2D] ("classical_ruin_tiles_1.png")
+        self.tex = self.Content.Load [Texture2D] ("testWood.jpg")
         self.box = self.Content.Load [ObjFile] ("box.obj")
         self.model = TexturedModel (self.box, 0, self.program)
 

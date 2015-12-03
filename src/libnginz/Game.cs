@@ -143,6 +143,17 @@ namespace nginz
 		}
 
 		/// <summary>
+		/// Resize the window.
+		/// </summary>
+		/// <param name="newWidth">New width.</param>
+		/// <param name="newHeight">New height.</param>
+		public void Resize (int newWidth, int newHeight) {
+			window.Width = newWidth;
+			window.Height = newHeight;
+			UpdateResolution ();
+		}
+
+		/// <summary>
 		/// Run the game.
 		/// </summary>
 		public void Run () {
@@ -152,7 +163,7 @@ namespace nginz
 
 			// Subscribe to the Resize event of the window
 			// to correctly handle resizing of the window
-			window.Resize += (sender, e) => Resize ();
+			window.Resize += (sender, e) => OnResize ();
 
 			// Subscribe to the Closing event of the window
 			// to dispose the context when closing the window.
@@ -271,7 +282,7 @@ namespace nginz
 		/// <summary>
 		/// Resize the game window.
 		/// </summary>
-		protected virtual void Resize () {
+		protected virtual void OnResize () {
 
 			// Update the resolution
 			UpdateResolution ();
