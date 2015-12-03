@@ -15,6 +15,7 @@ namespace nginz {
 		/// <summary>
 		/// The buffers.
 		/// </summary>
+		[CLSCompliant (false)]
 		public Dictionary<string, IBuffer<int>> Buffers;
 
 		/// <summary>

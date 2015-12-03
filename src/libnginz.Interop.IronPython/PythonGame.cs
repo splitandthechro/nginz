@@ -9,9 +9,7 @@ namespace nginz.Interop.IronPython
 		readonly ContentManager Content;
 		string scriptPath;
 		dynamic instance;
-		volatile bool continueLoop;
 		volatile bool exitLoop;
-		volatile bool hasExited;
 
 		PythonGame (string assetRoot) {
 			var root = assetRoot == string.Empty
@@ -20,9 +18,7 @@ namespace nginz.Interop.IronPython
 			Python = new PythonVM ();
 			Content = new ContentManager (root);
 			Content.RegisterAssetProvider<PythonScript> (typeof(PythonScriptProvider));
-			continueLoop = true;
 			exitLoop = false;
-			hasExited = false;
 		}
 
 		public static PythonGame Create (string assetRoot = "") {
@@ -40,9 +36,7 @@ namespace nginz.Interop.IronPython
 		}
 
 		public void RunLoop (string className, GameConfiguration conf) {
-			hasExited = false;
 			while (!exitLoop && RunOnce (className, conf)) { }
-			hasExited = true;
 		}
 
 		bool RunOnce (string className, GameConfiguration conf) {
