@@ -98,6 +98,11 @@
     <Compile Include="Interfaces\IAction.cs" />
     <Compile Include="Interfaces\IActor.cs" />
     <Compile Include="Interfaces\IDrawable2D.cs" />
+    <Compile Include="UI\UIScene.cs" />
+    <Compile Include="UI\UIController.cs" />
+    <Compile Include="UI\Control.cs" />
+    <Compile Include="UI\Panel.cs" />
+    <Compile Include="UI\Button.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
@@ -124,5 +129,8 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\" />
   </ItemGroup>
 </Project>

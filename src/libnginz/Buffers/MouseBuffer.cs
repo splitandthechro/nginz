@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using nginz.Common;
 using OpenTK;
 using OpenTK.Input;
-using System.Drawing;
 
 namespace nginz
 {
@@ -210,9 +212,11 @@ namespace nginz
 				//if (ShouldCenterMouse)
 				//	CenterMouse ();
 
-				// Update the mouse coordinates
-				X = MathHelper.Clamp (X + DeltaX, 0, window.Width);
-				Y = MathHelper.Clamp (Y + DeltaY, 0, window.Height);
+				// Clamp MouseCoordinates
+				X = mouseClientPoint.X;
+				Y = mouseClientPoint.Y;
+				//X = MathHelper.Clamp (X + DeltaX, 0, window.Width);
+				//Y = MathHelper.Clamp (Y + DeltaY, 0, window.Height);
 				Wheel += DeltaZ;
 			} else {
 

@@ -25,6 +25,10 @@ namespace nginz
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
+		public Rectangle Bounds {
+			get { return new Rectangle (0, 0, Width, Height); }
+		}
+
 		public Texture2D (TextureConfiguration config, int width, int height) {
 			Width = width;
 			Height = height;

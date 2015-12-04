@@ -33,6 +33,11 @@ namespace nginz
 		readonly public GameConfiguration Configuration;
 
 		/// <summary>
+		/// The user interface controller.
+		/// </summary>
+		readonly public UIController UI;
+
+		/// <summary>
 		/// The keyboard.
 		/// </summary>
 		readonly public KeyboardBuffer Keyboard;
@@ -124,6 +129,8 @@ namespace nginz
 		/// </summary>
 		volatile bool updating;
 
+		volatile bool windowVisible;
+
 		/// <summary>
 		/// The resolution.
 		/// </summary>
@@ -149,7 +156,13 @@ namespace nginz
 			// Initialize the actions
 			ContextActions = new ConcurrentQueue<Action> ();
 			UIActions = new ConcurrentQueue<Action> ();
+
+			// Initialize scripting enviroment
 			IsRunningInScriptedEnvironment = false;
+
+			// Set UI controller
+			UI = UIController.Instance;
+			UI.Bind (this);
 		}
 
 		/// <summary>
@@ -218,6 +231,9 @@ namespace nginz
 
 				// Process window events
 				window.ProcessEvents ();
+
+				if (!windowVisible)
+					windowVisible = true;
 			}
 
 			// Wait till all updates finished
@@ -502,6 +518,9 @@ namespace nginz
 
 			// Present the window to the user
 			window.Visible = true;
+
+			// Wait till the window is visible
+			while (!windowVisible && !window.Focused && !window.Visible) { }
 
 			// Enter the actual game loop
 			while (!exit) {

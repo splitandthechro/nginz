@@ -81,7 +81,7 @@ namespace nginz
 		public Fontmap SetText (string text) {
 
 			// Get the position as System.Drawing.PointF
-			var pos = new PointF (Position.X, Position.Y);
+			var bounds = new RectangleF (0, 0, Bitmap.Width, Bitmap.Height);
 
 			// Get the color as System.Drawing.Color
 			var color = GDIColor.FromArgb (
@@ -97,9 +97,14 @@ namespace nginz
 				// Clear the bitmap with transparent pixels
 				graphics.Clear (GDIColor.Transparent);
 
+				// Set the string format
+				var format = new StringFormat ();
+				format.Alignment = StringAlignment.Center;
+				format.LineAlignment = StringAlignment.Center;
+
 				// Draw the specified string onto the bitmap
 				graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-				graphics.DrawString (text, Font, new SolidBrush (color), pos);
+				graphics.DrawString (text, Font, new SolidBrush (color), bounds, format);
 			}
 
 			// Update the texture
@@ -168,7 +173,7 @@ namespace nginz
 
 		public void Draw (SpriteBatch batch) {
 			if (Texture != null)
-				batch.Draw (Texture, Vector2.Zero, GLColor.White);
+				batch.Draw (Texture, Position, GLColor.White);
 		}
 
 		#region IDisposable implementation
