@@ -104,6 +104,7 @@
     <Compile Include="UI\Control.cs" />
     <Compile Include="UI\Panel.cs" />
     <Compile Include="UI\Button.cs" />
+    <Compile Include="UI\Label.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />

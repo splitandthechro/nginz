@@ -39,8 +39,8 @@ namespace nginz
 
 		public void RegisterScene (UIScene scene) {
 			if (Scenes.All (s => s.SceneId != scene.SceneId)) {
-				this.Log ("Adding scene: {0}", scene.Name);
 				Scenes.Add (scene);
+				this.Log ("Added scene: {0}", scene.Name);
 			}
 		}
 
@@ -52,7 +52,6 @@ namespace nginz
 		public void SwitchScene (string name) {
 			if (Scenes.Any (s => s.Name == name)) {
 				var scene = Scenes.First (s => s.Name == name).SceneId;
-				this.Log ("Switching to scene: {0}", name);
 				SwitchScene (scene);
 			}
 		}

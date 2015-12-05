@@ -13,12 +13,38 @@ namespace nginz
 		public Fontmap Font { get; private set; }
 		public bool UseTexture { get; set; }
 
+		float transparency;
+		public float Transparency {
+			get { return transparency; }
+			set {
+				transparency = value;
+				Font.SetColor (ColorWithTransparency);
+				updateFont = true;
+			}
+		}
+
+		public Color4 ColorWithTransparency {
+			get {
+				var baseColor = highlighted
+					? HighlightForegroundColor
+					: foregroundColor;
+				var color = new Color4 (
+					r: baseColor.R,
+					g: baseColor.G,
+					b: baseColor.B,
+					a: transparency
+				);
+				return color;
+			}
+		}
+
 		string text;
 		public string Text {
 			get { return text; }
 			set {
 				text = value;
-				RecreateFont ();
+				Font.SetText (value);
+				updateFont = true;
 			}
 		}
 
@@ -27,7 +53,8 @@ namespace nginz
 			get { return fontFamily; }
 			set {
 				fontFamily = value;
-				RecreateFont ();
+				Font.SetFont (value, fontSize);
+				updateFont = true;
 			}
 		}
 
@@ -36,7 +63,8 @@ namespace nginz
 			get { return fontSize; }
 			set {
 				fontSize = value;
-				RecreateFont ();
+				Font.SetFont (fontFamily, value);
+				updateFont = true;
 			}
 		}
 
@@ -45,22 +73,32 @@ namespace nginz
 			get { return foregroundColor; }
 			set {
 				foregroundColor = value;
-				RecreateFont ();
+				Font.SetColor (value);
+				updateFont = true;
 			}
 		}
 
+		public Color4 HighlightForegroundColor { get; set; }
 		public Texture2D BackgroundTexture { get; set; }
 
 		bool mouseDown;
 		bool highlighted;
+		bool updateFont;
 
 		public Button (int width, int height) : base (width, height) {
 			fontFamily = "Arial";
 			fontSize = 14.25f;
 			foregroundColor = Color4.Black;
+			HighlightForegroundColor = Color4.White;
 			UseTexture = true;
-			RecreateFont ();
 			Click += delegate { };
+			var res = new Resolution (Bounds.Width, Bounds.Height);
+			Font = new Fontmap (res, fontFamily, fontSize);
+			Font.SetPosition (Position);
+			Font.HorizontalAlignment = StringAlignment.Center;
+			Font.VerticalAlignment = StringAlignment.Center;
+			Font.Update ();
+			transparency = 1f;
 		}
 
 		public static Button Create (int width, int height) {
@@ -68,22 +106,28 @@ namespace nginz
 		}
 
 		public new Button SetPosition (int x, int y) {
-			base.SetPosition (x, y);
-			RecreateFont ();
-			return this;
+			return SetPosition ((float) x, (float) y);
 		}
 
 		public new Button SetPosition (float x, float y) {
 			base.SetPosition (x, y);
-			RecreateFont ();
+			Font.SetPosition (Position);
+			updateFont = true;
 			return this;
+		}
+
+		protected override void OnPositionChanged () {
+			if (Font != null)
+				Font.SetPosition (Position);
+			updateFont = true;
+			base.OnPositionChanged ();
 		}
 
 		public Button SetFont (string fontFamily, float emSize, Color4 color) {
 			this.fontFamily = fontFamily;
 			this.fontSize = emSize;
 			this.foregroundColor = color;
-			RecreateFont ();
+			updateFont = true;
 			return this;
 		}
 
@@ -94,29 +138,31 @@ namespace nginz
 				mouseDown = false;
 			if (Bounds.IntersectsWith (mouseRect)) {
 				highlighted = true;
+				Font.SetColor (ColorWithTransparency);
+				updateFont = true;
 				if (!mouseDown && mouse.IsButtonDown (MouseButton.Left)) {
 					Click (this, EventArgs.Empty);
 					mouseDown = true;
 				}
-			} else
-				highlighted = false;
+			} else {
+				if (highlighted) {
+					highlighted = false;
+					Font.SetColor (ColorWithTransparency);
+					updateFont = true;
+				}
+			}
+			if (updateFont) {
+				Font.Update ();
+				updateFont = false;
+			}
 			base.Update (time);
 		}
 
 		public override void Draw (GameTime time, SpriteBatch batch) {
-			if (UseTexture && BackgroundTexture != null) {
-				batch.Draw (BackgroundTexture, BackgroundTexture.Bounds, Bounds, Color4.White);
-			}
+			if (UseTexture && BackgroundTexture != null)
+				batch.Draw (BackgroundTexture, BackgroundTexture.Bounds, Bounds, new Color4 (1, 1, 1, Transparency));
 			Font.Draw (batch);
 			base.Draw (time, batch);
-		}
-
-		void RecreateFont () {
-			var res = new Resolution { Width = Width, Height = Height };
-			Font = new Fontmap (res, fontFamily, fontSize);
-			Font.SetColor (foregroundColor);
-			Font.SetPosition (Position);
-			Font.SetText (text);
 		}
 	}
 }

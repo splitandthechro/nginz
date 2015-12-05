@@ -11,12 +11,12 @@ namespace nginz
 
 		public int X {
 			get { return (int) Position.X; }
-			set { Position = new Vector2 ((float) value, Position.Y); }
+			set { Position = new Vector2 (value, Y); }
 		}
 
 		public int Y {
 			get { return (int) Position.Y; }
-			set { Position = new Vector2 (Position.X, (float) value); }
+			set { Position = new Vector2 (X, value); }
 		}
 
 		public int Width { get; set; }
@@ -25,7 +25,15 @@ namespace nginz
 		public float WidthF { get { return (float) Width; } }
 		public float HeightF { get { return (float) Height; } }
 
-		public Vector2 Position { get; set; }
+		Vector2 position;
+		public Vector2 Position {
+			get { return position; }
+			set {
+				position = value;
+				OnPositionChanged ();
+			}
+		}
+
 		public Rectangle Bounds {
 			get {
 				return new Rectangle (
@@ -44,13 +52,15 @@ namespace nginz
 			Position = new Vector2 (0, 0);
 		}
 
-		public virtual void SetPosition (float x, float y) {
+		public void SetPosition (float x, float y) {
 			Position = new Vector2 (x, y);
 		}
 
-		public virtual void SetPosition (int x, int y) {
+		public void SetPosition (int x, int y) {
 			SetPosition ((float) x, (float) y);
 		}
+
+		protected virtual void OnPositionChanged () { }
 
 		#region IUpdatable implementation
 
