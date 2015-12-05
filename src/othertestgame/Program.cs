@@ -41,7 +41,7 @@ namespace othertestgame {
 			GL.CullFace (CullFaceMode.Back);
 			GL.Enable (EnableCap.CullFace);
 			program = Content.Load <ShaderProgram> ("passTex");
-			testTexture = Content.Load<Texture2D> ("testWood.jpg", TextureConfiguration.Nearest);
+			testTexture = Content.Load<Texture2D> ("testWood.jpg", TextureConfiguration.Linear);
 			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));

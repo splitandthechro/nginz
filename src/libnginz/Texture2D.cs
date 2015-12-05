@@ -7,7 +7,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using GDIPixelFormat = System.Drawing.Imaging.PixelFormat;
 using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
-
+using nginz.StbInterop;
 namespace nginz
 {
 
@@ -146,14 +146,14 @@ namespace nginz
 			Unbind (TextureUnit.Texture0);
 		}
 
-		public void SetData (Color4[] data, Rectangle? rect, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) {
+		public void SetData<T> (T[] data, Rectangle? rect, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) where T: struct {
 			Rectangle r = rect ?? new Rectangle (0, 0, Width, Height);
 			Bind (TextureUnit.Texture0);
 			GL.TexSubImage2D (
 				target: TextureTarget.Texture2D,
 				level: 0,
-				xoffset: 0,
-				yoffset: 0,
+				xoffset: r.X,
+				yoffset: r.Y,
 				width: r.Width,
 				height: r.Height,
 				format: pixelFormat,
@@ -178,13 +178,11 @@ namespace nginz
 			Texture2D tex;
 
 			// Load the image
-			using (var img = Image.FromFile (path))
-			using (var bmp = new Bitmap (img)) {
-
-				// Create the texture
-				tex = new Texture2D (bmp, config, true);
-			}
-
+			int x = -1, y = -1, n = -1;
+			var data = Stb.Load (path, ref x, ref y, ref n, 4);
+			tex = new Texture2D (config, x, y);
+			tex.SetData (data, null);
+			Stb.Free (data);
 			// Return the texture
 			return tex;
 		}

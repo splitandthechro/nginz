@@ -36,7 +36,7 @@ namespace nginz
 		/// <summary>
 		/// The layers.
 		/// </summary>
-		public int[] Layers;
+		public Tile[] Layers;
 
 		public TileMapLayer (SpriteSheet2D sheet, int width, int height, float scale) {
 			Sheet = sheet;
@@ -45,20 +45,17 @@ namespace nginz
 			Height = height;
 			Scale = scale;
 
-			Layers = new int[Width * Height];
+			Layers = new Tile[Width * Height];
 			for (int i = 0; i < Width * Height; i++)
-				Layers[i] = -1;
+				Layers[i] = Tile.Default;
 		}
 
-		public void SetTile (int x, int y, int tile) {
+		public void SetTile (int x, int y, Tile tile) {
 			Layers[x + y * Width] = tile;
 		}
-		public void SetTile (int x, int y, int tileX, int tileY) {
-			Layers[x + y * Width] = tileX + tileY * Sheet.TilesY;
-		}
-		public int GetTile (int x, int y) {
+		public Tile GetTile (int x, int y) {
 			if (x < 0 || y < 0 || x >= Width || y >= Width)
-				return -1;
+				return Tile.Default;
 			return Layers[x + y * Width];
 		}
 
@@ -66,10 +63,10 @@ namespace nginz
 			for (int y = 0; y < Height; y++)
 				for (int x = 0; x < Width; x++) {
 					var tile = Layers[x + y * Width];
-					if (tile != -1) {
+					if (tile.TileId != -1) {
 						var xPos = x * Sheet.TileWidth * Scale;
 						var yPos = y * Sheet.TileHeight * Scale;
-						batch.Draw (Sheet.Texture, Sheet[tile], position + new Vector2 (xPos, yPos), Color4.White, scale: new Vector2 (Scale));
+						batch.Draw (Sheet.Texture, Sheet[tile.TileId], position + new Vector2 (xPos, yPos), Color4.White, scale: Scale, rotation: tile.Rotation);
 					}
 				}
 		}

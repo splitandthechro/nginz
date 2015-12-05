@@ -86,23 +86,11 @@ namespace nginz
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="tile">Tile.</param>
-		public void SetTile (string name, int x, int y, int tile) {
+		public void SetTile (string name, int x, int y, Tile tile) {
 			GetLayer(name).SetTile(x, y, tile);
 		}
 
-		/// <summary>
-		/// Set a tile.
-		/// </summary>
-		/// <param name="name">Name.</param>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		/// <param name="tileX">Tile x.</param>
-		/// <param name="tileY">Tile y.</param>
-		public void SetTile (string name, int x, int y, int tileX, int tileY) {
-			GetLayer (name).SetTile (x, y, tileX, tileY);
-		}
-
-		public int GetTile (string name, int x, int y) {
+		public Tile GetTile (string name, int x, int y) {
 			return GetLayer (name).GetTile (x, y);
 		}
 

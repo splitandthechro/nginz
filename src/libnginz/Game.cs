@@ -5,6 +5,7 @@ using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
+using System.Runtime.InteropServices;
 
 namespace nginz
 {
@@ -14,7 +15,6 @@ namespace nginz
 	/// </summary>
 	public class Game : ICanLog, ICanThrow, IDisposable
 	{
-
 		/// <summary>
 		/// The sync root.
 		/// </summary>
@@ -591,6 +591,9 @@ namespace nginz
 
 			// Register an asset provider for scripts.
 			Content.RegisterAssetProvider<Script> (typeof(ScriptProvider));
+
+			// Register an asset provider for TTF fonts.
+			Content.RegisterAssetProvider<FontTTF> (typeof (FontTTFProvider));
 		}
 
 		#region IDisposable implementation

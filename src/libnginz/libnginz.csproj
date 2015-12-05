@@ -17,6 +17,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -25,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -35,7 +37,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
     <Reference Include="SharpFont">
-      <HintPath>..\packages\SharpFont.3.0.1\lib\net20\SharpFont.dll</HintPath>
+      <HintPath>..\..\freetype-build\SharpFont.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +45,7 @@
     <Compile Include="Buffers\GLBufferDynamic.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Extensions\TypeHelper.cs" />
+    <Compile Include="AssetProviders\FontTTFProvider.cs" />
     <Compile Include="FPSCamera.cs" />
     <Compile Include="Geometry.cs" />
     <Compile Include="Interfaces\IBuffer.cs" />
@@ -58,6 +61,7 @@
     <Compile Include="Staging\Stage.cs" />
     <Compile Include="SpriteSheet2D.cs" />
     <Compile Include="TextureConfiguration.cs" />
+    <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileMap.cs" />
     <Compile Include="Tiles\TileMapLayer.cs" />
     <Compile Include="VsyncMode.cs" />
@@ -104,10 +108,9 @@
     <Compile Include="UI\Panel.cs" />
     <Compile Include="UI\Button.cs" />
     <Compile Include="UI\Label.cs" />
+    <Compile Include="FontTTF.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
-  <Import Project="..\packages\SharpFont.3.0.1\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.3.0.1\build\SharpFont.props')" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -126,12 +129,22 @@
       <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
       <Name>libnginz.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\libnginz.StbInterop\libnginz.StbInterop.csproj">
+      <Project>{529EAA69-1806-4C6E-9D20-F5B79A0E515F}</Project>
+      <Name>libnginz.StbInterop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libnginz.FtInterop\libnginz.FtInterop.csproj">
+      <Project>{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}</Project>
+      <Name>libnginz.FtInterop</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="..\..\freetype-build\libfreetype.6.dylib">
+      <Link>libfreetype.6.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
 </Project>

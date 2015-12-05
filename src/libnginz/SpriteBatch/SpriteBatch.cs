@@ -45,9 +45,14 @@ namespace nginz
 		ShaderProgram Program;
 
 		/// <summary>
-		/// The camera.
+		/// The internal camera.
 		/// </summary>
-		Camera Camera;
+		Camera InternalCamera;
+
+		/// <summary>
+		/// The current camera.
+		/// </summary>
+		Camera CurrentCamera;
 
 		/// <summary>
 		/// The vertices.
@@ -100,7 +105,7 @@ namespace nginz
 		/// </summary>
 		/// <param name="shader">Shader.</param>
 		/// <param name="cam">Cam.</param>
-		public SpriteBatch (ShaderProgram shader = null, Camera cam = null) {
+		public SpriteBatch (ShaderProgram shader = null) {
 
 			// Set dot texture
 			Dot = new Texture2D (TextureConfiguration.Nearest, 1, 1);
@@ -144,7 +149,7 @@ namespace nginz
 			}
 
 			// Set camera
-			Camera = cam ?? new Camera (60f, Game.Resolution, 0, 16, type: ProjectionType.Orthographic);
+			InternalCamera = new Camera (60f, Game.Resolution, 0, 16, type: ProjectionType.Orthographic);
 
 			// Set current texture
 			CurrentTexture = Dot;
@@ -165,7 +170,7 @@ namespace nginz
 		/// <summary>
 		/// Begin batching sprites.
 		/// </summary>
-		public void Begin () {
+		public void Begin (Camera camera = null) {
 
 			// Throw if the sprite batch is active
 			if (active)
@@ -173,6 +178,9 @@ namespace nginz
 
 			// Mark the sprite batch as active
 			active = true;
+
+			// Set the current camera
+			CurrentCamera = camera ?? InternalCamera;
 
 			// Reset the vertex and index counts
 			vertexCount = 0;
@@ -212,6 +220,41 @@ namespace nginz
 			);
 		}
 
+		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 position, Color4 color, float scale, int depth = 0, float rotation = 0) {
+			var destRect = new Rectangle ((int) position.X, (int) position.Y, sourceRect.Value.Width, sourceRect.Value.Height);
+
+			// Draw the texture
+			DrawInternal (
+				texture: texture,
+				sourceRect: sourceRect,
+				destRect: destRect,
+				color: color,
+				scale: new Vector2 (scale),
+				dx: 0,
+				dy: 0,
+				depth: depth,
+				sin: (float) Math.Sin (rotation),
+				cos: (float) Math.Cos (rotation)
+			);
+		}
+
+		public void Draw (Texture2D texture, Rectangle? sourceRect, Rectangle destRect, Color4 color, Vector2 origin, float scale, int depth = 0, float rotation = 0) {
+
+			// Draw the texture
+			DrawInternal (
+				texture: texture,
+				sourceRect: sourceRect,
+				destRect: destRect,
+				color: color,
+				scale: new Vector2 (scale),
+				dx: -(origin.X),
+				dy: -(origin.Y),
+				depth: depth,
+				sin: (float) Math.Sin (rotation),
+				cos: (float) Math.Cos (rotation)
+			);
+		}
+
 		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 dest, Color4 color, Vector2 origin, Vector2 scale, int depth = 0, float rotation = 0) {
 
 			// Draw the texture
@@ -227,6 +270,24 @@ namespace nginz
 			);
 		}
 
+		public void Draw (Texture2D texture, Vector2 position, Color4 color, float scale, int depth = 0, float rotation = 0) {
+			var destRect = new Rectangle ((int) position.X, (int) position.Y, texture.Width, texture.Height);
+
+			// Draw the texture
+			DrawInternal (
+				texture: texture,
+				sourceRect: null,
+				destRect: destRect,
+				color: color,
+				scale: new Vector2 (scale),
+				depth: depth,
+				dx: 0,
+				dy: 0,
+				sin: (float) Math.Sin (rotation),
+				cos: (float) Math.Cos (rotation)
+			);
+		}
+
 		public void Draw (Texture2D texture, Vector2 position, Color4 color, Vector2 scale, int depth = 0) {
 
 			// Draw the texture
@@ -236,6 +297,19 @@ namespace nginz
 				position: position,
 				color: color,
 				scale: scale,
+				depth: depth
+			);
+		}
+
+		public void Draw (Texture2D texture, Vector2 position, Color4 color, float scale, int depth = 0) {
+
+			// Draw the texture
+			Draw (
+				texture: texture,
+				sourceRect: null,
+				position: position,
+				color: color,
+				scale: new Vector2 (scale),
 				depth: depth
 			);
 		}
@@ -532,7 +606,7 @@ namespace nginz
 				ibo.Bind ();
 
 				// Set the MVP uniform to the view projection matrix of the camera
-				Program ["MVP"] = Camera.ViewProjectionMatrix;
+				Program ["MVP"] = CurrentCamera.ViewProjectionMatrix;
 
 				// Draw the elements
 				GL.DrawElements (BeginMode.Triangles, ibo.Buffer.Count, DrawElementsType.UnsignedInt, 0);
