@@ -10,7 +10,7 @@ using SharpFont;
 
 namespace nginz
 {
-	public class FontTTF
+	public class FontTTF : IAsset
 	{
 		//Size of font textures (in pixels)
 		const int TEXTURE_SIZE = 512;

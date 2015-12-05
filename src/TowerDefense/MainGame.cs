@@ -14,6 +14,8 @@ namespace TowerDefense {
 		SpriteSheet2D SpriteSheet;
 		TileMap TileMap;
 
+		FontTTF Font;
+
 		public MainGame (GameConfiguration config) 
 			: base (config) { }
 
@@ -46,6 +48,8 @@ namespace TowerDefense {
 				for (int x = 0; x < tiles[y].Length; x++)
 					TileMap.SetTile ("Track", x, y, new Tile { TileId = tiles[y][x] });
 
+			Font = Content.Load<FontTTF> ("durselinvenice2015.ttf");
+
 			base.Initialize ();
 		}
 
@@ -58,6 +62,7 @@ namespace TowerDefense {
 			SpriteBatch.Draw (UITexture, Vector2.Zero, Color4.White, scale: 8f, rotation: 0);
 			SpriteBatch.Draw (SpriteSheet.Texture, SpriteSheet[0, 5], new Vector2(856, 96), Color4.White, scale: 1f, rotation: 0);
 			SpriteBatch.Draw (SpriteSheet.Texture, SpriteSheet[1, 5], new Vector2 (856, 144), Color4.White, scale: 1f, rotation: 0);
+			Font.DrawString (SpriteBatch, "100", new Vector2 (872, 96), Color4.Black);
 			SpriteBatch.End ();
 
 			base.Draw (time);

@@ -43,6 +43,7 @@
     <Compile Include="Buffers\GLBufferDynamic.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Extensions\TypeHelper.cs" />
+    <Compile Include="AssetProviders\FontTTFProvider.cs" />
     <Compile Include="FPSCamera.cs" />
     <Compile Include="Geometry.cs" />
     <Compile Include="Interfaces\IBuffer.cs" />
@@ -149,8 +150,5 @@
     <None Include="SharpFont.dll.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="x86\" />
-    <Folder Include="x64\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

@@ -592,6 +592,9 @@ namespace nginz
 
 			// Register an asset provider for scripts.
 			Content.RegisterAssetProvider<Script> (typeof(ScriptProvider));
+
+			// Register an asset provider for TTF fonts.
+			Content.RegisterAssetProvider<FontTTF> (typeof (FontTTFProvider));
 		}
 
 		#region IDisposable implementation
