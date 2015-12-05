@@ -71,7 +71,8 @@ namespace FlappyMascot
 		}
 
 		void CreateLayout () {
-			btnStart = new Button (200, 40) {
+			var font = game.Content.Load<FontTTF> ("durselinvenice2015.ttf");
+			btnStart = new Button (200, 40, font) {
 				BackgroundTexture = game.Content.Load<Texture2D> ("button.png"),
 				Text = "Start game",
 				FontFamily = "Source Sans Pro",
@@ -79,7 +80,7 @@ namespace FlappyMascot
 				ForegroundColor = new Color4 (.1f, .1f, .1f, 1),
 				HighlightForegroundColor = new Color4 (.3f, .3f, .3f, 1)
 			};
-			btnExit = new Button (200, 40) {
+			btnExit = new Button (200, 40, font) {
 				BackgroundTexture = game.Content.Load<Texture2D> ("button.png"),
 				Text = "Exit",
 				FontFamily = "Source Sans Pro",

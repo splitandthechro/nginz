@@ -136,6 +136,7 @@ namespace nginz
 					penX += krn;
 				}
 			}
+			penY = Math.Max (penY, LineHeight);
 			return new Point ((int) penX, (int) penY);
 		}
 

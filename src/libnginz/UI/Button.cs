@@ -3,6 +3,7 @@ using OpenTK.Graphics;
 using System.Drawing;
 using OpenTK.Graphics.ES30;
 using OpenTK.Input;
+using OpenTK;
 
 namespace nginz
 {
@@ -10,6 +11,7 @@ namespace nginz
 	{
 		public event EventHandler Click;
 
+		public FontTTF NewFont { get; private set; }
 		public Fontmap Font { get; private set; }
 		public bool UseTexture { get; set; }
 
@@ -18,7 +20,7 @@ namespace nginz
 			get { return transparency; }
 			set {
 				transparency = value;
-				Font.SetColor (ColorWithTransparency);
+				//Font.SetColor (ColorWithTransparency);
 				updateFont = true;
 			}
 		}
@@ -43,7 +45,7 @@ namespace nginz
 			get { return text; }
 			set {
 				text = value;
-				Font.SetText (value);
+				//Font.SetText (value);
 				updateFont = true;
 			}
 		}
@@ -53,7 +55,7 @@ namespace nginz
 			get { return fontFamily; }
 			set {
 				fontFamily = value;
-				Font.SetFont (value, fontSize);
+				//Font.SetFont (value, fontSize);
 				updateFont = true;
 			}
 		}
@@ -63,7 +65,7 @@ namespace nginz
 			get { return fontSize; }
 			set {
 				fontSize = value;
-				Font.SetFont (fontFamily, value);
+				//Font.SetFont (fontFamily, value);
 				updateFont = true;
 			}
 		}
@@ -73,7 +75,7 @@ namespace nginz
 			get { return foregroundColor; }
 			set {
 				foregroundColor = value;
-				Font.SetColor (value);
+				//Font.SetColor (value);
 				updateFont = true;
 			}
 		}
@@ -85,24 +87,25 @@ namespace nginz
 		bool highlighted;
 		bool updateFont;
 
-		public Button (int width, int height) : base (width, height) {
+		public Button (int width, int height, FontTTF font) : base (width, height) {
 			fontFamily = "Arial";
 			fontSize = 14.25f;
 			foregroundColor = Color4.Black;
 			HighlightForegroundColor = Color4.White;
 			UseTexture = true;
+			NewFont = font;
 			Click += delegate { };
 			var res = new Resolution (Bounds.Width, Bounds.Height);
-			Font = new Fontmap (res, fontFamily, fontSize);
-			Font.SetPosition (Position);
-			Font.HorizontalAlignment = StringAlignment.Center;
-			Font.VerticalAlignment = StringAlignment.Center;
-			Font.Update ();
+			//Font = new Fontmap (res, fontFamily, fontSize);
+			//Font.SetPosition (Position);
+			//Font.HorizontalAlignment = StringAlignment.Center;
+			//Font.VerticalAlignment = StringAlignment.Center;
+			//Font.Update ();
 			transparency = 1f;
 		}
 
-		public static Button Create (int width, int height) {
-			return new Button (width, height);
+		public static Button Create (int width, int height, FontTTF font) {
+			return new Button (width, height, font);
 		}
 
 		public new Button SetPosition (int x, int y) {
@@ -111,7 +114,7 @@ namespace nginz
 
 		public new Button SetPosition (float x, float y) {
 			base.SetPosition (x, y);
-			Font.SetPosition (Position);
+			//Font.SetPosition (Position);
 			updateFont = true;
 			return this;
 		}
@@ -138,7 +141,7 @@ namespace nginz
 				mouseDown = false;
 			if (Bounds.IntersectsWith (mouseRect)) {
 				highlighted = true;
-				Font.SetColor (ColorWithTransparency);
+				//Font.SetColor (ColorWithTransparency);
 				updateFont = true;
 				if (!mouseDown && mouse.IsButtonDown (MouseButton.Left)) {
 					Click (this, EventArgs.Empty);
@@ -147,12 +150,12 @@ namespace nginz
 			} else {
 				if (highlighted) {
 					highlighted = false;
-					Font.SetColor (ColorWithTransparency);
+					//Font.SetColor (ColorWithTransparency);
 					updateFont = true;
 				}
 			}
 			if (updateFont) {
-				Font.Update ();
+				//Font.Update ();
 				updateFont = false;
 			}
 			base.Update (time);
@@ -161,7 +164,13 @@ namespace nginz
 		public override void Draw (GameTime time, SpriteBatch batch) {
 			if (UseTexture && BackgroundTexture != null)
 				batch.Draw (BackgroundTexture, BackgroundTexture.Bounds, Bounds, new Color4 (1, 1, 1, Transparency));
-			Font.Draw (batch);
+			var measurement = NewFont.MeasureString (text);
+			var centerPos = new Vector2 (
+				x: (float) X + ((WidthF / 2f) - ((float) measurement.X / 2f)),
+				y: (float) Y + ((HeightF / 2f) - ((float) measurement.Y / 2f))
+			);
+			NewFont.DrawString (batch, text, centerPos, foregroundColor);
+			//Font.Draw (batch);
 			base.Draw (time, batch);
 		}
 	}
