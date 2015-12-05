@@ -58,6 +58,7 @@
     <Compile Include="Staging\Stage.cs" />
     <Compile Include="SpriteSheet2D.cs" />
     <Compile Include="TextureConfiguration.cs" />
+    <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileMap.cs" />
     <Compile Include="Tiles\TileMapLayer.cs" />
     <Compile Include="VsyncMode.cs" />
@@ -130,7 +131,5 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

@@ -35,10 +35,10 @@ namespace testgame2D {
 			testMap = new TileMap (new Vector2 (128, 256), 32, 32, new Vector2(32, 32), 2);
 			testMap.AddLayer ("testLayer", testSheet);
 
-			testMap.SetTile ("testLayer", 0, 1, 0);
+			/*testMap.SetTile ("testLayer", 0, 1, 0);
 			testMap.SetTile ("testLayer", 1, 1, 1);
 			testMap.SetTile ("testLayer", 2, 1, 2);
-			testMap.SetTile ("testLayer", 3, 1, 3);
+			testMap.SetTile ("testLayer", 3, 1, 3);*/
 
 			stage = new Stage (this);
 			var mascot = new MascotActor ();

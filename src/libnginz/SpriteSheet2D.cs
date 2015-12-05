@@ -37,5 +37,9 @@ namespace nginz {
 
 			Texture = texture;
 		}
+
+		public int GetTileId (int x, int y) {
+			return x + y * TilesX;
+		}
 	}
 }
