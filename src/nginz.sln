@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlappyMascot", "FlappyMasco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerDefense", "TowerDefense\TowerDefense.csproj", "{79F7A241-20AD-4486-9BBE-DC7B7C748BCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nginz.StbInterop", "libnginz.StbInterop\nginz.StbInterop.csproj", "{529EAA69-1806-4C6E-9D20-F5B79A0E515F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.StbInterop", "libnginz.StbInterop\libnginz.StbInterop.csproj", "{529EAA69-1806-4C6E-9D20-F5B79A0E515F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

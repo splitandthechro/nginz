@@ -127,9 +127,9 @@
       <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
       <Name>libnginz.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libnginz.StbInterop\nginz.StbInterop.csproj">
+    <ProjectReference Include="..\libnginz.StbInterop\libnginz.StbInterop.csproj">
       <Project>{529EAA69-1806-4C6E-9D20-F5B79A0E515F}</Project>
-      <Name>nginz.StbInterop</Name>
+      <Name>libnginz.StbInterop</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
