@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace nginz.StbInterop
@@ -8,8 +9,6 @@ namespace nginz.StbInterop
 		public static IntPtr Load(string filename, ref int x, ref int y, ref int n, int req_comp)
 		{
 			switch (Environment.OSVersion.Platform) {
-			case PlatformID.MacOSX:
-				return OSX.stbi_load(filename, ref x, ref y, ref n, req_comp);
 			case PlatformID.Win32Windows:
 			case PlatformID.Win32NT:
 			case PlatformID.Win32S:
@@ -18,6 +17,9 @@ namespace nginz.StbInterop
 				else
 					return Win32.stbi_load (filename, ref x, ref y, ref n, req_comp);
 			default:
+				if(Directory.Exists("/Library") &&
+					Directory.Exists("/System"))
+					return OSX.stbi_load(filename, ref x, ref y, ref n, req_comp);
 				if (IntPtr.Size == 8)
 					return Linux64.stbi_load (filename, ref x, ref y, ref n, req_comp);
 				else
@@ -27,9 +29,6 @@ namespace nginz.StbInterop
 		public static void Free(IntPtr data)
 		{
 			switch (Environment.OSVersion.Platform) {
-			case PlatformID.MacOSX:
-				OSX.stbi_image_free (data);
-				break;
 			case PlatformID.Win32Windows:
 			case PlatformID.Win32NT:
 			case PlatformID.Win32S:
@@ -39,7 +38,10 @@ namespace nginz.StbInterop
 					Win32.stbi_image_free (data);
 				break;
 			default:
-				if (IntPtr.Size == 8)
+				if (Directory.Exists ("/Library") &&
+				   Directory.Exists ("/System")) {
+					OSX.stbi_image_free (data);
+				} else if (IntPtr.Size == 8)
 					Linux64.stbi_image_free (data);
 				else
 					Linux32.stbi_image_free (data);

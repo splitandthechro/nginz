@@ -93,7 +93,7 @@ namespace nginz.FtInterop
 				}
 				break;
 			case Platforms.OSX:
-				libPath = "libfreetype.6..dylib";
+				libPath = "libfreetype.6.dylib";
 				break;
 			}
 			library = loader.LoadLibrary (ResolvePath (libPath));
