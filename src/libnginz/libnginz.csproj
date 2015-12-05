@@ -106,6 +106,7 @@
     <Compile Include="UI\Button.cs" />
     <Compile Include="UI\Label.cs" />
     <Compile Include="InteropTools.cs" />
+    <Compile Include="FontTTF.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

@@ -146,7 +146,7 @@ namespace nginz
 			Unbind (TextureUnit.Texture0);
 		}
 
-		public void SetData (Color4[] data, Rectangle? rect, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) {
+		public void SetData<T> (T[] data, Rectangle? rect, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) where T: struct {
 			Rectangle r = rect ?? new Rectangle (0, 0, Width, Height);
 			Bind (TextureUnit.Texture0);
 			GL.TexSubImage2D (
