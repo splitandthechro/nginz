@@ -55,9 +55,9 @@ namespace nginz.StbInterop
 		}
 		class Win32
 		{
-			[DllImport("stb_image-win32.dll")]
+			[DllImport ("stb_image-win32.dll", CallingConvention = CallingConvention.Cdecl)]
 			public static extern IntPtr stbi_load (string filename, ref int x, ref int y, ref int n, int req_comp);
-			[DllImport("stb_image-win32.dll")]
+			[DllImport ("stb_image-win32.dll", CallingConvention = CallingConvention.Cdecl)]
 			public static extern void stbi_image_free (IntPtr data);
 		}
 		class Linux64
