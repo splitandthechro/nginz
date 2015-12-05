@@ -102,8 +102,8 @@ namespace nginz
 				96
 			);
 			//get metrics
-			var faceRec = Marshal.PtrToStructure<FT.FaceRec> (facePtr);
-			var szRec = Marshal.PtrToStructure<FT.SizeRec> (faceRec.size);
+			var faceRec = (FT.FaceRec) Marshal.PtrToStructure (facePtr, typeof (FT.FaceRec));
+			var szRec = (FT.SizeRec) Marshal.PtrToStructure (faceRec.size, typeof (FT.SizeRec));
 			lineHeight = (int) FTMath.From26Dot6 (szRec.metrics.height);
 			pages.Add (GetNewTexture ());
 		}
@@ -201,9 +201,9 @@ namespace nginz
 			}
 			//Render
 			FT.FT_Load_Glyph (facePtr, index, FT.FT_LOAD_DEFAULT | FT.FT_LOAD_TARGET_NORMAL);
-			var faceRec = Marshal.PtrToStructure<FT.FaceRec> (facePtr);
+			var faceRec = (FT.FaceRec) Marshal.PtrToStructure (facePtr, typeof (FT.FaceRec));
 			FT.FT_Render_Glyph (faceRec.glyph, FT.FT_RENDER_MODE_NORMAL);
-			var glyphRec = Marshal.PtrToStructure<FT.GlyphSlotRec> (faceRec.glyph);
+			var glyphRec = (FT.GlyphSlotRec) Marshal.PtrToStructure (faceRec.glyph, typeof (FT.GlyphSlotRec));
 
 			//Check for glyph that is only spacing
 			if (glyphRec.bitmap.width == 0 || glyphRec.bitmap.rows == 0) {
