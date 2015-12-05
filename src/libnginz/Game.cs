@@ -5,6 +5,7 @@ using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
+using System.Runtime.InteropServices;
 
 namespace nginz
 {
@@ -14,7 +15,6 @@ namespace nginz
 	/// </summary>
 	public class Game : ICanLog, ICanThrow, IDisposable
 	{
-
 		/// <summary>
 		/// The sync root.
 		/// </summary>

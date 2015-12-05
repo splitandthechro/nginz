@@ -35,7 +35,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
     <Reference Include="SharpFont">
-      <HintPath>..\packages\SharpFont.3.0.1\lib\net20\SharpFont.dll</HintPath>
+      <HintPath>..\..\freetype-build\SharpFont.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -105,10 +105,9 @@
     <Compile Include="UI\Panel.cs" />
     <Compile Include="UI\Button.cs" />
     <Compile Include="UI\Label.cs" />
+    <Compile Include="InteropTools.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
-  <Import Project="..\packages\SharpFont.3.0.1\build\SharpFont.props" Condition="Exists('..\packages\SharpFont.3.0.1\build\SharpFont.props')" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -134,7 +133,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="..\..\freetype-build\Win64\freetype6.dll">
       <Link>x64\freetype6.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -147,6 +145,7 @@
       <Link>libfreetype.6.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="SharpFont.dll.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
