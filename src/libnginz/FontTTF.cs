@@ -116,8 +116,8 @@ namespace nginz
 				}
 				if (kerning && iter.Index < (iter.Count - 1)) {
 					var g2 = GetGlyph (iter.PeekNext ());
-					var kerning = face.GetKerning (glyph.CharIndex, g2.CharIndex, KerningMode.Default);
-					penX += (int)kerning.X;
+					var kvec = face.GetKerning (glyph.CharIndex, g2.CharIndex, KerningMode.Default);
+					penX += (float)kvec.X;
 				}
 			}
 			return new Point ((int) penX, (int) penY);
@@ -125,10 +125,48 @@ namespace nginz
 
 		public void DrawString(SpriteBatch spriteBatch, string text, Vector2 position, Color4 color)
 		{
-			if (text == "") //Skip empty strings
-				return;
+			DrawString (spriteBatch, text, (int)position.X, (int)position.Y, color);	
 		}
 
+		public void DrawString(SpriteBatch spriteBatch, string text, int x, int y, Color4 color)
+		{
+			if (text == "") //Skip empty strings
+				return;
+			var iter = new CodepointIterator (text);
+			float penX = x, penY = y;
+			while (iter.Iterate ()) {
+				uint c = iter.Codepoint;
+				if (c == (uint) '\n') {
+					penY += lineHeight;
+					penX = x;
+					continue;
+				}
+				var glyph = GetGlyph (c);
+				if (glyph.Render) {
+					spriteBatch.Draw (
+						glyph.Texture,
+						glyph.Rectangle,
+						new Rectangle (
+							(int) penX + glyph.XOffset,
+							(int) penY + (LineHeight - glyph.YOffset),
+							glyph.Rectangle.Width,
+							glyph.Rectangle.Height
+						),
+						color
+					);
+					penX += glyph.HorizontalAdvance;
+					penY += glyph.AdvanceY;
+				} else {
+					penX += glyph.AdvanceX;
+					penY += glyph.AdvanceY;
+				}
+				if (iter.Index < iter.Count - 1) {
+					var g2 = GetGlyph (iter.PeekNext ());
+					var kvec = face.GetKerning (glyph.CharIndex, g2.CharIndex, KerningMode.Default);
+					penX += (float)kvec.X;
+				}
+			}
+		}
 		void AddCharacter (uint cp) {
 			//Handle Tab
 			if (cp == (uint) '\t') {
