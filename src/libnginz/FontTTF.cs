@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -6,7 +7,7 @@ using nginz.Common;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
-using SharpFont;
+using nginz.FtInterop;
 
 namespace nginz
 {
@@ -18,10 +19,14 @@ namespace nginz
 		/// <summary>
 		/// Global FT_Library instance.
 		/// </summary>
-		static Library freetype;
+		static IntPtr freetype;
 
 		static FontTTF () {
-			freetype = new Library ();
+			if (!FT.Loaded)
+				FT.Load ();
+			var err = FT.FT_Init_FreeType (out freetype);
+			if (err != 0)
+				throw new Exception ("Failed to initialise freetype");
 		}
 
 		class GlyphInfo
@@ -56,7 +61,8 @@ namespace nginz
 			}
 		}
 		//font info
-		Face face;
+		IntPtr facePtr;
+		IntPtr size26d6;
 		int lineHeight;
 		bool kerning;
 		//glyph storage
@@ -76,25 +82,33 @@ namespace nginz
 		/// Initializes a Font from the specified TTF file
 		/// </summary>
 		/// <param name="filename">The TTF to load.</param>
-		/// <param name="emSize">The size of the font in pt.</param>
-		public FontTTF (string filename, float emSize) {
+		/// <param name="size">The size of the font in pt.</param>
+		public FontTTF (string filename, float size) {
 			
 			if (!File.Exists (filename))
 				throw new FileNotFoundException (filename);
-			
-			face = new Face (freetype, filename);
-			face.SetCharSize (new Fixed26Dot6 (0), new Fixed26Dot6 (emSize), 0, 96);
-			lineHeight = (int) face.Size.Metrics.Height;
+			size26d6 = FTMath.To26Dot6 (size);
+			if (!File.Exists (filename))
+				throw new FileNotFoundException ("Font not found " + filename, filename);
+
+			var err = FT.FT_New_Face (freetype, filename, 0, out facePtr);
+			if (err != 0)
+				throw new Exception ("Freetype Error");
+
+			FT.FT_Set_Char_Size (facePtr,
+				FTMath.To26Dot6 (0),
+				size26d6,
+				0,
+				96
+			);
+			//get metrics
+			var faceRec = Marshal.PtrToStructure<FT.FaceRec> (facePtr);
+			var szRec = Marshal.PtrToStructure<FT.SizeRec> (faceRec.size);
+			lineHeight = (int) FTMath.From26Dot6 (szRec.metrics.height);
 			pages.Add (GetNewTexture ());
-			kerning = face.HasKerning;
-			//Rasterize ASCII
-			for (uint i = 32; i < 127; i++) {
-				AddCharacter (i);
-			}
 		}
 
-		public Point MeasureString(string text)
-		{
+		public Point MeasureString (string text) {
 			if (text == "") //Skip empty strings
 				return Point.Empty;
 			var iter = new CodepointIterator (text);
@@ -116,20 +130,20 @@ namespace nginz
 				}
 				if (kerning && iter.Index < (iter.Count - 1)) {
 					var g2 = GetGlyph (iter.PeekNext ());
-					var kvec = face.GetKerning (glyph.CharIndex, g2.CharIndex, KerningMode.Default);
-					penX += (float)kvec.X;
+					FT.FT_Vector vec;
+					FT.FT_Get_Kerning (facePtr, glyph.CharIndex, g2.CharIndex, 2, out vec);
+					var krn = FTMath.From26Dot6 (vec.x);
+					penX += krn;
 				}
 			}
 			return new Point ((int) penX, (int) penY);
 		}
 
-		public void DrawString(SpriteBatch spriteBatch, string text, Vector2 position, Color4 color)
-		{
-			DrawString (spriteBatch, text, (int)position.X, (int)position.Y, color);	
+		public void DrawString (SpriteBatch spriteBatch, string text, Vector2 position, Color4 color) {
+			DrawString (spriteBatch, text, (int) position.X, (int) position.Y, color);	
 		}
 
-		public void DrawString(SpriteBatch spriteBatch, string text, int x, int y, Color4 color)
-		{
+		public void DrawString (SpriteBatch spriteBatch, string text, int x, int y, Color4 color) {
 			if (text == "") //Skip empty strings
 				return;
 			var iter = new CodepointIterator (text);
@@ -162,19 +176,22 @@ namespace nginz
 				}
 				if (iter.Index < iter.Count - 1) {
 					var g2 = GetGlyph (iter.PeekNext ());
-					var kvec = face.GetKerning (glyph.CharIndex, g2.CharIndex, KerningMode.Default);
-					penX += (float)kvec.X;
+					FT.FT_Vector vec;
+					FT.FT_Get_Kerning (facePtr, glyph.CharIndex, g2.CharIndex, 2, out vec);
+					var krn = FTMath.From26Dot6 (vec.x);
+					penX += krn;
 				}
 			}
 		}
-		void AddCharacter (uint cp) {
+
+		unsafe void AddCharacter (uint cp) {
 			//Handle Tab
 			if (cp == (uint) '\t') {
 				var spaceGlyph = GetGlyph ((uint) ' ');
 				glyphs.Add (cp, new GlyphInfo (spaceGlyph.AdvanceX * 5, spaceGlyph.AdvanceY, spaceGlyph.CharIndex));
 				return;
 			}
-			uint index = face.GetCharIndex (cp);
+			uint index = FT.FT_Get_Char_Index (facePtr, cp);
 			//Check if Glyph exists
 			if (index == 0) {
 				if (cp == (uint) '?')
@@ -183,51 +200,55 @@ namespace nginz
 				return;
 			}
 			//Render
-			face.LoadGlyph (index, LoadFlags.Default, LoadTarget.Normal);
-			face.Glyph.RenderGlyph (RenderMode.Normal);
+			FT.FT_Load_Glyph (facePtr, index, FT.FT_LOAD_DEFAULT | FT.FT_LOAD_TARGET_NORMAL);
+			var faceRec = Marshal.PtrToStructure<FT.FaceRec> (facePtr);
+			FT.FT_Render_Glyph (faceRec.glyph, FT.FT_RENDER_MODE_NORMAL);
+			var glyphRec = Marshal.PtrToStructure<FT.GlyphSlotRec> (faceRec.glyph);
+
 			//Check for glyph that is only spacing
-			if (face.Glyph.Bitmap.Width == 0 || face.Glyph.Bitmap.Rows == 0) {
+			if (glyphRec.bitmap.width == 0 || glyphRec.bitmap.rows == 0) {
 				glyphs.Add (cp, new GlyphInfo (
-					(int) face.Glyph.Advance.X,
-					(int) face.Glyph.Advance.Y,
+					(int)Math.Ceiling(FTMath.From26Dot6 (glyphRec.advance.x)),
+					(int)Math.Ceiling(FTMath.From26Dot6 (glyphRec.advance.y)),
 					index
 				));
 				return;
 			}
-			var pixels = new RGBA[face.Glyph.Bitmap.Width * face.Glyph.Bitmap.Rows];
-			var ftpix = face.Glyph.Bitmap.BufferData;
-			if (face.Glyph.Bitmap.PixelMode == PixelMode.Gray) {
-				for (int i = 0; i < ftpix.Length; i++) {
-					pixels [i] = new RGBA (255, 255, 255, ftpix [i]);
+			var pixels = new RGBA[glyphRec.bitmap.width * glyphRec.bitmap.rows];
+			if (glyphRec.bitmap.pixel_mode == 2) {
+				byte* data = (byte*)glyphRec.bitmap.buffer;
+				for (int i = 0; i < glyphRec.bitmap.width * glyphRec.bitmap.rows; i++) {
+					//TODO: 4 bytes used for 1 byte of alpha data? investigate compression with GL_RED and shader.
+					pixels [i] = new RGBA (255, 255, 255, data [i]);
 				}
 			} else {
 				throw new NotImplementedException ();
 			}
-			if (currentX + face.Glyph.Bitmap.Width > TEXTURE_SIZE) {
+			if (currentX + glyphRec.bitmap.width  > TEXTURE_SIZE) {
 				currentX = 0;
 				currentY += lineMax;
 				lineMax = 0;
 			}
-			if (currentY + face.Glyph.Bitmap.Rows > TEXTURE_SIZE) {
+			if (currentY + glyphRec.bitmap.rows  > TEXTURE_SIZE) {
 				currentX = 0;
 				currentY = 0;
 				lineMax = 0;
 				pages.Add (GetNewTexture ());
 			}
-			lineMax = (int) Math.Max (lineMax, face.Glyph.Bitmap.Rows);
-			var rect = new Rectangle (currentX, currentY, face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
+			lineMax = (int) Math.Max (lineMax, glyphRec.bitmap.rows);
+			var rect = new Rectangle (currentX, currentY, glyphRec.bitmap.width, glyphRec.bitmap.rows);
 			var tex = pages [pages.Count - 1];
 			tex.SetData (pixels, rect);
-			currentX += face.Glyph.Bitmap.Width;
+			currentX += glyphRec.bitmap.width;
 			glyphs.Add (cp,
 				new GlyphInfo (
-					tex,
-					rect,
-					(int) face.Glyph.Advance.X,
-					(int) face.Glyph.Advance.Y,
-					(int) face.Glyph.Metrics.HorizontalAdvance,
-					face.Glyph.BitmapLeft,
-					face.Glyph.BitmapTop,
+					tex, 
+					rect, 
+					(int)Math.Ceiling (FTMath.From26Dot6 (glyphRec.advance.x)),
+					(int)Math.Ceiling (FTMath.From26Dot6 (glyphRec.advance.y)),
+					(int)Math.Ceiling (FTMath.From26Dot6 (glyphRec.metrics.horiAdvance)),
+					glyphRec.bitmap_left,
+					glyphRec.bitmap_top,
 					index
 				)
 			);
@@ -239,8 +260,8 @@ namespace nginz
 			public byte G;
 			public byte B;
 			public byte A;
-			public RGBA(byte r, byte g, byte b, byte a)
-			{
+
+			public RGBA (byte r, byte g, byte b, byte a) {
 				R = r;
 				G = g;
 				B = b;

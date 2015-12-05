@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerDefense", "TowerDefens
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.StbInterop", "libnginz.StbInterop\libnginz.StbInterop.csproj", "{529EAA69-1806-4C6E-9D20-F5B79A0E515F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.FtInterop", "libnginz.FtInterop\libnginz.FtInterop.csproj", "{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +165,14 @@ Global
 		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Release|x86.ActiveCfg = Release|Any CPU
 		{DA7F639B-5D84-4F4C-84BB-674CD6DD87FC}.Release|x86.Build.0 = Release|Any CPU
+		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}.Debug|x86.Build.0 = Debug|Any CPU
+		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}.Release|x86.ActiveCfg = Release|Any CPU
+		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}.Release|x86.Build.0 = Release|Any CPU
 		{E2E8B124-2B79-4051-9CEE-CA45B569B3E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2E8B124-2B79-4051-9CEE-CA45B569B3E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2E8B124-2B79-4051-9CEE-CA45B569B3E4}.Debug|x86.ActiveCfg = Debug|Any CPU

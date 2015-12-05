@@ -152,8 +152,8 @@ namespace nginz
 			GL.TexSubImage2D (
 				target: TextureTarget.Texture2D,
 				level: 0,
-				xoffset: 0,
-				yoffset: 0,
+				xoffset: r.X,
+				yoffset: r.Y,
 				width: r.Width,
 				height: r.Height,
 				format: pixelFormat,

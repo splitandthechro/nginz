@@ -17,6 +17,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -25,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -106,7 +108,6 @@
     <Compile Include="UI\Panel.cs" />
     <Compile Include="UI\Button.cs" />
     <Compile Include="UI\Label.cs" />
-    <Compile Include="InteropTools.cs" />
     <Compile Include="FontTTF.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -132,22 +133,17 @@
       <Project>{529EAA69-1806-4C6E-9D20-F5B79A0E515F}</Project>
       <Name>libnginz.StbInterop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\libnginz.FtInterop\libnginz.FtInterop.csproj">
+      <Project>{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}</Project>
+      <Name>libnginz.FtInterop</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="..\..\freetype-build\Win64\freetype6.dll">
-      <Link>x64\freetype6.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\freetype-build\Win32\freetype6.dll">
-      <Link>x86\freetype6.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\freetype-build\libfreetype.6.dylib">
       <Link>libfreetype.6.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="SharpFont.dll.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
