@@ -16,7 +16,7 @@ namespace FlappyMascot
 		bool mouseDown;
 
 		public Bird (Game game) {
-			tex = game.Content.Load<Texture2D> ("flappymascot.png");
+			tex = game.Content.Load<Texture2D> ("flappymascot.png", TextureConfiguration.Nearest);
 			this.game = game;
 			ypos = (Game.Resolution.Height / 2) + (tex.Height / 2);
 		}

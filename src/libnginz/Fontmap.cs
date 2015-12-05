@@ -16,6 +16,9 @@ namespace nginz
 	public class Fontmap : IDisposable
 	{
 
+		public StringAlignment HorizontalAlignment;
+		public StringAlignment VerticalAlignment;
+
 		/// <summary>
 		/// The texture.
 		/// </summary>
@@ -42,6 +45,11 @@ namespace nginz
 		GLColor Color;
 
 		/// <summary>
+		/// The text.
+		/// </summary>
+		string Text;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Fontmap"/> class.
 		/// </summary>
 		/// <param name = "res"></param>
@@ -50,17 +58,23 @@ namespace nginz
 		/// <param name="fontStyle">Font style.</param>
 		public Fontmap (Resolution res, string fontFamily, float emSize, FontStyle fontStyle = 0x0) {
 
-			SetPosition (Vector2.Zero);
-			SetFont (fontFamily, emSize, fontStyle);
+			HorizontalAlignment = StringAlignment.Near;
+			VerticalAlignment = StringAlignment.Near;
+			SetPosition (Vector2.Zero, false);
+			SetFont (fontFamily, emSize, fontStyle, false);
+			SetText (string.Empty, false);
 
 			// Create a transparent bitmap with the desired resolution
 			Bitmap = new Bitmap (res.Width, res.Height, GDIPixelFormat.Format32bppArgb);
 
 			// Create a texture from the bitmap
 			Texture = new Texture2D (Bitmap, TextureConfiguration.Nearest, true);
+
+			// Update the texture
+			Update ();
 		}
 
-		public Fontmap SetFont (string fontFamily, float emSize, FontStyle fontStyle = 0x0) {
+		public Fontmap SetFont (string fontFamily, float emSize, FontStyle fontStyle = 0x0, bool update = false) {
 
 			// Dispose the old font
 			if (Font != null)
@@ -69,17 +83,15 @@ namespace nginz
 			// Set the new font
 			Font = new Font (fontFamily, emSize, fontStyle, GraphicsUnit.Pixel);
 
+			// Update the texture
+			if (update) Update ();
+
 			// Return this instance
 			return this;
 		}
+
+		public void Update () {
 			
-
-		/// <summary>
-		/// Set or update the text.
-		/// </summary>
-		/// <param name="text">Text.</param>
-		public Fontmap SetText (string text) {
-
 			// Get the position as System.Drawing.PointF
 			var bounds = new RectangleF (0, 0, Bitmap.Width, Bitmap.Height);
 
@@ -99,16 +111,30 @@ namespace nginz
 
 				// Set the string format
 				var format = new StringFormat ();
-				format.Alignment = StringAlignment.Center;
-				format.LineAlignment = StringAlignment.Center;
+				format.Alignment = HorizontalAlignment;
+				format.LineAlignment = VerticalAlignment;
 
 				// Draw the specified string onto the bitmap
 				graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-				graphics.DrawString (text, Font, new SolidBrush (color), bounds, format);
+				graphics.DrawString (Text, Font, new SolidBrush (color), bounds, format);
 			}
 
 			// Update the texture
 			Texture.Update (Bitmap, true);
+		}
+			
+
+		/// <summary>
+		/// Set or update the text.
+		/// </summary>
+		/// <param name="text">Text.</param>
+		public Fontmap SetText (string text, bool update = false) {
+
+			// Update text
+			Text = text;
+
+			// Update texture
+			if (update) Update ();
 
 			// Return this instance
 			return this;
@@ -120,55 +146,70 @@ namespace nginz
 			return SetText (string.Format (format, args));
 		}
 
-		public Fontmap SetPosition (int x, int y) {
+		public Fontmap SetPosition (int x, int y, bool update = false) {
 
 			// Set the position
 			Position = new Vector2 (x, y);
 
+			// Update texture
+			if (update) Update ();
+
 			// Return this instance
 			return this;
 		}
 
-		public Fontmap SetPosition (Vector2 pos) {
+		public Fontmap SetPosition (Vector2 pos, bool update = false) {
 
 			// Set the position
-			Position = new Vector2 (pos.X, pos.Y);
+			Position = pos;
+
+			// Update texture
+			if (update) Update ();
 
 			// Return this instance
 			return this;
 		}
 
-		public Fontmap SetColor (int r, int g, int b, int a = 255) {
+		public Fontmap SetColor (int r, int g, int b, int a = 255, bool update = false) {
 
 			// Set the color
 			Color = new GLColor (r / 255f, g / 255f, b / 255f, a / 255f);
 
+			// Update texture
+			if (update) Update ();
+
 			// Return this instance
 			return this;
 		}
 
-		public Fontmap SetColor (float r, float g, float b, float a = 1f) {
+		public Fontmap SetColor (float r, float g, float b, float a = 1f, bool update = false) {
 
 			// Set the color
 			Color = new GLColor (r, g, b, a);
 
+			// Update texture
+			if (update) Update ();
+
 			// Return this instance
 			return this;
 		}
 
-		public Fontmap SetColor (GLColor color) {
+		public Fontmap SetColor (GLColor color, bool update = false) {
 
 			// Set the color
 			Color = color;
 
+			// Update texture
+			if (update) Update ();
+
 			// Return this instance
 			return this;
 		}
 
-		public Fontmap SetColor (GDIColor color) {
+		public Fontmap SetColor (GDIColor color, bool update = false) {
 
 			// Set the color
-			return SetColor (color.R, color.G, color.B, color.A);
+			return SetColor (color.R, color.G, color.B, color.A, false);
 		}
 
 		public void Draw (SpriteBatch batch) {
