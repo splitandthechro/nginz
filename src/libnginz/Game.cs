@@ -25,6 +25,7 @@ namespace nginz
 		/// </summary>
 		static Game () {
 			syncRoot = new object ();
+			InteropTools.DetectArchitecture ();
 		}
 
 		/// <summary>

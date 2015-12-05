@@ -12,10 +12,14 @@ namespace nginz
 
 		public static void DetectArchitecture()
 		{
-			var path = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
-			path = Path.Combine (path, IntPtr.Size == 8 ? "x64" : "x86");
-			bool ok = SetDllDirectory (path);
-			if (!ok) throw new System.ComponentModel.Win32Exception ();
+			if (Environment.OSVersion.Platform == PlatformID.Win32Windows ||
+			   Environment.OSVersion.Platform == PlatformID.Win32NT ||
+			   Environment.OSVersion.Platform == PlatformID.Win32S) {
+				var path = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
+				path = Path.Combine (path, IntPtr.Size == 8 ? "x64" : "x86");
+				bool ok = SetDllDirectory (path);
+				if (!ok) throw new System.ComponentModel.Win32Exception ();
+			}
 		}
 	}
 }
