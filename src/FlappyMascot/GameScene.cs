@@ -11,6 +11,8 @@ namespace FlappyMascot
 		readonly Bird bird;
 		readonly Label lblScore;
 		readonly Texture2D texMap;
+		int score;
+		float scoreDelta;
 
 		float backgroundLeft;
 
@@ -29,11 +31,19 @@ namespace FlappyMascot
 		}
 
 		public override void Update (GameTime time) {
+			scoreDelta += 2f * (float) time.Elapsed.TotalSeconds;
+			if (scoreDelta > 1f) {
+				score += 1;
+				lblScore.Text = "Score: " + score.ToString ();
+				scoreDelta -= 1f;
+			}
+			game.Mouse.CursorVisible = false;
+			game.Mouse.ShouldCenterMouse = true;
 			if (game.Keyboard.IsKeyTyped (OpenTK.Input.Key.Escape))
 				UIController.Instance.SwitchScene ("mainmenu");
 			var scrollSpeed = 160f * (float) time.Elapsed.TotalSeconds;
 			backgroundLeft = Wrap (backgroundLeft - scrollSpeed, -texMap.Width);
-			//bird.Update (time);
+			bird.Update (time);
 			base.Update (time);
 		}
 
@@ -48,7 +58,7 @@ namespace FlappyMascot
 			batch.Draw (texMap, new Vector2 (backgroundLeft, 0), Color4.White);
 			if (backgroundLeft < 640)
 				batch.Draw (texMap, new Vector2 (backgroundLeft + texMap.Width, 0), Color4.White);
-			//bird.Draw (time, batch);
+			bird.Draw (time, batch);
 			base.Draw (time, batch);
 		}
 	}

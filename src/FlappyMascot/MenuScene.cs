@@ -43,6 +43,8 @@ namespace FlappyMascot
 		}
 
 		public override void Update (GameTime time) {
+			game.Mouse.CursorVisible = true;
+			game.Mouse.ShouldCenterMouse = false;
 			if (fadeOut) {
 				var fadeSpeed = 2f * (float) time.Elapsed.TotalSeconds;
 				overlayAlpha = MathHelper.Clamp (overlayAlpha - fadeSpeed, 0f, 1f);
@@ -58,7 +60,7 @@ namespace FlappyMascot
 				menuAlpha = MathHelper.Clamp (menuAlpha + fadeSpeed, 0f, 1f);
 				btnStart.Transparency = MathHelper.Clamp (btnStart.Transparency + (fadeSpeed * 2f), 0f, 1f);
 				btnExit.Transparency = MathHelper.Clamp (btnStart.Transparency + (fadeSpeed * 2f), 0f, 1f);
-				overlayAlpha = MathHelper.Clamp (overlayAlpha + (fadeSpeed * 2f), 0f, .75f);
+				overlayAlpha = MathHelper.Clamp (overlayAlpha + (fadeSpeed * 2f), 0f, .5f);
 			}
 			base.Update (time);
 		}
@@ -103,7 +105,7 @@ namespace FlappyMascot
 				menuAlpha = 0f;
 				btnStart.Text = "Continue";
 			} else {
-				overlayAlpha = .75f;
+				overlayAlpha = .5f;
 				menuAlpha = 1f;
 				btnStart.Text = "New game";
 			}
