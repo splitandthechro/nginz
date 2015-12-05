@@ -1,0 +1,40 @@
+#!/bin/bash
+#Build Script for stb_image
+function windows_build {
+	mkdir -p ./bin/Windows
+	echo "Compiling Win64 to ./bin/Windows/stb_image-win64.dll"
+	x86_64-w64-mingw32-gcc -shared -o ./bin/Windows/stb_image-win64.dll src/stb_image.c
+	echo "Compiling Win32 to ./bin/Windows/stb_image-win32.dll"
+	i686-w64-mingw32-gcc -shared -o ./bin/Windows/stb_image-win32.dll src/stb_image.c
+}
+function osx_build {
+	mkdir -p ./bin/OSX
+	echo "Compiling OSX Universal Binary to ./bin/OSX/stb_image.dylib"
+	clang -arch x86_64 -arch i386 -shared -o ./bin/OSX/stb_image.dylib src/stb_image.c
+}
+function linux_build {
+	mkdir -p ./bin/Linux
+	echo "Compiling Linux-i686 to ./bin/Linux/stb_image-i686.so"
+	gcc -shared -m32 -fPIC -o ./bin/Linux/stb_image-i686.so src/stb_image.c
+	echo "Compiling Linux-x86_64 to ./Linux/stb_image-x86_64.so"
+	gcc -shared -fPIC -o ./bin/Linux/stb_image-x86_64.so src/stb_image.c
+}
+
+if [ "$(uname)" == "Darwin" ]; then
+	echo "Detected OSX"
+	echo "=================="
+	osx_build
+	exit 0;
+fi
+if [ "$(uname)" == "Linux" ]; then
+	echo "Detected Linux"
+	echo "=================="
+	linux_build
+	exit 0;
+fi
+if [ "$(uname -o)" == "Cygwin" ]; then
+	echo "Detected Windows"
+	echo "=================="
+	windows_build
+	exit 0;
+fi
