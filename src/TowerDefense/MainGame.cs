@@ -14,7 +14,7 @@ namespace TowerDefense {
 		SpriteSheet2D SpriteSheet;
 		TileMap TileMap;
 
-		FontTTF Font;
+		Font Font;
 
 		public MainGame (GameConfiguration config) 
 			: base (config) { }
@@ -48,7 +48,7 @@ namespace TowerDefense {
 				for (int x = 0; x < tiles[y].Length; x++)
 					TileMap.SetTile ("Track", x, y, new Tile { TileId = tiles[y][x] });
 
-			Font = Content.Load<FontTTF> ("durselinvenice2015.ttf", 15f);
+			Font = Content.Load<Font> ("durselinvenice2015.ttf", 15f);
 
 			base.Initialize ();
 		}

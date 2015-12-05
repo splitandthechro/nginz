@@ -33,9 +33,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlappyMascot", "FlappyMasco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerDefense", "TowerDefense\TowerDefense.csproj", "{79F7A241-20AD-4486-9BBE-DC7B7C748BCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.StbInterop", "libnginz.StbInterop\libnginz.StbInterop.csproj", "{529EAA69-1806-4C6E-9D20-F5B79A0E515F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.StbImage", "libnginz.StbInterop\libnginz.Interop.StbImage.csproj", "{529EAA69-1806-4C6E-9D20-F5B79A0E515F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.FtInterop", "libnginz.FtInterop\libnginz.FtInterop.csproj", "{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Freetype", "libnginz.FtInterop\libnginz.Interop.Freetype.csproj", "{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

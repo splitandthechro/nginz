@@ -11,7 +11,6 @@ namespace testgame2D {
 		
 		SpriteBatch batch;
 		Texture2D tex;
-		Fontmap font;
 
 		SpriteSheet2D testSheet;
 		TileMap testMap;
@@ -26,9 +25,6 @@ namespace testgame2D {
 
 			var version = Assembly.GetEntryAssembly ().GetName ().Version;
 			batch = new SpriteBatch ();
-			font = new Fontmap (Resolution, "Source Sans Pro", 20.25f)
-				.SetColor (Color4.White)
-				.SetText ("nginz alpha v{0}", version.ToString (4));
 			tex = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 
 			testSheet = new SpriteSheet2D (Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest), 23, 16);
@@ -71,7 +67,6 @@ namespace testgame2D {
 			batch.Begin ();
 			batch.Draw (tex, Vector2.Zero, Color4.White, Vector2.One);
 			testMap.Draw (batch);
-			font.Draw (batch);
 			stage.Draw (time, batch);
 			batch.End ();
 

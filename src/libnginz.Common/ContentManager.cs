@@ -95,7 +95,7 @@ namespace nginz.Common
 				var provider = (AssetProvider<T>) AssetProviders[typeof (T)];
 
 				// Log that the asset was loaded
-				this.Log ("Loaded asset {0} as {1}", Path.GetFileName (path), typeof (T).Name);
+				// this.Log ("Loaded asset {0} as {1}", Path.GetFileName (path), typeof (T).Name);
 
 				// Return the asset
 				return provider.Load (path, args);

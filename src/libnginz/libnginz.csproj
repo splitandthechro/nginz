@@ -36,9 +36,6 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
-    <Reference Include="SharpFont">
-      <HintPath>..\..\freetype-build\SharpFont.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buffers\GLBuffer.cs" />
@@ -84,7 +81,6 @@
     <Compile Include="Buffers\KeyState.cs" />
     <Compile Include="Buffers\MouseBuffer.cs" />
     <Compile Include="Material.cs" />
-    <Compile Include="Fontmap.cs" />
     <Compile Include="ModelLoaders\ObjFile.cs" />
     <Compile Include="ModelLoaders\ObjFaceGroup.cs" />
     <Compile Include="ModelLoaders\ObjFace.cs" />
@@ -108,7 +104,7 @@
     <Compile Include="UI\Panel.cs" />
     <Compile Include="UI\Button.cs" />
     <Compile Include="UI\Label.cs" />
-    <Compile Include="FontTTF.cs" />
+    <Compile Include="Font.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -129,22 +125,16 @@
       <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
       <Name>libnginz.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libnginz.StbInterop\libnginz.StbInterop.csproj">
-      <Project>{529EAA69-1806-4C6E-9D20-F5B79A0E515F}</Project>
-      <Name>libnginz.StbInterop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\libnginz.FtInterop\libnginz.FtInterop.csproj">
+    <ProjectReference Include="..\libnginz.FtInterop\libnginz.Interop.Freetype.csproj">
       <Project>{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}</Project>
-      <Name>libnginz.FtInterop</Name>
+      <Name>libnginz.Interop.Freetype</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libnginz.StbInterop\libnginz.Interop.StbImage.csproj">
+      <Project>{529EAA69-1806-4C6E-9D20-F5B79A0E515F}</Project>
+      <Name>libnginz.Interop.StbImage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <None Include="..\..\freetype-build\libfreetype.6.dylib">
-      <Link>libfreetype.6.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup />
 </Project>

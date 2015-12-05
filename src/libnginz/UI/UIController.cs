@@ -27,10 +27,12 @@ namespace nginz
 		readonly List<UIScene> Scenes;
 		public UIScene ActiveScene { get; private set; }
 		public Game Game { get; private set; }
+		public Dictionary<string, Font> Fonts;
 
 		UIController () {
 			Scenes = new List<UIScene> ();
 			ActiveScene = UIScene.Empty;
+			Fonts = new Dictionary<string, Font> ();
 		}
 
 		public void Bind (Game game) {
@@ -53,6 +55,36 @@ namespace nginz
 			if (Scenes.Any (s => s.Name == name)) {
 				var scene = Scenes.First (s => s.Name == name).SceneId;
 				SwitchScene (scene);
+			}
+		}
+
+		public void LoadDefaultFonts () {
+			var fonts = new [] {
+				"Roboto-Black",
+				"Roboto-Black-Italic",
+				"Roboto-Bold",
+				"Roboto-Bold-Italic",
+				"Roboto-Bold-Condensed",
+				"Roboto-Bold-Condensed-Italic",
+				"Roboto-Condensed",
+				"Roboto-Condensed-Italic",
+				"Roboto-Italic",
+				"Roboto-Light",
+				"Roboto-Light-Italic",
+				"Roboto-Medium",
+				"Roboto-Medium-Italic",
+				"Roboto-Regular",
+				"Roboto-Thin",
+				"Roboto-Thin-Italic"
+			};
+			foreach (var font in fonts) {
+				try {
+					var loaded = Game.Content.Load<Font> (font + ".ttf");
+					Fonts.Add (font.Replace ('-', ' '), loaded);
+				} catch (Exception ex) {
+					this.Log ("Could not load font: {0}", font);
+					this.Log ("Reason: {0}", ex.Message);
+				}
 			}
 		}
 

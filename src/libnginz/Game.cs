@@ -162,7 +162,6 @@ namespace nginz
 
 			// Set UI controller
 			UI = UIController.Instance;
-			UI.Bind (this);
 		}
 
 		/// <summary>
@@ -505,6 +504,9 @@ namespace nginz
 			// Initialize the sprite batch
 			SpriteBatch = new SpriteBatch ();
 
+			// Bind the UI
+			UI.Bind (this);
+
 			// Initialize the game
 			this.Log ("Initializing game");
 			Initialize ();
@@ -593,7 +595,7 @@ namespace nginz
 			Content.RegisterAssetProvider<Script> (typeof(ScriptProvider));
 
 			// Register an asset provider for TTF fonts.
-			Content.RegisterAssetProvider<FontTTF> (typeof (FontTTFProvider));
+			Content.RegisterAssetProvider<Font> (typeof (FontTTFProvider));
 		}
 
 		#region IDisposable implementation

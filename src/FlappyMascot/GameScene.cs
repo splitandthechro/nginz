@@ -17,10 +17,9 @@ namespace FlappyMascot
 		public GameScene () : base ("maingame") {
 			game = UIController.Instance.Game;
 			bird = new Bird (game);
-			lblScore = new Label (150, 20) {
+			lblScore = new Label (150, 20, "Roboto Regular") {
 				X = 25,
 				Y = Game.Resolution.Height - 45,
-				FontFamily = "Source Sans Pro",
 				FontSize = 18f,
 				Text = "Score: 0"
 			};
