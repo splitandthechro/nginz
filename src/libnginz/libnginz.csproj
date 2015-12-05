@@ -135,6 +135,22 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\..\freetype-build\Win64\freetype6.dll">
+      <Link>x64\freetype6.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\freetype-build\Win32\freetype6.dll">
+      <Link>x86\freetype6.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\freetype-build\libfreetype.6.dylib">
+      <Link>libfreetype.6.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="x86\" />
+    <Folder Include="x64\" />
+  </ItemGroup>
 </Project>
