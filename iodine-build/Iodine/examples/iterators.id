@@ -1,0 +1,48 @@
+class IterableList {
+ 
+        func IterableList (self, item) {
+                self.index = 0;
+                self.item = item;
+        }
+ 
+        func _iterGetNext (self) {
+                return self.item[self.index - 1];
+        }
+ 
+        func _iterMoveNext (self) {
+                if (self.index >= self.item.getSize ())
+                        return false;
+                self.index = self.index + 1;
+                return true;
+        }
+ 
+        func _iterReset (self) {
+                self.index = 0;
+        }
+
+	func add (self, item) {
+		self.item.add (item);
+	}
+
+	func filter (self, f) {
+		ret = IterableList (list ());
+		for (i = 0; i < self.item.getSize (); i = i + 1) {
+			if (f (self.item[i])) {
+				ret.add (self.item[i]);
+			}
+		}
+		return ret;	
+	}
+ 
+}
+ 
+func main (args) {
+        myList = IterableList ({1, 2, 3, 4, 5, 6});
+	result = myList.filter (lambda (i) { 
+		return i % 2 == 0;
+	});
+
+        foreach (n in result) {
+                print (n);
+        }
+}

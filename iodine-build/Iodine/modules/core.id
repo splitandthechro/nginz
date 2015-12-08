@@ -1,0 +1,286 @@
+###
+# Name        : core
+# Author      : @SplittyDev
+#             : @GruntTheDivine
+# Description : Iodine core library
+# Please add yourself as author if you make changes
+###
+
+use * from reflection
+
+###
+### printf, printr, sprintf, sprintf_t
+###
+
+# format  : object || string
+# args    : object || tuple
+func printf (format, *args) {
+    print (sprintf_t (format, args))
+}
+
+# format    : Object || Str
+# args      : Object || Tuple
+# returns   : Str
+func sprintf (format, *args) {
+    return sprintf_t (format, args)
+}
+
+# obj     : object
+func printr (obj) {
+    print (repr (obj))
+}
+
+# format  : object || string
+# args    : additional arguments
+# returns : string
+func format (format, *args) {
+    return sprintf_t (format, args)
+}
+
+# format  : object || string
+# args    : object || list || tuple
+# returns : string
+func sprintf_t (format, args) {
+    if (type (format) != "Str")
+        format = Str (format)
+    if (type (args) != "Tuple" && type (args) != "List")
+        args = (args,)
+    buf = ""
+    i = 0
+    arg_pos = 0
+    while (i < len (format)) {
+        if (format[i] != "{") {
+            if (format[i] == "}") {
+                i = i + 1
+                if (i < len (format) && format[i] == "}") {
+                    buf += "}"
+                    i = i + 1
+                }
+                else
+                    raise ("Unexpected closing curly bracket")
+            }
+            else {
+                buf += format[i]
+                i = i + 1
+            }
+        }
+        else if (format[i] == "{") {
+            i = i + 1
+            if (i < len (format) && format[i] == "}") {
+                if (arg_pos < len (args)) {
+                    buf += repr (args[arg_pos])
+                    arg_pos = arg_pos + 1
+                    i = i + 1
+                }
+                else
+                    raise ("Index out of range: Requested element " +
+                        Str (arg_pos) + " of " + Str (len (args) - 1))
+            }
+            else if (i < len (format) && format[i] == "{") {
+                buf += "{"
+                i = i + 1
+            }
+            else {
+                arg_index = ""
+                while (i < len (format) && format[i] != "}") {
+                    arg_index += format[i]
+                    i = i + 1
+                }
+                arg_index = Int (arg_index)
+                if (arg_index < len (args))
+                    buf += repr (args[arg_index])
+                else
+                    raise ("Index out of range: Requested element " +
+                        Str (arg_index) + " of " + Str (len (args) - 1))
+                i = i + 1
+            }
+        }
+    }
+    return buf
+}
+
+###
+### Generic functions
+###
+
+# obj     : object
+# returns : int
+func len (obj) {
+    # Note: I edited this to iterate through
+    # what ever is passed to it, that way this
+    # will work for any iterable object that is
+    # passed to it, not just ones that have
+    # getSize ()
+    #    - Grunt
+    i = 0
+    foreach (o in obj) {
+         i += 1
+    }
+    return i
+}
+
+# obj     : object
+# returns : string
+func type (obj) {
+    return obj.typeDef.name
+}
+
+###
+### Dec to hex conversion
+###
+
+# n       : int
+# returns : string
+func hex (n) {
+    buf = ""
+    lookup = "ABCDEF"
+    while (n > 0) {
+        rem = n % 16
+        if (rem < 10)
+            buf += Str (rem)
+        else
+            buf += lookup[rem - 10]
+        n /= 16
+    }
+    return reverse (buf)
+}
+
+###
+### Reverse
+### Functions for reversing strings, lists and tuples
+###
+
+# obj     : object
+# returns : object
+func reverse (obj) {
+    _type = type (obj)
+    if (_type == "Str")
+        return reverseString (obj)
+    else if (_type == "List")
+        return reverseList (obj)
+    else if (_type == "Tuple") {
+        # Fixed the list to tuple conversion in this function.
+        # Unit tests regarding this issue pass now.
+        return Tuple (reverseList (obj))
+    }
+    else
+        raise (format ("Can't reverse object of type {}", type))
+}
+
+# str     : string
+# returns : string
+func reverseString (str) {
+    i = len (str) - 1
+    buf = ""
+    while (i >= 0) {
+        buf += str[i]
+        i = i - 1
+    }
+    return buf
+}
+
+# lst     : list || tuple
+# returns : list
+func reverseList (lst) {
+    i = len (lst) - 1
+    buf = list ()
+    while (i >= 0) {
+        buf.add (lst[i])
+        i = i - 1
+    }
+    return buf
+}
+
+###
+### Repr
+### Functions for bringing objects into
+### a developer-friendly, printable state
+###
+
+# obj     : object
+# returns : string
+func repr (obj) {
+    _type = type (obj)
+    if (_type == "List")
+        return reprList (obj)
+    else if (_type == "Tuple")
+        return reprTuple (obj)
+    else if (_type == "HashMap")
+        return reprHashMap (obj)
+    else if (_type == "Null")
+        return reprNull (obj)
+    else if (_type == "Stack")
+        return reprList (reverse (obj.store))
+    else if (_type == "Bool")
+        return reprBool (obj)
+    else
+        return Str (obj)
+}
+
+# lst     : list
+# returns : string
+func reprList (lst) {
+    return format ("[{}]", lambda () => {
+        buf = ""
+        i = 0
+        while (i < len (lst)) {
+            if (i == len (lst) - 1)
+                buf += format ("{}", lst[i])
+            else
+                buf += format ("{}, ", lst[i])
+            i = i + 1
+        }
+        return buf
+    }())
+}
+
+# tpl     : tuple
+# returns : string
+func reprTuple (tpl) {
+    return format ("({})", lambda () => {
+        buf = ""
+        i = 0
+        while (i < len (tpl)) {
+            if (i == len (tpl) - 1)
+                buf += format ("{}", repr (tpl[i]))
+            else
+                buf += format ("{}, ", repr (tpl[i]))
+            i = i + 1
+        }
+        return buf
+    }())
+}
+
+# dict    : hashmap
+# returns : string
+func reprHashMap (dict) {
+    return format ("{{{}}}", lambda () => {
+        buf = ""
+        i = 0
+        foreach (key in dict) {
+            _key = repr (key)
+            _val = repr (dict[key])
+            val = format ("{0}: {1}", _key, _val)
+            if (i == len (dict) - 1)
+                buf += format ("{}", val)
+            else
+                buf += format ("{}, ", val)
+            i = i + 1
+        }
+        return buf
+    }())
+}
+
+# obj     : null
+# returns : string
+func reprNull (obj) {
+    return "NULL"
+}
+
+# obj     : bool
+# returns : string
+func reprBool (obj) {
+    if (obj)
+        return "true"
+    return "false"
+}

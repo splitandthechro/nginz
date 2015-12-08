@@ -1,0 +1,65 @@
+###
+# Name        : configfile
+# Author      : @GruntTheDivine
+# Description : Module for parsing simple INI files
+# Please add yourself as author if you make changes
+###
+
+use regex;
+
+class ConfigFile {
+    func ConfigFile (self) {
+        self.sections = HashMap ();
+    }
+
+    func hasSection (self, name) {
+        return self.sections.contains (name);
+    }
+
+    func addSection (self, name, values) {
+        self.sections [name] = typecast (HashMap, values);  
+    }
+
+    func getSection (self, name) {
+        return self.sections [name];
+    }
+
+    func save (self, path) {
+        with (file = open (path, "w")) {
+            foreach (section in self.sections) {
+                file.write ("[{}]\n".format (section));
+                dict = self.sections [section];
+                foreach (key in dict) {
+                    file.write ("{}={}\n".format (key, dict [key]));
+                }
+            }
+        }
+    }
+
+    func open (file) {
+        with (fd = open (file, "r")) {
+            source = fd.readAllText ();
+            return ConfigFile.parse (source);
+        }
+    }
+
+    func parse (source) {
+        file = ConfigFile ();
+        source = source.trim ();
+        foreach (section in regex.matchexp (source, "(?ms)^\\[[^]\n]+](?:(?!^\\[[^]\n]+]).)*")) {
+            name = regex.matchexp (section.value, "\\[[^\\(]*\\]").value;
+            name = name.replace ("[", "").replace ("]", "");
+            dict = HashMap ();
+            foreach (m in regex.matchexp (section.value, "(?ms)^([^=;\r\n]+)=([^;\r\n]*)")) {
+                kv = m.value;
+                key = kv.substr (0, kv.indexOf ("=")).trim ();
+                value = kv.substr (kv.indexOf ("=") + 1).trim ();
+                dict [key] = value;
+            }
+            file.addSection (name, dict);
+        }
+        return file;
+
+    }
+}
+

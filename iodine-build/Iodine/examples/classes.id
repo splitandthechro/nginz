@@ -1,0 +1,46 @@
+# Iodine is object oriented, and objects can be created by 
+# instantiating a class.
+
+# Class definition
+class Dog {
+
+    # This is the constructor, instance variables should
+    # be initialized here
+    func Dog (self, name) {
+        self.name = name; # Note: All instance variables require
+        # access through the 'self' keyword
+    }
+
+    # The self parameter donates that this is an instance
+    # method
+    func showName (self) {
+        print (self.name);
+    }
+
+    func bark (self) {
+        print ("Woof!");
+    }
+}
+
+# This class derives dog
+class BigDog : Dog {
+    func BigDog (self) {
+        super ("Big Dog");	# In order to inherit everything from dog, we must
+				# explicitly invoke its constructor
+    }
+
+    func bark (self) {
+        print ("Bark! Bark!");
+    }
+}
+
+func main (args) {
+    # Classes are instantiating by invoking the class as if it
+    # were a method.
+    fido = Dog ("Fiddo");
+    fido.showName ();
+    fido.bark ();
+    bigDog = BigDog ();
+    bigDog.showName ();
+    bigDog.bark ();
+}

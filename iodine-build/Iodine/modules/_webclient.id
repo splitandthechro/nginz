@@ -1,0 +1,125 @@
+###
+# Name        : webclient
+# Author      : @SplittyDev
+# Description : An easy to use web client
+###
+
+use socket
+use urllib
+use dns
+use len, printf, sprintf from core
+
+class WebClient {
+  func downloadString (uri) {
+    ip = dns.getHostEntry (urllib.getUrlBase (uri)).addressList [0]
+    sock = socket.socket (socket.SOCK_STREAM, socket.PROTO_TCP)
+    proto = urllib.getUrlProtocol (uri)
+    if (proto == "http")
+      sock.connect (ip, urllib.getUrlPort (uri))
+    else if (proto == "https") {
+      sock.setHost (urllib.getUrlBase (uri))
+      sock.connectSsl (ip, 443)
+    }
+    else
+      raise ("Unknown protocol: {}".format (proto))
+    request = ("GET {} HTTP/1.1\r\n" +
+               "Host: {}\r\n" +
+               "Accept-Charset: ISO-8859-1,UTF-8;q=0.7,*;q=0.7\r\n" +
+               "Cache-Control: no-cache\r\n" +
+               "Accept-Language: en;q=0.7,en-us;q=0.3\r\n" +
+               "Connection: close\r\n\r\n").format (
+               urllib.getUrlTail (uri),
+               urllib.getUrlBase (uri))
+    sock.send (request)
+    accum = ""
+    while (sock.getBytesAvailable () > 0)
+      accum += sock.readLine ()
+    printf (accum)
+    #header = WebClient.parseResponseHeader (accum)
+    #code = header["Code"]
+    #if (Int (code) != 200)
+    #  raise ("Server returned HTTP {} {}".format (code, header["Reason"]))
+    #contentLength = Int (header["Content-Length"])
+    #content = socket.receive (contentLength)
+  }
+
+  func parseResponseHeader (header_str) {
+    header = hashMap ()
+    i = 0
+    lines = header_str.split ("\r\n")
+    while (i < len (lines)) {
+      line = lines [i].trim ()
+      if (i == 0) {
+        version = line.substr (0, line.indexOf (" "))
+        code = line.substr (line.indexOf (" ") + 1)
+        reason = reverse (line)
+        reason = reverse (reason.substr (0, reason.indexOf (" ")))
+        header["Version"] = version
+        header["Code"] = code
+        header["Reason"] = reason
+      } else if (line == "") {
+        i = i + 1
+        line = lines [i].trim ()
+        if (i < len (lines)) {
+          args = HashMap ()
+          foreach (arg in line.split ("&")) {
+            if (arg.contains ("=")) {
+              key = arg.substr (0, arg.indexOf ("=")).trim ()
+              val = arg.substr (arg.indexOf ("=") + 1).trim ()
+              args[key] = val
+            }
+          }
+          header["args"] = args
+        }
+      } else {
+        if (line.contains (":")) {
+          key = line.substr (0, line.indexOf (":")).trim ()
+          val = line.substr (line.indexOf (":") + 1).trim ()
+          header[key] = val
+        }
+      }
+      i = i + 1
+    }
+    return header
+  }
+
+  func parseRequestHeader (header_str) {
+    header = HashMap ()
+    i = 0
+    lines = header_str.split ("\r\n")
+    while (i < len (lines)) {
+      line = lines [i].trim ()
+      if (i == 0) {
+        method = line.substr (0, line.indexOf (" "))
+        path = line.substr (line.indexOf (" ") + 1)
+        version = reverse (line)
+        version = reverse (version.substr (0, version.indexOf (" ")))
+        header["Method"] = method.trim ()
+        header["Path"] = path.trim ()
+        header["Version"] = version.trim ()
+      } else if (line == "") {
+        i = i + 1
+        line = lines [i].trim ()
+        if (i < len (lines)) {
+          args = HashMap ()
+          foreach (arg in line.split ("&")) {
+            if (arg.contains ("=")) {
+              key = arg.substr (0, arg.indexOf ("=")).trim ()
+              val = arg.substr (arg.indexOf ("=") + 1).trim ()
+              args[key] = val
+            }
+          }
+          header["args"] = args
+        }
+      } else {
+        if (line.contains (":")) {
+          key = line.substr (0, line.indexOf (":")).trim ()
+          val = line.substr (line.indexOf (":") + 1).trim ()
+          header[key] = val
+        }
+      }
+      i = i + 1
+    }
+    return header
+  }
+}

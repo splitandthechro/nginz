@@ -1,0 +1,126 @@
+use random; 
+
+# We will have a list of words hard coded into the program
+# for simplicity
+words = [
+    "closure",
+    "function",
+    "dictionary",
+    "polymorphism"
+];
+
+frames = ["
+ |--------
+ | /
+ |/
+ |
+ |
+ |
+ |", "
+ |--------
+ | /  |
+ |/  ( )
+ |   
+ |   
+ |
+ |
+ ", "
+ |--------
+ | /  |
+ |/  ( )
+ |    |
+ |
+ |
+ |", "
+ |--------
+ | /  |
+ |/  ( )
+ |   /|
+ |
+ |
+ |
+ ", "
+ |--------
+ | /  |
+ |/  ( )
+ |   /|\\
+ |
+ |
+ |
+ ", "
+ |--------
+ | /  |
+ |/  ( )
+ |   /|\\
+ |   /
+ |  
+ |
+ ","
+ |--------
+ | /  |
+ |/  (x)
+ |   /|\\
+ |   / \\
+ |
+ |
+ "];
+
+func main (args) {
+    word = null;
+    guessedLetters = null;
+
+    # Function for getting a string representation of what the user has 
+    # guessed so far. This will replace every letter that they have not 
+    # guessed with a _
+    func getWord () {
+        letters = map (word, lambda (c) {
+            if (guessedLetters.contains (c)) {
+                return c;
+            }
+            return "_";
+        });
+        return " ".join (letters); 
+    }
+
+    # Function for checking whether or not the users input matches the current word
+    func isCorrect () {
+        ret = reduce (word, true, lambda (a, c) {
+            if (!a) {
+                return false;
+            }
+            return guessedLetters.contains (c); 
+        });
+        return ret;
+    }
+    while (true) {
+        tries = 0;
+        word = random.choice (words); # Pick a random word
+        guessedLetters = []; # Letters we have guessed
+        while (tries < 6) {
+            print (frames [tries]);
+            print ("Word: " + getWord ());
+            letter = input ("Letter: ").toLower ();
+            if (!word.contains (letter) && !guessedLetters.contains (letter)) {
+                tries += 1;
+            } else {
+                guessedLetters.add (letter);
+                if (isCorrect ()) {
+                    print ("You win!");
+                    break;
+                }
+            }
+        }
+        
+        if (tries == 6) {
+            print (frames [6]);
+            print ("You died! The word was, {}!".format (word));
+        }
+
+        if (input ("Play again? [y/n] ").toLower () != "y") {
+            break;
+        }
+    }
+}
+
+
+

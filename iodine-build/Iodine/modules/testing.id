@@ -1,0 +1,216 @@
+###
+# Name        : testing
+# Author      : @SplittyDev
+# Description : Iodine unit testing library
+# Please add yourself as author if you make changes
+###
+
+use repr, len, printf from core;
+
+# Constants
+PASS = "PASS";
+FAIL = "FAIL";
+SKIP = "SKIP";
+INDETERMINATE = "INDETERMINATE";
+
+class assert {
+    func assert (self) {
+        self.passed = 0;
+        self.failed = 0;
+        self.history = List ();
+        self.hooks = List ();
+        self.last = null;
+        self.lock = false;
+    }
+
+    func add (self, action) {
+        self.hooks.add (action);
+    }
+
+    ###
+    ### Test runner
+    ###
+
+    func run (self) {
+        printf ("Running unit tests...\n");
+        last = null;
+        i = 0;
+        foreach (hook in self.hooks) {
+            try {
+                 hook (self);
+            } except (e) {
+                 self.fail (null, null, e.message);
+            }
+            if (len (self.history) != 0)
+                self.last = self.history[len (self.history) - 1];
+            if (last != self.last) {
+                last = self.last;
+                msg = last.state;
+                printf ("Test {}: {}\n\t{}", i, last.msg, msg);
+                if (last.state == FAIL)
+                    printf ("\tExpect: {}\n\tActual: {}",
+                        repr (last.expected), repr (last.result));
+            }
+            else {
+                printf ("Test {}:\n\t{}", i, INDETERMINATE);
+            }
+            i = i + 1
+            self.lock = false
+        }
+        printf ("\nResult:\t{} total | {} passed | {} failed",
+            i, self.passed, self.failed);
+    }
+
+    ###
+    ### Assertion functions
+    ###
+
+    func internal_eq (self, expected, actual, msg) {
+        if (self.should_list_compare (expected, actual)) {
+            tmp = self.list_compare (expected, actual);
+            expected = true;
+            actual = tmp;
+        }
+        if (expected == actual)
+            self.pass (expected, actual, msg);
+        self.fail (expected, actual, msg);
+    }
+
+    func internal_neq (self, expected, actual, msg) {
+        if (self.should_list_compare (expected, actual)) {
+            tmp = self.list_compare (expected, actual);
+            expected = true;
+            actual = tmp;
+        }
+        if (expected != actual)
+            self.pass (expected, actual, msg);
+        self.fail (expected, actual, msg);
+    }
+
+    func internal_gt (self, x, y, msg) {
+        if (x > y)
+            self.pass (true, true, msg);
+        self.fail (true, false, msg);
+    }
+
+    func internal_lt (self, x, y, msg) {
+        if (x < y)
+            self.pass (true, true, msg);
+        self.fail (true, false, msg);
+    }
+
+    func internal_instanceof (self, obj, tdef) {
+        if (core.type (obj) == tdef)
+            self.pass (true, true, msg);
+        self.fail (true, false, msg);
+    }
+
+    func internal_notinstanceof (self, obj, tdef) {
+        if (core.type (obj) != tdef)
+            self.pass (true, true, msg);
+        self.fail (true, false, msg);
+    }
+
+    ###
+    ### Assertion wrappers
+    ###
+
+    func eq (self, expected, actual, msg) {
+        self.internal_eq (expected, actual, msg);
+    }
+
+    func equals (self, expected, actual, msg) {
+        self.internal_eq (expected, actual, msg);
+    }
+
+    func neq (self, expected, actual, msg) {
+        self.internal_neq (expected, actual, msg);
+    }
+
+    func notEquals (self, expected, actual, msg) {
+        self.internal_neq (expected, actual, msg);
+    }
+
+    func gt (self, x, y, msg)  {
+        self.internal_gt (x, y, msg);
+    }
+
+    func greater (self, x, y, msg) {
+        self.internal_gt (x, y, msg);
+    }
+
+    func lt (self, x, y, msg) {
+        self.internal_lt (x, y, msg);
+    }
+
+    func less (self, x, y, msg) {
+        self.internal_lt (x, y, msg);
+    }
+
+    func type (self, obj, tdef) {
+        self.internal_instanceof (obj, tdef);
+    }
+
+    func instanceOf (self, obj, tdef) {
+        self.internal_instanceof (obj, tdef);
+    }
+
+    func notInstanceOf (self, obj, tdef) {
+        self.internal_notinstanceof (obj, tdef);
+    }
+
+    func pass (self, expected, result, msg) {
+        if (!self.lock) {
+            self.passed += 1;
+            self.history.add (testResult (expected, result, PASS, msg));
+            self.lock = true;
+        }
+    }
+
+    func fail (self, expected, result, msg) {
+        if (!self.lock) {
+            self.failed += 1;
+            self.history.add (testResult (expected, result, FAIL, msg));
+            self.lock = true;
+        }
+    }
+
+    func skip (self, msg) {
+        if (!self.lock) {
+            self.history.add (testResult (null, null, SKIP, msg));
+            self.lock = true;
+        }
+    }
+
+    ###
+    ### Tricky bits
+    ###
+
+    func should_list_compare (self, expected, actual) {
+        if ((core.type (expected) == "List" && core.type (actual) == "List")
+                 || (core.type (expected) == "Tuple" && core.type (actual) == "Tuple"))
+            return true;
+        return false;
+    }
+
+    func list_compare (self, expected, actual) {
+        i = 0;
+        if (len (expected) != len (actual))
+            return false;
+        while (i < len (expected)) {
+            if (expected[i] != actual[i])
+                return false;
+            i += 1;
+        }
+        return true;
+    }
+}
+
+class testResult {
+    func testResult (self, expected, result, state, msg) {
+        self.expected = expected;
+        self.result = result;
+        self.state = state;
+        self.msg = msg;
+    }
+}

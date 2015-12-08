@@ -1,0 +1,13 @@
+
+func oneToOneMillion () {
+	for (i = 0; i < 1000000; i += 1) {
+		yield i;
+	}
+}
+
+func main () {
+	print ("Counting from one to one million!");
+	foreach (i in oneToOneMillion ()) {
+		print (i);
+	}
+}

@@ -1,0 +1,225 @@
+###
+# Name        : urllib
+# Author      : @SplittyDev
+# Description : An easy to use module for working with urls
+# Please add yourself as author if you make changes
+###
+
+use reverse, hex, len, printf, sprintf from core
+use dns;
+use socket;
+
+###
+### Class definitions
+###
+
+class HTTPConnection {
+  func HTTPConnection (self, url) {
+    self.proto = _getUrlProtocol (url);
+    self.base = _getUrlBase (url);
+    self.tail = _getUrlTail (url);
+    self.port = _getUrlPort (url);
+  }
+
+  func read (self) {
+    ip = dns.getHostEntry (self.base).addressList [0];
+    self.sock = socket.socket (socket.SOCK_STREAM, socket.PROTO_TCP);
+    self.sock.connect (ip, self.port);
+    request = "GET " + self.tail + " HTTP/1.1\r\n" +
+              "User-Agent: \r\n" +
+              "Host: " + self.base + "\r\n" +
+              "Connection: close\r\n\r\n"
+    self.sock.send (request);
+    contentLength = 0;
+    redirect = null;
+    code = Int (self.sock.readLine ().trim ().split (" ")[1]);
+    if (code != 200 && code != 301) {
+      raise ("Server returned HTTP {}".format (code));
+    }
+    while ((line = self.sock.readLine ()).trim () != "") {
+      if (line.contains (":")) {
+        param = line.substr (0, line.indexOf (":"));
+        arg = line.substr (line.indexOf (":") + 1).trim ();
+        if (param.toLower () == "content-length") {
+          contentLength = Int (arg);
+        } else if (param.toLower () == "location") {
+          redirect = arg;
+        }
+      }
+    }
+    if (redirect != null) {
+      rCon = HTTPConnection (redirect);
+      self.sock.close ();
+      return rCon.read ();
+    }
+    response = self.sock.receive (contentLength);
+    self.sock.close ();
+    return response;
+  }
+}
+
+###
+### Public functions
+###
+
+# Auroras style guide calls for camelCase :P
+
+func openUrl (url) {
+  return HTTPConnection (url);
+}
+
+func normalizeUrl (url) {
+  input = url
+  lower_url = input
+  protocol = _getUrlProtocol (lower_url)
+  base = _getUrlBase (lower_url)
+  base = _optUrlBase (base)
+  tail = _getUrlTail (lower_url)
+  tail = _optUrlTail (tail)
+  return _buildUrl (protocol, base, tail)
+}
+
+func getUrlProtocol (url) {
+  url = normalizeUrl (url)
+  return _getUrlProtocol (url)
+}
+
+func getUrlBase (url) {
+  url = normalizeUrl (url)
+  return _getUrlBase (url)
+}
+
+func getUrlTail (url) {
+  url = normalizeUrl (url)
+  return _getUrlTail (url)
+}
+
+func getUrlPort (url) {
+  url = normalizeUrl (url)
+  return _getUrlPort (url)
+}
+
+func parseQuery (url) {
+  tail = getUrlTail (url)
+  return _parseQuery (tail)
+}
+
+###
+### Private functions
+###
+
+func _getUrlProtocol (url) {
+  return url.substr (0, url.indexOf ("://"))
+}
+
+func _getUrlBase (url) {
+  start = url.indexOf ("://") + 3
+  middle = url.substr (start)
+  if (middle.contains ("/")) {
+    next_slash = middle.indexOf("/")
+    middle = middle.substr (0, next_slash);
+  }
+  return middle
+}
+
+func _getUrlTail (url) {
+  start = url.substr (url.indexOf ("://") + 3)
+  if (start.contains ("/")) {
+    next_slash = start.indexOf ("/")
+    return start.substr (next_slash)
+  }
+  else
+    return "/"
+}
+
+func _getUrlPort (url) {
+  url = _getUrlBase (url)
+  if (!url.contains (":"))
+    return 80
+  port = url.substr (url.indexOf (":") + 1)
+  return toInt (port)
+}
+
+func _optUrlBase (url) {
+  if (!url.contains (":"))
+    return url
+  base = url.substr (0, url.indexOf (":"))
+  port = url.substr (url.indexOf (":") + 1)
+  if (port == "80")
+    return base
+  return url
+}
+
+func _optUrlTail (url) {
+  n = 0
+  inc = lambda () => {
+    prevn = n
+    n = n + 1
+    return hex (prevn)
+  }
+  lookup = hashMap ()
+  n = 32
+  lookup [" "]   = inc ()
+  lookup ["!"]   = inc ()
+  lookup ["\""]  = inc ()
+  lookup ["#"]   = inc ()
+  lookup ["$"]   = inc ()
+  lookup ["%"]   = inc ()
+  inc () # &
+  lookup ["'"]   = inc ()
+  lookup ["("]   = inc ()
+  lookup [")"]   = inc ()
+  lookup ["*"]   = inc ()
+  lookup ["+"]   = inc ()
+  lookup [","]   = inc ()
+  lookup ["-"]   = inc ()
+  inc () # .
+  inc () # /
+  n = 58
+  lookup [":"]   = inc ()
+  lookup [";"]   = inc ()
+  lookup ["<"]   = inc ()
+  inc () # =
+  lookup [">"]   = inc ()
+  inc () # ?
+  lookup ["@"]   = inc ()
+  n = 91
+  lookup ["["]   = inc ()
+  lookup ["\\"]  = inc ()
+  lookup ["]"]   = inc ()
+  lookup ["^"]   = inc ()
+  lookup ["_"]   = inc ()
+  lookup ["`"]   = inc ()
+  i = 0
+  buf = ""
+  while (i < len (url)) {
+    if (lookup.contains (url [i]))
+      buf += sprintf ("%{}", lookup [url [i]])
+    else
+      buf += url[i]
+    i = i + 1
+  }
+  return buf
+}
+
+func _buildUrl (protocol, base, tail) {
+  return sprintf ("{}://{}{}", protocol, base, tail)
+}
+
+func _parseQuery (tail) {
+  dict = hashMap ()
+  skip = "?&="
+  i = 0;
+  if (tail[0] == "?")
+    tail = tail.substr (1)
+  lines = tail.split ("&")
+  foreach (line in lines) {
+    if (line.contains ("=")) {
+      index = line.indexOf ("=")
+      dict[line.substr (0, index)] = line.substr (index + 1)
+    }
+    else
+      dict[line] = null
+  }
+  return dict
+}

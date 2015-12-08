@@ -1,0 +1,298 @@
+
+class InvalidJsonException : Exception {
+    func InvalidJsonException (self) {
+        super ("Attempted to parse invalid JSON!");
+    }
+}
+
+class JsonFile {
+    # JSON token types   
+    enum JsonTokenType {
+        BEGIN_ARRAY,
+        END_ARRAY,
+        BEGIN_OBJECT,
+        END_OBJECT,
+        NAME_SEPERATOR,
+        VALUE_SEPERATOR,
+        TRUE_LITERAL,
+        FALSE_LITERAL,
+        NULL_LITERAL,
+        NUMBER_LITERAL,
+        STRING_LITERAL
+    }
+
+    class JsonToken {
+        func JsonToken (self, type, value) {
+            self.type = type;
+            self.value = value;
+        }
+    }
+
+    # Static method parse, returns an object resulting from the 
+    # parsed json. 
+    # Throws InvalidJsonException
+    func parse (json) {
+        parser = JsonFile ();
+        tokens = parser._initialize (json);
+        return parser._parse (tokens);
+    }
+
+    func _initialize (self, source) {
+        self.position = 0;
+        self.length = source.getSize ();
+        self.source = source;
+    }
+
+    func _parse (self, tokens) {
+        
+        position = 0;
+        size = tokens.getSize ();
+
+        func matchToken (type) {
+            if (position < size) {
+                return tokens [position].type == type;
+            }
+            return false;
+        }
+
+        func expect (type) {
+            if (matchToken (type)) {
+                position += 1;
+                return tokens [position - 1];
+            }
+            raise InvalidJsonException ();
+        }
+
+        func consumeToken () {
+            position += 1;
+            return tokens [position - 1];
+        }
+
+        func parseItem () {
+            token = tokens [position];
+            ret = null;
+            given (token.type) {
+                when JsonFile.JsonTokenType.BEGIN_ARRAY {
+                    ret = [];
+                    expect (JsonFile.JsonTokenType.BEGIN_ARRAY);
+                    while (position < size && !matchToken (JsonFile.JsonTokenType.END_ARRAY)) {
+                        ret.add (parseItem ());
+                        if (!matchToken (JsonFile.JsonTokenType.VALUE_SEPERATOR)) {
+                            break;
+                        }
+                        consumeToken ();
+                    }
+                    expect (JsonFile.JsonTokenType.END_ARRAY);
+                }
+                when JsonFile.JsonTokenType.BEGIN_OBJECT {
+                    ret = {};
+                    expect (JsonFile.JsonTokenType.BEGIN_OBJECT);
+                    while (position < size && !matchToken (JsonFile.JsonTokenType.END_OBJECT)) {
+                        name = expect (JsonFile.JsonTokenType.STRING_LITERAL).value;
+                        expect (JsonFile.JsonTokenType.NAME_SEPERATOR);
+                        value = parseItem ();
+                        ret [name] = value;
+                        if (!matchToken (JsonFile.JsonTokenType.VALUE_SEPERATOR)) {
+                            break;
+                        }
+                        consumeToken ();
+                    }
+                    expect (JsonFile.JsonTokenType.END_OBJECT);
+                }
+                when JsonFile.JsonTokenType.NUMBER_LITERAL {
+                    ret = consumeToken ().value;
+                }
+                when JsonFile.JsonTokenType.STRING_LITERAL {
+                    ret = consumeToken ().value;
+                }
+                when JsonFile.JsonTokenType.TRUE_LITERAL {
+                    consumeToken ();
+                    ret = true;
+                }
+                when JsonFile.JsonTokenType.FALSE_LITERAL {
+                    consumeToken ();
+                    ret = false;
+                }
+                when JsonFile.JsonTokenType.NULL_LITERAL {
+                    consumeToken ();
+                    ret = null;
+                }
+                default {
+                    raise InvalidJsonException ();
+                }
+            }
+
+            return ret;
+        }
+        
+        return parseItem ();
+    }
+
+    func _tokenize (self) {
+        tokens = [];
+        position = 0;
+
+        func peekChar () {
+            if (position < self.length) {
+                return self.source [position];
+            }
+            return "";
+        }
+
+        func readChar () {
+            if (position < self.length) {
+                position += 1;
+                return self.source [position - 1];
+            }
+            return "";
+        }
+
+        func scanConstant () {
+            accum = "";
+            result = null;
+            while (peekChar ().isLetter ()) {
+                accum += readChar ();
+            }
+            given (accum) {
+                when "true" {
+                    result = JsonFile.JsonToken (JsonFile.JsonTokenType.TRUE_LITERAL, true);
+                }
+                when "false" {
+                    result = JsonFile.JsonToken (JsonFile.JsonTokenType.FALSE_LITERAL, false);
+                }
+                when "null" {
+                    result = JsonFile.JsonToken (JsonFile.JsonTokenType.NULL_LITERAL, null);
+                }
+            }
+            return result;
+        }
+
+        func eatWhitespace () {
+            while (peekChar ().isWhiteSpace ()) {
+                readChar ();
+            }
+        }
+
+        func scanString () {
+            delim = readChar ();
+            accum = "";
+            while (peekChar () != "" && peekChar () != delim) {
+                if (peekChar () == "\\") {
+                    readChar (); 
+                    ch = readChar ();
+                    escapeVals = {"n" : "\n",
+                        "t" : "\t",
+                        "f" : "\f",
+                        "r" : "\r",
+                        "\"" : "\"",
+                        "\\" : "\\"};
+                    if (!escapeVals.contains (ch)) {
+                        raise InvalidJsonException ();
+                    }
+                    accum += escapeVals [ch];
+                } else {
+                    accum += readChar ();
+                }
+            }
+            readChar ();
+            return accum;
+        }
+
+        func scanNumber () {
+            accum = "";
+            ch = peekChar ();
+            do {
+                accum += readChar ();
+                ch = peekChar (); 
+            } while (ch.isDigit ());
+            return Int (accum);
+        }   
+
+        eatWhitespace ();
+        while (position < self.length) {
+            last = tokens.getSize ();
+            ch = peekChar ();
+            given (ch) {
+                when "{" {
+                    readChar ();
+                    tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.BEGIN_OBJECT, "{"));
+                }
+                when "}" {
+                    readChar ();
+                    tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.END_OBJECT, "}"));
+                }
+                when "[" {
+                    readChar ();
+                    tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.BEGIN_ARRAY, "["));
+                }
+                when "]" {
+                    readChar ();
+                    tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.END_ARRAY, "]"));
+                }
+                when ":" {
+                    readChar ();
+                    tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.NAME_SEPERATOR, ":"));
+                }
+                when "," {
+                    readChar ();
+                    tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.VALUE_SEPERATOR, ","));
+                }
+                when "-" {
+                    tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.NUMBER_LITERAL, scanNumber ()));
+                }
+                when "\"" {
+                    tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.STRING_LITERAL, scanString ()));
+                }
+            }
+
+            if (ch.isDigit ()) {
+                tokens.add (JsonFile.JsonToken (JsonFile.JsonTokenType.NUMBER_LITERAL, scanNumber ()));
+            } else if (ch.isLetter ()) {
+                tokens.add (scanConstant ());           
+            } else if (tokens.getSize () == last) {
+                raise InvalidJsonException ();
+            }
+            eatWhitespace ();
+        }
+        return tokens;
+    }
+}
+
+
+func parse (json) {
+    file = JsonFile ();
+    file._initialize (json);
+    return file._parse (file._tokenize ());
+}
+
+func dump (item) {
+    return _dump (item);
+}
+
+func _dump (item) {
+    if (item is List) {
+        items = map (item, lambda (x) {
+            return _dump (x);
+        });
+        return "[{}]".format (",".join (items));
+    } else if (item is HashMap) {
+        items = map (item, lambda (x) {
+           return _dump (x) + " : " + _dump (item [x]);
+        });
+        return "{" + ",".join (items) + "}";
+    } else if (item is Int) {
+        return Str (item);
+    } else if (item is Bool) {
+        if (item) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
+    return "\"{}\"".format (Str (item));
+}
+
+func _dumpList (item) {
+    return "[{}]".format (",".join (item));
+}
+

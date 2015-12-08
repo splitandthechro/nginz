@@ -1,0 +1,84 @@
+# Fizz buzz is a counting game designed to teach children how to divide. 
+# It is also a tool used by companies to weed out incompetent programmers.
+# Fizzbuzz involves counting off, and for each number that is divisible 
+# by 3, that number is replaced with fizz. Each number that is divisible
+# by 5 is replaced by buzz, and each number that is divisible by both 3
+# and 5 is replaced with fizz buzz. 
+
+func main (args) {
+    print ("Example 1:");
+    firstExample (100);
+    print ("Example 2:");
+    secondExample (100);
+    print ("Example 3");
+    thirdExample (100);
+}
+
+# First example of fizzbizz, this will use lambda expressions
+
+func firstExample (n) {
+    numbers = range (n); # Create an iterator from 0 to n
+
+    # Map will apply the function inside the lambda expression
+    # to each item in our result list. This will create a list
+    # of results from the fizz buzz game. 
+
+    result = map (numbers, lambda (x) {
+        if (x % 3 == 0 && x % 5 == 0) {
+            return "Fizz buzz!";
+        } else if (x % 3 == 0) {
+            return "Fizz!";
+        } else if (x % 5 == 0) {
+            return "Buzz!";
+        }
+            return x;
+    });
+
+    # Now that we have our list we can print out each item
+
+    foreach (item in result) {
+        print (item);
+    }
+}
+
+# A perhaps more traditional implementation of fizzbuzz using a
+# simple for loop
+
+func secondExample (n) {
+    # We will just count from 0 to n using a traditional
+    # for loop
+
+    for (i = 0; i < n; i += 1) {
+        if (i % 3 == 0 && i % 5 == 0) {
+            print ("Fizz buzz!");
+	} else if (i % 3 == 0) {
+            print ("Fizz!");
+        } else if (i % 5 == 0) {
+            print ("Buzz!");
+        } else {
+            print (i);
+        }
+    }
+}
+
+# While the second example works, we can write a more efficent example
+# using a foreach loop
+
+func thirdExample (n) {
+    # While Iodine does have a traditional for loop, it is inefficent compared
+    # to the foreach statement below. Iodine's integer type is immutable, which
+    # means that each iteration of a for loop several new Int objects will be
+    # allocated in memory. We can mitigate this using a foreach loop on the
+    # range operator (.. and ...)
+    foreach (i in 0 .. n) {
+        if (i % 3 == 0 && i % 5 == 0) {
+            print ("Fizz buzz!");
+        } else if (i % 3 == 0) {
+            print ("Fizz!");
+        } else if (i % 5 == 0) {
+            print ("Buzz!");
+        } else {
+            print (i);
+        }
+    }
+}

@@ -1,0 +1,66 @@
+###
+# Name        : stack
+# Author      : @SplittyDev
+# Description : Stack data structure
+# Please add yourself as author if you make changes
+###
+
+use * from core
+
+class Stack {
+    func Stack (self) {
+        self.store = List ()
+        self.iter_index = 0
+    }
+
+    func push (self, val) {
+        self.store.add (val)
+    }
+
+    func pop (self) {
+        if (len (self.store) == 0)
+            raise Exception ("There are no elements on the stack!")
+        tmp = reverse (self.store)
+        val = tmp[0]
+        tmp.removeAt (0)
+        self.store = reverse (tmp)
+        return val
+    }
+
+    # So.. this is REALLY hacky.
+    # The lookahead parameter is optional.
+    func peek (self, *args) {
+        lookahead = 0
+        if (len (args) > 0 && type (args[0]) == "Int")
+            lookahead = args[0]
+        if (lookahead >= len (self.store))
+            raise (sprintf ("Index out of range: Can't peek item {} of {}",
+                lookahead + 1, len (self.store)))
+        return reverse (self.store)[lookahead]
+    }
+
+    func __iterReset__ (self) {
+        self.iter_index = len (self.store) - 1
+    }
+
+    func __iterMoveNext__ (self) {
+        self.iter_index -= 1
+        return self.iter_index >= 0
+    }
+
+    func __iterGetNext__ (self) {
+        return self.store[self.iter_index]
+    }
+}
+
+class TypedStack : Stack {
+    func TypedStack (self, t) {
+        super ()
+        self.typeDef.name = "Stack"
+        self.t = t
+    }
+
+    func push (self, val) {
+        self.__super__.push (self.t (val))
+    }
+}

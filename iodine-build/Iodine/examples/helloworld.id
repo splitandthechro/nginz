@@ -1,0 +1,17 @@
+
+# Iodine expressions are allowed outside functions, however
+# statements are not. With this in mind, a file just containing
+# print ("Hello, World!") is valid Iodine code and will work as
+# expected. However, since statements are not allowed outside 
+# of functions, function calls should be reserved inside the 
+# program's entry point (Which is func main)
+
+#
+# Command line arguments can be received by declaring this as
+# func main (args) {
+#   
+# }
+
+func main () {
+    print ("Hello, World!");
+}

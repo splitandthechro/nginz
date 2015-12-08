@@ -1,0 +1,124 @@
+###
+# Name          : argparse
+# Author        : @GruntTheDivine
+# Description   : Simple command line argument parsing module
+####
+
+use reflection;
+
+class CommandLineOptions {
+    
+    class CommandLineOption {
+        func CommandLineOption (self, defaultValue, required) {
+            self.defaultValue = defaultValue;
+            self.required = required;
+        }
+    }
+    
+    class CommandLineVerb {
+        func CommandLineVerb (self, options, callback) {
+            self.options = options;
+            self.callback = callback;
+        }
+    }
+    
+    class CommandLineArgument {
+        func CommandLineArgument (self, name, defaultValue, required) {
+           	self.name = name;
+			self.defaultValue = defaultValue;
+            self.required = required;
+        }
+    }
+    
+    func CommandLineOptions (self) {
+        self.arguments = List ();
+        self.options = HashMap ();
+        self.verbs = HashMap ();
+    }
+    
+    func addArgument (self, name, *args) {
+        if (args.getSize () == 0) {
+            self.arguments.add (CommandLineOptions.CommandLineArgument (name, false, false));
+        } else if (args.getSize () == 1) {
+            self.arguments.add (CommandLineOptions.CommandLineArgument (name, args [0], false));
+        } else {
+            self.arguments.add (CommandLineOptions.CommandLineArgument (name, args [0], args [1]));
+        }
+    }
+    
+    func addOption (self, name, *args) {
+        if (args.getSize () == 0) {
+            self.options [name] = CommandLineOptions.CommandLineOption (false, false);
+        } else if (args.getSize () == 1) {
+            self.options [name] = CommandLineOptions.CommandLineOption (args [0], false);
+        } else {
+            self.options [name] = CommandLineOptions.CommandLineOption (args [0], args [1]);
+        }
+    }
+    
+    func addVerb (self, name, options, callback) {
+        self.verbs [name] = CommandLineOptions.CommandLineVerb (options, callback);
+    }
+}
+
+func parseArgs (options, args) {
+    ret = Object ();
+    foreach (option in options.options) {
+        reflection.setAttribute (ret, option, options.options [option].defaultValue);
+    }
+    options = typecast (CommandLineOptions, options);
+    position = 0;
+    func nextArg () {
+        if (position < args.getSize ()) {
+            position += 1;
+            return args [position - 1];
+        }
+        return "";
+    }
+    
+    func peekArg () {
+        if (position < args.getSize ()) {
+            return args [position];
+        }
+        return "";
+    }
+    
+    func isOption (val) {
+        return val.startsWith ("-") || val.startsWith ("/") || val.startsWith ("--");
+    }
+    
+    func isVerb (val) {
+        return options.verbs.contains (val);
+    }
+    argCount = options.arguments.getSize ();
+    currentArgument = 0;
+    while (position < args.getSize ()) {
+        arg = nextArg ();
+        if (isOption (arg)) {
+            if (arg.startsWith ("--")) {
+                arg = arg.substr (2);
+            } else {
+                arg = arg.substr (1);
+            }
+            if (options.options.contains (arg)) {
+                option = options [arg];
+                if (!isOption (peekArg ()) && peekArg () != "") {
+                    value = nextArg ();
+                    reflection.setAttribute (ret, arg, value);
+                }
+            }
+        } else if (isVerb (arg)) {
+            verb = options.verbs [arg];
+            verbArgs = List ();
+            while (arg != "" && !isVerb (peekArg ())) {
+                arg = nextArg ();
+                verbArgs.add (arg);
+            }
+            verb.callback (parseArgs (verb.options, verbArgs));
+        } else if (currentArgument < argCount) {
+            reflection.setAttribute (ret, options.arguments [currentArgument].name, arg);
+            currentArgument += 1;
+        }
+    }
+    return ret;
+}

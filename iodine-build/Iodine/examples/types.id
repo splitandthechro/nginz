@@ -1,0 +1,19 @@
+
+func main () {
+	# Everythin in Iodine is an object, including classes,
+	# and functions. Each object has an attribute called 
+	# typeDef which provides information regarding the type
+	
+	# We will pass various objects to whatTypeAmI which will
+	# then print the name of the type
+
+	whatTypeAmI ("I'm a string");
+	whatTypeAmI (whatTypeAmI);
+	whatTypeAmI (10);
+	whatTypeAmI (list ());
+}
+
+func whatTypeAmI (x) {
+	# ALL Objects have this attribute
+	print (x.typeDef.name);
+}
