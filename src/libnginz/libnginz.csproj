@@ -105,6 +105,7 @@
     <Compile Include="UI\Button.cs" />
     <Compile Include="UI\Label.cs" />
     <Compile Include="Font.cs" />
+    <Compile Include="Animator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

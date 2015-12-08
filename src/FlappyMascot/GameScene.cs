@@ -34,7 +34,7 @@ namespace FlappyMascot
 			scoreDelta += 2f * (float) time.Elapsed.TotalSeconds;
 			if (scoreDelta > 1f) {
 				score += 1;
-				lblScore.Text = "Score: " + score.ToString ();
+				lblScore.Text = "Score: " + score;
 				scoreDelta -= 1f;
 			}
 			game.Mouse.CursorVisible = false;
