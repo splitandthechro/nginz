@@ -16,6 +16,7 @@ namespace nginz.Interop.Iodine
 		readonly Game Game;
 
 		dynamic Scope;
+		string currentError;
 
 		public dynamic this [string name] {
 			get { return CallDynamic (name); }
@@ -58,15 +59,28 @@ namespace nginz.Interop.Iodine
 		}
 
 		public dynamic CallDynamic (string name) {
-
-			// TODO: Implement this.
-			return null;
+			return Engine.Get (name);
 		}
 
 		public object Call (string name, params object[] args) {
-
-			// TODO: Implement this.
+			try {
+				var result = Engine.Call (name, args);
+				currentError = string.Empty;
+				return (object) result;
+			} catch (Exception e) {
+				if (currentError != e.Message)
+					this.Log (e.Message);
+				currentError = e.Message;
+			}
 			return null;
+		}
+
+		public T Call<T> (string name, params object[] args) {
+			return (T) Call (name, args);
+		}
+
+		public string GetLastError () {
+			return currentError;
 		}
 
 		void SetupGlobals () {
