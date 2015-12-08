@@ -46,7 +46,7 @@
       <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
       <Name>libnginz.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libnginz.Interop.IronPython\libnginz.Interop.Python.csproj">
+    <ProjectReference Include="..\libnginz.Interop.Python\libnginz.Interop.Python.csproj">
       <Project>{13523E0E-ADEC-4E45-9EB2-80A402934F2A}</Project>
       <Name>libnginz.Interop.Python</Name>
     </ProjectReference>

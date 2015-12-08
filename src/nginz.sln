@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "othertestgame", "othertestg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testgame2D", "testgame2D\testgame2D.csproj", "{74FDA228-9E72-4144-92BB-72BD452BAEDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Python", "libnginz.Interop.IronPython\libnginz.Interop.Python.csproj", "{13523E0E-ADEC-4E45-9EB2-80A402934F2A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pythontestgame", "pythontestgame\pythontestgame.csproj", "{E2E8B124-2B79-4051-9CEE-CA45B569B3E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "purepythontestgame", "purepythontestgame\purepythontestgame.csproj", "{1BE1DA8E-A045-4B07-B422-19C24C8B26EA}"
@@ -26,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.StbImage", "libnginz.StbInterop\libnginz.Interop.StbImage.csproj", "{529EAA69-1806-4C6E-9D20-F5B79A0E515F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Freetype", "libnginz.FtInterop\libnginz.Interop.Freetype.csproj", "{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Python", "libnginz.Interop.Python\libnginz.Interop.Python.csproj", "{13523E0E-ADEC-4E45-9EB2-80A402934F2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
