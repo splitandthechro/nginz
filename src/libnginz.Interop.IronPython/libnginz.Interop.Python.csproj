@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{13523E0E-ADEC-4E45-9EB2-80A402934F2A}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>nginz.Interop.IronPython</RootNamespace>
-    <AssemblyName>libnginz.Interop.IronPython</AssemblyName>
+    <RootNamespace>nginz.Interop.Python</RootNamespace>
+    <AssemblyName>libnginz.Interop.Python</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

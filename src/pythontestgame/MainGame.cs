@@ -1,6 +1,6 @@
 ﻿using System;
 using nginz;
-using nginz.Interop.IronPython;
+using nginz.Interop.Python;
 
 namespace pythontestgame
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using nginz.Common;
 
-namespace nginz.Interop.IronPython
+namespace nginz.Interop.Python
 {
 	public class PythonGame : ICanLog
 	{

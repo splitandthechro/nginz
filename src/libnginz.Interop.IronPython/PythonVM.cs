@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
-using IronPython.Hosting;
-using Microsoft.Scripting.Hosting;
-using nginz.Common;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
+using Microsoft.Scripting.Hosting;
+using nginz.Common;
+using PythonHost = IronPython.Hosting.Python;
 
-namespace nginz.Interop.IronPython
+namespace nginz.Interop.Python
 {
 	public class PythonVM : ICanLog, ICanThrow
 	{
@@ -24,7 +24,7 @@ namespace nginz.Interop.IronPython
 
 		public PythonVM (Game game = null) {
 			Game = game;
-			Engine = Python.CreateEngine ();
+			Engine = PythonHost.CreateEngine ();
 			Scope = Engine.CreateScope ();
 			Reloader = new ScriptReloader ("*.py");
 			Reloader.LoadScript = Load;

@@ -2,7 +2,7 @@
 using System.IO;
 using nginz.Common;
 
-namespace nginz.Interop.IronPython
+namespace nginz.Interop.Python
 {
 	public class PythonScript : Script
 	{
