@@ -48,6 +48,9 @@ namespace Iodine.Engine
 		private TypeRegistry typeRegistry = new TypeRegistry ();
 		private Dictionary<string, IodineModule> modules = new Dictionary<string, IodineModule> ();
 
+
+		private IodineModule module; // Last module produced by DoString or DoFile 
+
 		public dynamic this [string name] {
 			get {
 				return GetMember (name);
@@ -124,15 +127,49 @@ namespace Iodine.Engine
 		public dynamic DoString (string source)
 		{
 			SourceUnit line = SourceUnit.CreateFromSource (source);
-			Context.Invoke (line.Compile (Context), new IodineObject[] { });
+			module = line.Compile (Context);
+			Context.Invoke (module, new IodineObject[] { });
 			return null;
 		}
 
 		public dynamic DoFile (string file)
 		{
-			IodineModule main = new IodineModule (Path.GetFileNameWithoutExtension (file));
-			DoString (File.ReadAllText (file));
-			return IodineDynamicObject.Create (main, Context.VirtualMachine, typeRegistry);
+			SourceUnit line = SourceUnit.CreateFromFile (file);
+			module = line.Compile (Context);
+			Context.Invoke (module, new IodineObject[] { });
+			return null;
+		}
+
+		public dynamic Call (string name, params object[] args)
+		{
+			IodineObject[] arguments = new IodineObject[args.Length];
+			for (int i = 0; i < args.Length; i++) {
+				arguments [i] = typeRegistry.ConvertToIodineObject (args [i]);
+			}
+			IodineObject ret = Context.Invoke (module.GetAttribute (name), arguments);
+			return IodineDynamicObject.Create (ret, Context.VirtualMachine, typeRegistry);
+		}
+
+		public T Call<T> (string name, params object[] args)
+		{
+			IodineObject[] arguments = new IodineObject[args.Length];
+			for (int i = 0; i < args.Length; i++) {
+				arguments [i] = typeRegistry.ConvertToIodineObject (args [i]);
+			}
+			IodineObject ret = Context.Invoke (module.GetAttribute (name), arguments);
+			return (T)typeRegistry.ConvertToNativeObject (ret, typeof(T));
+		}
+
+		public dynamic Get (string name)
+		{
+			IodineObject ret = module.GetAttribute (name);
+			return IodineDynamicObject.Create (ret, Context.VirtualMachine, typeRegistry);
+		}
+
+		public T Get<T> (string name)
+		{
+			IodineObject ret = module.GetAttribute (name);
+			return (T)typeRegistry.ConvertToNativeObject (ret, typeof(T));
 		}
 
 		private IodineModule ResolveModule (string path)
@@ -160,4 +197,3 @@ namespace Iodine.Engine
 		}
 	}
 }
-
