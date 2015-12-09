@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1BE1DA8E-A045-4B07-B422-19C24C8B26EA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>purepythontestgame</RootNamespace>
+    <AssemblyName>purepythontestgame</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\opentk-build\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Scripting\libnginz.Scripting.Python\libnginz.Scripting.Python.csproj">
+      <Project>{13523E0E-ADEC-4E45-9EB2-80A402934F2A}</Project>
+      <Name>libnginz.Scripting.Python</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\libnginz\libnginz.csproj">
+      <Project>{C985815A-AAB7-45D2-9427-039101F10B76}</Project>
+      <Name>libnginz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\libnginz.Common\libnginz.Common.csproj">
+      <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
+      <Name>libnginz.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

@@ -5,13 +5,9 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interoperability", "Interoperability", "{75CB3C70-0C8B-47AC-B0F5-03B981EB221C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Freetype", "libnginz.FtInterop\libnginz.Interop.Freetype.csproj", "{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Freetype", "Interoperability\libnginz.Interop.FreeType\libnginz.Interop.Freetype.csproj", "{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Python", "libnginz.Interop.Python\libnginz.Interop.Python.csproj", "{13523E0E-ADEC-4E45-9EB2-80A402934F2A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.StbImage", "libnginz.StbInterop\libnginz.Interop.StbImage.csproj", "{529EAA69-1806-4C6E-9D20-F5B79A0E515F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.Iodine", "libnginz.Interop.Iodine\libnginz.Interop.Iodine.csproj", "{4530496F-1981-4CC1-A0BB-790D0C6ED37F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Interop.StbImage", "Interoperability\libnginz.Interop.StbImage\libnginz.Interop.StbImage.csproj", "{529EAA69-1806-4C6E-9D20-F5B79A0E515F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Third Party Sources", "Third Party Sources", "{83BEDE17-FE19-42DD-A5F9-8A399D87F1D0}"
 EndProject
@@ -19,23 +15,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libIodine", "..\iodine-buil
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{D07C9B61-8930-42E5-A91A-8920C15E545F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz", "libnginz\libnginz.csproj", "{C985815A-AAB7-45D2-9427-039101F10B76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz", "Core\libnginz\libnginz.csproj", "{C985815A-AAB7-45D2-9427-039101F10B76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Common", "libnginz.Common\libnginz.Common.csproj", "{C6313A63-A0A2-46CC-8B0C-9D60C226F707}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Common", "Core\libnginz.Common\libnginz.Common.csproj", "{C6313A63-A0A2-46CC-8B0C-9D60C226F707}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{17686208-D022-468E-8CA5-3FD86D9A866A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlappyMascot", "FlappyMascot\FlappyMascot.csproj", "{993C6942-1AAC-4743-874C-542C3125ACB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlappyMascot", "Games\FlappyMascot\FlappyMascot.csproj", "{993C6942-1AAC-4743-874C-542C3125ACB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "othertestgame", "othertestgame\othertestgame.csproj", "{5F376241-3892-46C0-8BBC-2A4D8E106C28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "othertestgame", "Games\othertestgame\othertestgame.csproj", "{5F376241-3892-46C0-8BBC-2A4D8E106C28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerDefense", "TowerDefense\TowerDefense.csproj", "{79F7A241-20AD-4486-9BBE-DC7B7C748BCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerDefense", "Games\TowerDefense\TowerDefense.csproj", "{79F7A241-20AD-4486-9BBE-DC7B7C748BCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "purepythontestgame", "purepythontestgame\purepythontestgame.csproj", "{1BE1DA8E-A045-4B07-B422-19C24C8B26EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "purepythontestgame", "Games\purepythontestgame\purepythontestgame.csproj", "{1BE1DA8E-A045-4B07-B422-19C24C8B26EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pythontestgame", "pythontestgame\pythontestgame.csproj", "{E2E8B124-2B79-4051-9CEE-CA45B569B3E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pythontestgame", "Games\pythontestgame\pythontestgame.csproj", "{E2E8B124-2B79-4051-9CEE-CA45B569B3E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testgame2D", "testgame2D\testgame2D.csproj", "{74FDA228-9E72-4144-92BB-72BD452BAEDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testgame2D", "Games\testgame2D\testgame2D.csproj", "{74FDA228-9E72-4144-92BB-72BD452BAEDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripting", "Scripting", "{9F2F3C49-61AF-40C7-8F7D-D2093BCD5586}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Scripting.Iodine", "Scripting\libnginz.Scripting.Iodine\libnginz.Scripting.Iodine.csproj", "{4530496F-1981-4CC1-A0BB-790D0C6ED37F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Scripting.Python", "Scripting\libnginz.Scripting.Python\libnginz.Scripting.Python.csproj", "{13523E0E-ADEC-4E45-9EB2-80A402934F2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,9 +154,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DCF47DF3-DFBE-4B6A-BCD8-85515C14EFD9} = {75CB3C70-0C8B-47AC-B0F5-03B981EB221C}
-		{13523E0E-ADEC-4E45-9EB2-80A402934F2A} = {75CB3C70-0C8B-47AC-B0F5-03B981EB221C}
 		{529EAA69-1806-4C6E-9D20-F5B79A0E515F} = {75CB3C70-0C8B-47AC-B0F5-03B981EB221C}
-		{4530496F-1981-4CC1-A0BB-790D0C6ED37F} = {75CB3C70-0C8B-47AC-B0F5-03B981EB221C}
 		{7A5BFF77-C783-4D40-AF7F-4C673C20E48B} = {83BEDE17-FE19-42DD-A5F9-8A399D87F1D0}
 		{C985815A-AAB7-45D2-9427-039101F10B76} = {D07C9B61-8930-42E5-A91A-8920C15E545F}
 		{C6313A63-A0A2-46CC-8B0C-9D60C226F707} = {D07C9B61-8930-42E5-A91A-8920C15E545F}
@@ -164,6 +164,8 @@ Global
 		{1BE1DA8E-A045-4B07-B422-19C24C8B26EA} = {17686208-D022-468E-8CA5-3FD86D9A866A}
 		{E2E8B124-2B79-4051-9CEE-CA45B569B3E4} = {17686208-D022-468E-8CA5-3FD86D9A866A}
 		{74FDA228-9E72-4144-92BB-72BD452BAEDD} = {17686208-D022-468E-8CA5-3FD86D9A866A}
+		{4530496F-1981-4CC1-A0BB-790D0C6ED37F} = {9F2F3C49-61AF-40C7-8F7D-D2093BCD5586}
+		{13523E0E-ADEC-4E45-9EB2-80A402934F2A} = {9F2F3C49-61AF-40C7-8F7D-D2093BCD5586}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
