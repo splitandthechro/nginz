@@ -27,7 +27,6 @@ nginz is built on top of [OpenTK].
 
 nginz also uses the following libraries:
 - [Iodine]
-- [MoonSharp]
 - [IronPython]
 - [stb_image]
 
@@ -45,6 +44,5 @@ Some nginz code is roughly based on the following libraries:
 [OpenTK]: https://github.com/OpenTK/OpenTK "OpenTK"
 [Iodine]: https://github.com/IodineLang/Iodine "Iodine"
 [stb_image]: https://github.com/nothings/stb "stb_image"
-[MoonSharp]: https://github.com/xanathar/moonsharp "MoonSharp"
 [IronPython]: https://ironpython.codeplex.com "IronPython"
 [ObjLoader]: https://github.com/Real-Serious-Games/ObjLoader "ObjLoader"
