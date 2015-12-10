@@ -1,6 +1,10 @@
 # Autosave files
 *~
 
+# profiling
+*.psess
+*.vspx
+
 # build
 [Oo]bj/
 [Bb]in/

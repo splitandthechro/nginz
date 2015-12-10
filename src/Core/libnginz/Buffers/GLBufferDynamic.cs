@@ -38,17 +38,31 @@ namespace nginz {
 			Unbind ();
 		}
 
-		public void UploadData (IList<T> data) {
+		public void UploadData (T[] dataArray) {
 
 			// Check if data is null
-			if (data == null)
+			if (dataArray == null)
 				this.Throw ("Cannot upload data: data is null");
 
 			// Calculate the buffer size
-			var bufferSize = Marshal.SizeOf (data[0]) * data.Count;
+			var bufferSize = Marshal.SizeOf (dataArray[0]) * dataArray.Length;
 
 			Bind ();
-			GL.BufferData (Settings.Target, bufferSize, data.ToArray (), Settings.Hint);
+			GL.BufferData (Settings.Target, bufferSize, dataArray, Settings.Hint);
+			Unbind ();
+		}
+
+		public void UploadData (IList<T> dataList) {
+
+			// Check if data is null
+			if (dataList == null)
+				this.Throw ("Cannot upload data: data is null");
+
+			// Calculate the buffer size
+			var bufferSize = Marshal.SizeOf (dataList[0]) * dataList.Count;
+
+			Bind ();
+			GL.BufferData (Settings.Target, bufferSize, dataList.ToArray (), Settings.Hint);
 			Unbind ();
 		}
 

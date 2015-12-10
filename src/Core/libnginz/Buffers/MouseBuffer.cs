@@ -108,7 +108,7 @@ namespace nginz
 			get {
 				bool visible = false;
 				if (game != null)
-					game.EnsureContextThread (() => visible = window.CursorVisible);
+					game.EnsureUIThread (() => visible = window.CursorVisible);
 				else
 					visible = window.CursorVisible;
 				return visible;
@@ -253,7 +253,7 @@ namespace nginz
 			var y = window.Bounds.Top + window.Bounds.Height / 2;
 
 			// Set new mouse position
-			Mouse.SetPosition(x, y);
+			Mouse.SetPosition (x, y);
 		}
 	}
 }
