@@ -90,11 +90,11 @@ namespace FlappyMascot
 		}
 
 		void ResetLayout (bool setFadeIn = false) {
-			btnStart.X = (Game.Resolution.Width / 2) - 100;
-			btnStart.Y = (Game.Resolution.Height / 2) - 25;
+			btnStart.X = (game.Resolution.Width / 2) - 100;
+			btnStart.Y = (game.Resolution.Height / 2) - 25;
 			btnStart.Transparency = 1f;
-			btnExit.X = (Game.Resolution.Width / 2) - 100;
-			btnExit.Y = (Game.Resolution.Height / 2) + 25;
+			btnExit.X = (game.Resolution.Width / 2) - 100;
+			btnExit.Y = (game.Resolution.Height / 2) + 25;
 			btnExit.Transparency = 1f;
 			fadeIn = setFadeIn;
 			fadeOut = false;

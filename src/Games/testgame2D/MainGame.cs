@@ -24,7 +24,7 @@ namespace testgame2D {
 			Content.ContentRoot = "../../assets";
 
 			var version = Assembly.GetEntryAssembly ().GetName ().Version;
-			batch = new SpriteBatch ();
+			batch = new SpriteBatch (this);
 			tex = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 
 			testSheet = new SpriteSheet2D (Content.Load<Texture2D> ("classical_ruin_tiles_1.png", TextureConfiguration.Nearest), 23, 16);

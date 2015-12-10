@@ -8,6 +8,7 @@ namespace FlappyMascot
 	public class GameScene : UIScene
 	{
 		readonly Game game;
+		readonly TubeGenerator generator;
 		readonly Bird bird;
 		readonly Label lblScore;
 		readonly Texture2D texMap;
@@ -18,10 +19,11 @@ namespace FlappyMascot
 
 		public GameScene () : base ("maingame") {
 			game = UIController.Instance.Game;
-			bird = new Bird (game);
+			generator = new TubeGenerator (game);
+			bird = new Bird (game, generator);
 			lblScore = new Label (150, 20, "Roboto Regular") {
 				X = 25,
-				Y = Game.Resolution.Height - 45,
+				Y = game.Resolution.Height - 45,
 				FontSize = 18f,
 				Text = "Score: 0"
 			};
@@ -44,6 +46,7 @@ namespace FlappyMascot
 			var scrollSpeed = 160f * (float) time.Elapsed.TotalSeconds;
 			backgroundLeft = Wrap (backgroundLeft - scrollSpeed, -texMap.Width);
 			bird.Update (time);
+			generator.Update (time);
 			base.Update (time);
 		}
 
@@ -59,6 +62,7 @@ namespace FlappyMascot
 			if (backgroundLeft < 640)
 				batch.Draw (texMap, new Vector2 (backgroundLeft + texMap.Width, 0), Color4.White);
 			bird.Draw (time, batch);
+			generator.Draw (time, batch);
 			base.Draw (time, batch);
 		}
 	}

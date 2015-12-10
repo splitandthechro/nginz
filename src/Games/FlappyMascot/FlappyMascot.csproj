@@ -41,6 +41,7 @@
     <Compile Include="Bird.cs" />
     <Compile Include="GameScene.cs" />
     <Compile Include="MenuScene.cs" />
+    <Compile Include="TubeGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

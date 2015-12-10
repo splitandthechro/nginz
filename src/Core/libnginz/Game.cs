@@ -6,6 +6,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace nginz
 {
@@ -68,9 +69,49 @@ namespace nginz
 		/// </summary>
 		public MouseBuffer Mouse;
 
+		/// <summary>
+		/// Whether the game is running in a scripted environment.
+		/// </summary>
 		public bool IsRunningInScriptedEnvironment;
+
+		/// <summary>
+		/// Whether the game has crashed.
+		/// </summary>
 		public bool HasCrashed;
+
+		/// <summary>
+		/// The error message.
+		/// </summary>
 		public string ErrorMessage;
+
+		/// <summary>
+		/// The resolution.
+		/// </summary>
+		public Resolution Resolution;
+
+		/// <summary>
+		/// Gets the bounds of the game window.
+		/// </summary>
+		/// <value>The bounds.</value>
+		public Rectangle Bounds {
+			get {
+				return new Rectangle (
+					x: 0,
+					y: 0,
+					width: Resolution.Width,
+					height: Resolution.Height
+				);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the content root directory.
+		/// </summary>
+		/// <value>The content root.</value>
+		public string ContentRoot {
+			get { return Content.ContentRoot; }
+			set { Content.ContentRoot = value; }
+		}
 
 		// No XML doc for those since they are not
 		// used anywhere except in the gameloop.
@@ -89,20 +130,26 @@ namespace nginz
 		double updateCurrentTime;
 		#endregion
 
+		#region OpenTK stuff
+
 		/// <summary>
 		/// The graphics mode.
 		/// </summary>
 		GraphicsMode graphicsMode;
 
 		/// <summary>
-		/// Game window and also the drawing surface.
-		/// </summary>
-		volatile NativeWindow window;
-
-		/// <summary>
 		/// Graphics context.
 		/// </summary>
 		GraphicsContext context;
+
+		#endregion
+
+		#region Volatiles
+
+		/// <summary>
+		/// Game window and also the drawing surface.
+		/// </summary>
+		volatile NativeWindow window;
 
 		/// <summary>
 		/// Whether the game should pause.
@@ -129,17 +176,12 @@ namespace nginz
 		/// </summary>
 		volatile bool updating;
 
+		/// <summary>
+		/// Whether the window is currently visible.
+		/// </summary>
 		volatile bool windowVisible;
 
-		/// <summary>
-		/// The resolution.
-		/// </summary>
-		public static Resolution Resolution;
-
-		/// <summary>
-		/// The content root.
-		/// </summary>
-		public string ContentRoot;
+		#endregion
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Game"/> class.
@@ -385,7 +427,7 @@ namespace nginz
 			Mouse = new MouseBuffer (window, this);
 
 			// Initialize the context manager
-			Content = new ContentManager (ContentRoot ?? AppDomain.CurrentDomain.BaseDirectory);
+			Content = new ContentManager (AppDomain.CurrentDomain.BaseDirectory);
 			RegisterProviders ();
 		}
 
@@ -502,7 +544,7 @@ namespace nginz
 			context.LoadAll ();
 
 			// Initialize the sprite batch
-			SpriteBatch = new SpriteBatch ();
+			SpriteBatch = new SpriteBatch (this);
 
 			// Bind the UI
 			UI.Bind (this);

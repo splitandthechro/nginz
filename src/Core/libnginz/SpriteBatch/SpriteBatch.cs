@@ -30,6 +30,11 @@ namespace nginz
 		const int MAX_INDICES = MAX_BATCHES * 6;
 
 		/// <summary>
+		/// The game.
+		/// </summary>
+		Game Game;
+
+		/// <summary>
 		/// The default texture.
 		/// </summary>
 		Texture2D Dot;
@@ -103,9 +108,12 @@ namespace nginz
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.SpriteBatch"/> class.
 		/// </summary>
+		/// <param name = "game">The game.</param>
 		/// <param name="shader">Shader.</param>
-		/// <param name="cam">Cam.</param>
-		public SpriteBatch (ShaderProgram shader = null) {
+		public SpriteBatch (Game game, ShaderProgram shader = null) {
+
+			// Set the game
+			Game = game;
 
 			// Set dot texture
 			Dot = new Texture2D (TextureConfiguration.Nearest, 1, 1);
@@ -149,7 +157,7 @@ namespace nginz
 			}
 
 			// Set camera
-			InternalCamera = new Camera (60f, Game.Resolution, 0, 16, type: ProjectionType.Orthographic);
+			InternalCamera = new Camera (60f, game.Resolution, 0, 16, type: ProjectionType.Orthographic);
 
 			// Set current texture
 			CurrentTexture = Dot;

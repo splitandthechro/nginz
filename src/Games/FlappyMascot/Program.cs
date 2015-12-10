@@ -6,7 +6,15 @@ namespace FlappyMascot
 	class MainClass
 	{
 		public static void Main (string[] args) {
-			var conf = GameConfiguration.Default;
+			var conf = new GameConfiguration {
+				Width = 640,
+				Height = 480,
+				FixedWindow = true,
+				FixedFramerate = false,
+				Vsync = VsyncMode.Off,
+				Fullscreen = false,
+				WindowTitle = "nginz :: Flappy Mascot"
+			};
 			using (var game = new MainGame (conf))
 				game.Run ();
 		}
