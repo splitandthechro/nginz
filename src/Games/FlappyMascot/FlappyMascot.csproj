@@ -42,6 +42,8 @@
     <Compile Include="GameScene.cs" />
     <Compile Include="MenuScene.cs" />
     <Compile Include="TubeGenerator.cs" />
+    <Compile Include="Tube.cs" />
+    <Compile Include="TubeInstance.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

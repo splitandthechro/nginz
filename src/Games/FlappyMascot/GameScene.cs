@@ -28,7 +28,7 @@ namespace FlappyMascot
 				Text = "Score: 0"
 			};
 			backgroundLeft = 0f;
-			texMap = game.Content.Load<Texture2D> ("flappymascot_map.png");
+			texMap = game.Content.Load<Texture2D> ("flappymascot_map_new.png");
 			Controls.Add (lblScore);
 		}
 

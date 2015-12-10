@@ -10,66 +10,43 @@ namespace FlappyMascot
 {
 	public class TubeGenerator : IUpdatable, IDrawable2D
 	{
-		class TubeInstance {
-			public Tube[] Tubes;
-			public bool IsInView () {
-				return Tubes.All (t => t.IsInView ());
-			}
-		}
-
-		class Tube {
-			public Texture2D Texture;
-			public Vector2 Position;
-			public Rectangle Bounds {
-				get {
-					return new Rectangle (
-						x: (int) Position.X,
-						y: (int) Position.Y,
-						width: Texture.Width,
-						height: Texture.Height
-					);
-				}
-			}
-			public bool IsInView () {
-				if (Position.X < (-Texture.Width) || Position.X > 640)
-					return false;
-				return true;
-			}
-		}
-
 		const int MAX_TUBES = 2;
 		const float TUBE_SPEED = .2f;
 		readonly Random rng;
 		readonly List<TubeInstance> tubes;
 		readonly Texture2D tube_top_large, tube_bottom_large;
+		readonly Texture2D tube_top_normal, tube_bottom_normal;
 		readonly Texture2D tube_top_small, tube_bottom_small;
 		readonly Game game;
 		int tubeCount;
+		int lastIndex;
 
 		public TubeGenerator (Game game) {
 			this.game = game;
 			rng = new Random ();
 			tubes = new List<TubeInstance> ();
-			tube_top_large = game.Content.Load<Texture2D> ("flappymascot_tube_top_large.png");
-			tube_bottom_large = game.Content.Load<Texture2D> ("flappymascot_tube_bottom_large.png");
-			tube_top_small = game.Content.Load<Texture2D> ("flappymascot_tube_top_small.png");
-			tube_bottom_small = game.Content.Load<Texture2D> ("flappymascot_tube_bottom_small.png");
+			tube_top_large = game.Content.Load<Texture2D> ("flappymascot_tube_large_top.png");
+			tube_bottom_large = game.Content.Load<Texture2D> ("flappymascot_tube_large_bottom.png");
+			tube_top_normal = game.Content.Load<Texture2D> ("flappymascot_tube_normal_top.png");
+			tube_bottom_normal = game.Content.Load<Texture2D> ("flappymascot_tube_normal_bottom.png");
+			tube_top_small = game.Content.Load<Texture2D> ("flappymascot_tube_small_top.png");
+			tube_bottom_small = game.Content.Load<Texture2D> ("flappymascot_tube_small_bottom.png");
+			lastIndex = -1;
 			AddTube ();
 		}
 
-		public bool CollidesWithTube (Rectangle bounds) {
+		public bool CollidesWithTube (RectangleF bounds) {
 			return tubes
 				.Any (instance => instance.Tubes
 					.Any (tube => tube.Bounds.IntersectsWith (bounds)));
 		}
 
 		void AddTube () {
-			// Spin the randomizer
-			for (var i = 0; i < 1000; i++)
-				rng.Next ();
 			if (tubeCount >= MAX_TUBES)
 				return;
-			var tubeIndex = rng.Next (0, 3);
+			int tubeIndex;
+			while ((tubeIndex = rng.Next (0, 5)) == lastIndex) { }
+			lastIndex = tubeIndex;
 			var tubePos1 = new Vector2 ();
 			var tubePos2 = new Vector2 ();
 			Texture2D tubeTex1 = null;
@@ -89,6 +66,22 @@ namespace FlappyMascot
 				tubePos2.Y = game.Resolution.Height - tubeTex2.Height;
 				break;
 			case 2:
+				tubeTex1 = tube_top_normal;
+				tubeTex2 = tube_bottom_small;
+				tubePos1.X = 640;
+				tubePos1.Y = 0;
+				tubePos2.X = 640;
+				tubePos2.Y = game.Resolution.Height - tubeTex2.Height;
+				break;
+			case 3:
+				tubeTex1 = tube_top_small;
+				tubeTex2 = tube_bottom_normal;
+				tubePos1.X = 640;
+				tubePos1.Y = 0;
+				tubePos2.X = 640;
+				tubePos2.Y = game.Resolution.Height - tubeTex2.Height;
+				break;
+			case 4:
 				tubeTex1 = tube_bottom_large;
 				tubePos1.X = 640;
 				tubePos1.Y = game.Resolution.Height - tubeTex1.Height;

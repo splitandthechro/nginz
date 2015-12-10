@@ -24,7 +24,7 @@ namespace FlappyMascot
 
 			// Load textures
 			texMenu = game.Content.Load<Texture2D> ("flappymascot_menu_background.png");
-			texMap = game.Content.Load<Texture2D> ("flappymascot_map.png");
+			texMap = game.Content.Load<Texture2D> ("flappymascot_map_new.png");
 			texOverlay = game.Content.Load<Texture2D> ("flappymascot_overlay.png");
 
 			// Create the layout

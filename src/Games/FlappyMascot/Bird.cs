@@ -33,7 +33,7 @@ namespace FlappyMascot
 		#region IUpdatable implementation
 
 		public void Update (GameTime time) {
-			ypos = MathHelper.Clamp (ypos + (drag * (float) time.Elapsed.TotalSeconds), (sheet [0].Height / 1.5f) / 2, game.Resolution.Height - ((sheet [0].Height / 1.5f) * 2));
+			ypos = MathHelper.Clamp (ypos + (drag * (float) time.Elapsed.TotalSeconds), 0, game.Resolution.Height - (sheet [0].Height * animator.Scale.Y));
 			drag = MathHelper.Clamp (drag + (750 * (float)time.Elapsed.TotalSeconds), MIN_DRAG, MAX_DRAG);
 			if (ydelta > 0) {
 				var xdrag = (drag * 3 * (float) time.Elapsed.TotalSeconds);
@@ -49,9 +49,9 @@ namespace FlappyMascot
 				mouseDown = false;
 			animator.Position.Y = ypos;
 			animator.Update (time);
-			var bounds = new Rectangle (
-				x: (int) animator.Position.X,
-				y: (int) animator.Position.Y,
+			var bounds = new RectangleF (
+				x: animator.Position.X,
+				y: animator.Position.Y,
 				width: sheet [0].Width,
 				height: sheet [0].Height
 			);
