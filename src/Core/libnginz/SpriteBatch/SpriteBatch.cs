@@ -600,7 +600,7 @@ namespace nginz
 				GL.BindVertexArray (abo);
 
 				// Upload vertices to the vertex buffer object
-				vbo.UploadData (dataArray: Vertices);
+				vbo.UploadData (dataArray:Vertices);
 
 				// Point the vertex buffer object to the right point
 				vbo.PointTo (Program.Attrib ("v_pos"), 2, 0);

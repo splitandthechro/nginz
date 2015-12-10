@@ -79,7 +79,6 @@
     <Compile Include="InterpolationMode.cs" />
     <Compile Include="Buffers\KeyboardBuffer.cs" />
     <Compile Include="Buffers\KeyState.cs" />
-    <Compile Include="Buffers\MouseBuffer.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="ModelLoaders\ObjFile.cs" />
     <Compile Include="ModelLoaders\ObjFaceGroup.cs" />
@@ -109,6 +108,7 @@
     <Compile Include="Fonts\GlyphInfo.cs" />
     <Compile Include="Fonts\RGBA.cs" />
     <Compile Include="Fonts\CodepointIterator.cs" />
+    <Compile Include="Fonts\MouseBuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

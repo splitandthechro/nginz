@@ -12,7 +12,7 @@ namespace nginz.Interop.StbImage
 			case PlatformID.Win32Windows:
 			case PlatformID.Win32NT:
 			case PlatformID.Win32S:
-				if (IntPtr.Size == 8)
+				if (Environment.Is64BitProcess)
 					return Win64.stbi_load (filename, ref x, ref y, ref n, req_comp);
 				else
 					return Win32.stbi_load (filename, ref x, ref y, ref n, req_comp);
@@ -20,7 +20,7 @@ namespace nginz.Interop.StbImage
 				if(Directory.Exists("/Library") &&
 					Directory.Exists("/System"))
 					return OSX.stbi_load(filename, ref x, ref y, ref n, req_comp);
-				if (IntPtr.Size == 8)
+				if (Environment.Is64BitProcess)
 					return Linux64.stbi_load (filename, ref x, ref y, ref n, req_comp);
 				else
 					return Linux32.stbi_load(filename, ref x, ref y, ref n, req_comp);
@@ -32,7 +32,7 @@ namespace nginz.Interop.StbImage
 			case PlatformID.Win32Windows:
 			case PlatformID.Win32NT:
 			case PlatformID.Win32S:
-				if (IntPtr.Size == 8)
+				if (Environment.Is64BitProcess)
 					Win64.stbi_image_free (data);
 				else
 					Win32.stbi_image_free (data);
@@ -41,7 +41,7 @@ namespace nginz.Interop.StbImage
 				if (Directory.Exists ("/Library") &&
 				   Directory.Exists ("/System")) {
 					OSX.stbi_image_free (data);
-				} else if (IntPtr.Size == 8)
+				} else if (Environment.Is64BitProcess)
 					Linux64.stbi_image_free (data);
 				else
 					Linux32.stbi_image_free (data);

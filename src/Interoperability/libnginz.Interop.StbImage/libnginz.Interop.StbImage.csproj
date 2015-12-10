@@ -6,6 +6,7 @@
     <ProjectGuid>{529EAA69-1806-4C6E-9D20-F5B79A0E515F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>nginz.Interop.StbImage</RootNamespace>
+    <AssemblyName>libnginz.Interop.StbImage</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -16,7 +17,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <AssemblyName>libnginz.Interop.StbImage</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -25,7 +25,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <AssemblyName>libnginz.StbInterop</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
