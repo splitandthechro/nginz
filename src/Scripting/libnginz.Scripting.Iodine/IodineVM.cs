@@ -89,7 +89,7 @@ namespace nginz.Scripting.Iodine
 		}
 
 		void RegisterAssembly (string path) {
-			var assembly = Assembly.Load (path);
+			var assembly = Assembly.LoadFrom (path);
 			Engine.RegisterAssembly (assembly);
 		}
 	}

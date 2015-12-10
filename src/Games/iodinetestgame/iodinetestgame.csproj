@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{993C6942-1AAC-4743-874C-542C3125ACB6}</ProjectGuid>
+    <ProjectGuid>{A468996A-B9FF-4F56-BEEA-1EC483E8882F}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>FlappyMascot</RootNamespace>
-    <AssemblyName>FlappyMascot</AssemblyName>
+    <RootNamespace>iodinetestgame</RootNamespace>
+    <AssemblyName>iodinetestgame</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -17,9 +17,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -28,21 +28,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
     <Reference Include="OpenTK">
       <HintPath>..\..\..\opentk-build\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainGame.cs" />
-    <Compile Include="GameScene.cs" />
-    <Compile Include="MenuScene.cs" />
-    <Compile Include="TubeGenerator.cs" />
-    <Compile Include="Tube.cs" />
-    <Compile Include="TubeInstance.cs" />
-    <Compile Include="Bird.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -53,6 +47,10 @@
     <ProjectReference Include="..\..\Core\libnginz.Common\libnginz.Common.csproj">
       <Project>{C6313A63-A0A2-46CC-8B0C-9D60C226F707}</Project>
       <Name>libnginz.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Scripting\libnginz.Scripting.Iodine\libnginz.Scripting.Iodine.csproj">
+      <Project>{4530496F-1981-4CC1-A0BB-790D0C6ED37F}</Project>
+      <Name>libnginz.Scripting.Iodine</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
