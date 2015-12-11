@@ -70,6 +70,11 @@ namespace nginz
 		public MouseBuffer Mouse;
 
 		/// <summary>
+		/// The sound manager.
+		/// </summary>
+		public SoundManager SoundManager;
+
+		/// <summary>
 		/// Whether the game is running in a scripted environment.
 		/// </summary>
 		public bool IsRunningInScriptedEnvironment;
@@ -426,6 +431,9 @@ namespace nginz
 			// Initialize the mouse buffer
 			Mouse = new MouseBuffer (window, this);
 
+			// Start the sound manager
+			SoundManager = new SoundManager();
+
 			// Initialize the context manager
 			Content = new ContentManager (AppDomain.CurrentDomain.BaseDirectory);
 			RegisterProviders ();
@@ -657,6 +665,9 @@ namespace nginz
 
 			// Wait till the game stops updating
 			while (updating) { }
+
+			// Dispose the sound manager
+			SoundManager.Dispose ();
 
 			// Dispose the window
 			window.Dispose ();

@@ -36,6 +36,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
+    <Reference Include="NVorbis">
+      <HintPath>..\..\..\nvorbis-build\NVorbis.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buffers\GLBuffer.cs" />
@@ -110,6 +113,13 @@
     <Compile Include="Fonts\CodepointIterator.cs" />
     <Compile Include="Fonts\MouseBuffer.cs" />
     <Compile Include="Audio\SoundManager.cs" />
+    <Compile Include="Audio\AudioDevice.cs" />
+    <Compile Include="Audio\StreamingAudio.cs" />
+    <Compile Include="Audio\AudioPlayState.cs" />
+    <Compile Include="Audio\DecoderFactory.cs" />
+    <Compile Include="Audio\IDecoder.cs" />
+    <Compile Include="Audio\VorbisDecoder.cs" />
+    <Compile Include="Audio\WaveDecoder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
