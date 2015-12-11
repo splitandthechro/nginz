@@ -646,6 +646,9 @@ namespace nginz
 
 			// Register an asset provider for TTF fonts.
 			Content.RegisterAssetHandler<Font> (typeof (FontTTFProvider));
+
+			// Register an asset provider for sounds.
+			Content.RegisterAssetHandler<Sound> (typeof (SoundProvider));
 		}
 
 		#region IDisposable implementation

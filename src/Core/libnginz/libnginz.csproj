@@ -120,6 +120,8 @@
     <Compile Include="Audio\IDecoder.cs" />
     <Compile Include="Audio\VorbisDecoder.cs" />
     <Compile Include="Audio\WaveDecoder.cs" />
+    <Compile Include="Audio\Sound.cs" />
+    <Compile Include="AssetProviders\SoundProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

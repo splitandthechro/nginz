@@ -5,76 +5,119 @@ using OpenTK.Audio.OpenAL;
 
 namespace nginz
 {
+	/// <summary>
+	/// Sound manager.
+	/// </summary>
 	public class SoundManager : IDisposable
 	{
-		AudioDevice device;
-		StreamingAudio musicStreamer;
-		IDecoder musicDecoder;
-		float musicVolume = 1f;
+
+		/// <summary>
+		/// The device.
+		/// </summary>
+		readonly AudioDevice Device;
+
+		/// <summary>
+		/// The music streamer.
+		/// </summary>
+		StreamingAudio MusicStreamer;
+
+		/// <summary>
+		/// The music decoder.
+		/// </summary>
+		IDecoder MusicDecoder;
+
+		/// <summary>
+		/// Whether the music should be looped.
+		/// </summary>
 		bool loopMusic = false;
 
+		/// <summary>
+		/// The music volume.
+		/// </summary>
+		float musicVolume = 1f;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="nginz.SoundManager"/> should loop music.
+		/// </summary>
+		/// <value><c>true</c> if music should be looped; otherwise, <c>false</c>.</value>
 		public bool LoopMusic {
 			get {
 				return loopMusic;
-			} set {
+			}
+			set {
 				loopMusic = value;
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the music volume.
+		/// </summary>
+		/// <value>The music volume.</value>
 		public float MusicVolume {
 			get {
 				return musicVolume;
-			} set {
+			}
+			set {
 				musicVolume = value;
-				if (musicStreamer != null)
-					musicStreamer.Volume = MusicVolume;
+				if (MusicStreamer != null)
+					MusicStreamer.Volume = MusicVolume;
 			}
 		}
 
-		public SoundManager () 
-		{
-			device = new AudioDevice ();
-		}
-
-		public void PlayMusic(string filename)
-		{
-			StopMusic ();
-			var stream = File.OpenRead (filename);
-			musicDecoder = DecoderFactory.GetDecoderFromStream (stream);
-			musicStreamer = new StreamingAudio (device, musicDecoder.Format, musicDecoder.SampleRate);
-			musicStreamer.BufferNeeded += (instance, buffer) => musicDecoder.Read(buffer.Length, buffer);
-			musicStreamer.PlaybackFinished += (sender, e) => {
-				if(loopMusic)
-					PlayMusic(filename);
-				else {
-					musicStreamer.Dispose();
-					musicDecoder.Dispose();
-					musicStreamer = null;
-				}
-			};
-			musicStreamer.Play ();
-		}
-
-		public void StopMusic()
-		{
-			if(MusicState == AudioPlayState.Playing) {
-				musicStreamer.Stop ();
-				musicStreamer.Dispose();
-				musicDecoder.Dispose();
-				musicStreamer = null;
-			}
-		}
-
+		/// <summary>
+		/// Gets the state of the music.
+		/// </summary>
+		/// <value>The state of the music.</value>
 		public AudioPlayState MusicState {
 			get {
-				return musicStreamer == null ? AudioPlayState.Stopped : musicStreamer.GetState ();
+				var state = MusicStreamer == null
+					? AudioPlayState.Stopped
+					: MusicStreamer.GetState ();
+				return state;
 			}
 		}
 
-		public void Dispose()
-		{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="nginz.SoundManager"/> class.
+		/// </summary>
+		public SoundManager () {
+			Device = new AudioDevice ();
+		}
+
+		public void PlayMusic (Sound sound) {
+			PlayMusic (sound.Filename);
+		}
+
+		public void PlayMusic (string filename) {
 			StopMusic ();
-			device.Dispose ();
+			var stream = File.OpenRead (filename);
+			MusicDecoder = DecoderFactory.GetDecoderFromStream (stream);
+			MusicStreamer = new StreamingAudio (Device, MusicDecoder.Format, MusicDecoder.SampleRate);
+			MusicStreamer.BufferNeeded += (instance, buffer) => MusicDecoder.Read (buffer.Length, buffer);
+			MusicStreamer.PlaybackFinished += (sender, e) => {
+				if (loopMusic)
+					PlayMusic (filename);
+				else {
+					MusicStreamer.Dispose ();
+					MusicDecoder.Dispose ();
+					MusicStreamer = null;
+				}
+			};
+			MusicStreamer.Play ();
+		}
+
+		public void StopMusic () {
+			if (MusicState == AudioPlayState.Playing) {
+				MusicStreamer.Stop ();
+				MusicStreamer.Dispose ();
+				MusicDecoder.Dispose ();
+				MusicStreamer = null;
+			}
+		}
+
+		public void Dispose () {
+			StopMusic ();
+			Device.Dispose ();
 		}
 	}
 }
