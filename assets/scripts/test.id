@@ -1,9 +1,21 @@
+use Pipeline from nginz.Compatibility.Iodine;
+use Vector2 from OpenTK;
+use Color4 from OpenTK.Graphics;
+
+tex = null;
+
 func initialize (game) {
 	print ("Hello from Iodine!");
+	pipeline = Pipeline (game);
+	pipeline.SetRoot ("../../assets");
+	tex = pipeline.LoadTexture2D ("nginz.png");
 }
 
 func update (time) {
 }
 
 func draw (time, batch) {
+	batch.Begin ();
+	batch.Draw (tex, Vector2.Zero, Color4.White, 0, 0);
+	batch.End ();
 }

@@ -178,7 +178,14 @@ namespace nginz
 		/// <summary>
 		/// Begin batching sprites.
 		/// </summary>
-		public void Begin (Camera camera = null) {
+		public void Begin () {
+			Begin (null);
+		}
+
+		/// <summary>
+		/// Begin batching sprites.
+		/// </summary>
+		public void Begin (Camera camera) {
 
 			// Throw if the sprite batch is active
 			if (active)

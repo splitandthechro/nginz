@@ -23,12 +23,14 @@ namespace iodinetestgame
 		}
 
 		protected override void Update (GameTime time) {
-			GL.ClearColor (Color4.White);
-			GL.Clear (ClearBufferMask.ColorBufferBit);
+			iodine.Call ("update", time);
 			base.Update (time);
 		}
 
 		protected override void Draw (GameTime time) {
+			GL.ClearColor (Color4.White);
+			GL.Clear (ClearBufferMask.ColorBufferBit);
+			iodine.Call ("draw", time, SpriteBatch);
 			base.Draw (time);
 		}
 	}

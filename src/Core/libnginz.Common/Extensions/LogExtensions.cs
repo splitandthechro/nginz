@@ -8,6 +8,14 @@ namespace nginz.Common
 	/// </summary>
 	public static class LogExtensions
 	{
+		public static bool IsRunningInScriptedEnvironment;
+		static string LastErrorMessage;
+
+		static LogExtensions () {
+			IsRunningInScriptedEnvironment = false;
+			LastErrorMessage = string.Empty;
+		}
+
 		public static void Log<T> (this T dummy, string format, params object[] args)
 			where T : class, ICanLog {
 			Console.WriteLine ("[{0}] {1}", dummy.GetType ().Name, string.Format (format, args));
@@ -23,7 +31,14 @@ namespace nginz.Common
 		public static void Throw<T> (this T dummy, string format, params object[] args)
 			where T : class, ICanThrow {
 			var message = string.Format (format, args);
-			throw new Exception (string.Format ("[{0}] {1}", dummy.GetType ().Name, message));
+			var formattedMessage = string.Format ("[{0}] {1}", dummy.GetType ().Name, message);
+			if (IsRunningInScriptedEnvironment) {
+				if (LastErrorMessage != formattedMessage)
+					Console.Error.WriteLine (formattedMessage);
+				LastErrorMessage = formattedMessage;
+			}
+			else
+				throw new Exception (formattedMessage);
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using Iodine.Engine;
+using Iodine.Runtime;
 using nginz.Common;
 
 namespace nginz.Scripting.Iodine
@@ -62,15 +63,23 @@ namespace nginz.Scripting.Iodine
 		}
 
 		public object Call (string name, params object[] args) {
+			LogExtensions.IsRunningInScriptedEnvironment = true;
 			try {
 				var result = Engine.Call (name, args);
+				var castedResult = (object) result;
 				currentError = string.Empty;
-				return (object) result;
+				return castedResult;
+			} catch (UnhandledIodineExceptionException e) {
+				var message = e.OriginalException.GetAttribute ("message");
+				if (currentError != message.ToString ())
+					this.Log (message.ToString ());
+				currentError = message.ToString ();
 			} catch (Exception e) {
 				if (currentError != e.Message)
 					this.Log (e.Message);
 				currentError = e.Message;
 			}
+			LogExtensions.IsRunningInScriptedEnvironment = false;
 			return null;
 		}
 
@@ -86,6 +95,7 @@ namespace nginz.Scripting.Iodine
 			RegisterAssembly ("OpenTK.dll");
 			RegisterAssembly ("libnginz.dll");
 			RegisterAssembly ("libnginz.Common.dll");
+			RegisterAssembly ("libnginz.Compatibility.Iodine.dll");
 		}
 
 		void RegisterAssembly (string path) {
