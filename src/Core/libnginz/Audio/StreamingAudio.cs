@@ -7,18 +7,21 @@ namespace nginz
 {
 	class StreamingAudio
 	{
-		public delegate int BufferNeededHandler(StreamingAudio instance, byte[] buffer); 
+		public delegate int BufferNeededHandler (StreamingAudio instance, byte[] buffer);
+		public delegate void PlaybackFinishedHandler (object sender, bool finished);
 		public event BufferNeededHandler BufferNeeded;
-		public event EventHandler<bool> PlaybackFinished;
-		ALFormat bufferFormat;
-		int sampleRate;
-		int sourceId;
-		int[] bufferIds;
-		byte[] buffer = new byte[4096];
+		public event PlaybackFinishedHandler PlaybackFinished;
 
+		readonly int sourceId;
+		readonly int[] bufferIds;
+
+		int sampleRate;
+		byte[] buffer = new byte[4096];
+		float volume = 1f;
+
+		ALFormat bufferFormat;
 		AudioPlayState currentState = AudioPlayState.Stopped;
 		AudioDevice device;
-		float volume = 1f;
 
 		public float Volume {
 			get {

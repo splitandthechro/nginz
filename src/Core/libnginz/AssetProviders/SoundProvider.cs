@@ -3,6 +3,7 @@ using nginz.Common;
 
 namespace nginz
 {
+	[CLSCompliant (false)]
 	public class SoundProvider : AssetHandler<Sound>
 	{
 		public SoundProvider (ContentManager content)

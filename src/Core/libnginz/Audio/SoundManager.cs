@@ -27,6 +27,11 @@ namespace nginz
 		IDecoder MusicDecoder;
 
 		/// <summary>
+		/// The file stream.
+		/// </summary>
+		FileStream Stream;
+
+		/// <summary>
 		/// Whether the music should be looped.
 		/// </summary>
 		bool loopMusic = false;
@@ -90,8 +95,8 @@ namespace nginz
 
 		public void PlayMusic (string filename) {
 			StopMusic ();
-			var stream = File.OpenRead (filename);
-			MusicDecoder = DecoderFactory.GetDecoderFromStream (stream);
+			Stream = File.OpenRead (filename);
+			MusicDecoder = DecoderFactory.GetDecoderFromStream (Stream);
 			MusicStreamer = new StreamingAudio (Device, MusicDecoder.Format, MusicDecoder.SampleRate);
 			MusicStreamer.BufferNeeded += (instance, buffer) => MusicDecoder.Read (buffer.Length, buffer);
 			MusicStreamer.PlaybackFinished += (sender, e) => {
@@ -112,6 +117,12 @@ namespace nginz
 				MusicStreamer.Dispose ();
 				MusicDecoder.Dispose ();
 				MusicStreamer = null;
+				if (Stream != null) {
+					try {
+						Stream.Dispose ();
+					// Analysis disable once EmptyGeneralCatchClause
+					} catch { }
+				}
 			}
 		}
 
