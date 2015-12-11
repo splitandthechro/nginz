@@ -71,10 +71,6 @@ namespace nginz
 				param: (int) magfilter
 			);
 
-			// Create a mipmap if requested
-			if (config.Mipmap)
-				GL.GenerateMipmap (GenerateMipmapTarget.Texture2D);
-
 			// Create the texture
 			GL.TexImage2D (
 				target: TextureTarget.Texture2D,
@@ -87,6 +83,10 @@ namespace nginz
 				type: PixelType.UnsignedByte,
 				pixels: IntPtr.Zero
 			);
+
+			// Create a mipmap if requested
+			if (config.Mipmap)
+				GL.GenerateMipmap (GenerateMipmapTarget.Texture2D);
 
 			Unbind (TextureUnit.Texture0);
 		}

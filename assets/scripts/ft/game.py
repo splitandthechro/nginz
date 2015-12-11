@@ -22,7 +22,7 @@ def loadcontent (_game, _content):
 
 def internalloadcontent ():
     global game, content, sheet, animator, tex_fireball
-    tex_fireball = content.Load [Texture2D] ("ft/fireball.png")
+    tex_fireball = content.Load [Texture2D] ("ft/fireball.png", TextureConfiguration.LinearMipmap)
     sheet = SpriteSheet2D (tex_fireball, 8, 1)
     animator = Animator (sheet, 8)
     animator.DurationInMilliseconds = 750
