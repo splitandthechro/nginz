@@ -33,8 +33,7 @@ namespace Iodine.Engine
 {
 	abstract class TypeMapping
 	{
-		public abstract IodineObject ConvertFrom (object obj);
-		public abstract object ConvertFrom (IodineObject obj);
+		public abstract IodineObject ConvertFrom (TypeRegistry registry, object obj);
+		public abstract object ConvertFrom (TypeRegistry registry, IodineObject obj);
 	}
 }
-

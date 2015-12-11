@@ -193,6 +193,7 @@
     <Compile Include="Engine\TypeMappings\FloatTypeMapping.cs" />
     <Compile Include="Engine\TypeMappings\CharTypeMapping.cs" />
     <Compile Include="Engine\TypeMappings\ObjectTypeMapping.cs" />
+    <Compile Include="Engine\TypeMappings\ArrayTypeMapping.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

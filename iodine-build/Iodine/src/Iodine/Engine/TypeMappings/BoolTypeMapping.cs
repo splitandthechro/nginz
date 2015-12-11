@@ -34,16 +34,15 @@ namespace Iodine.Engine
 {
 	class BoolTypeMapping : TypeMapping
 	{
-		public override object ConvertFrom (IodineObject obj)
+		public override object ConvertFrom (TypeRegistry registry, IodineObject obj)
 		{
 			IodineBool boolean = obj as IodineBool;
 			return boolean.Value;
 		}
 
-		public override IodineObject ConvertFrom (object obj)
+		public override IodineObject ConvertFrom (TypeRegistry registry, object obj)
 		{
 			return ((IodineBool)obj).Value ? IodineBool.True : IodineBool.False;
 		}
 	}
 }
-

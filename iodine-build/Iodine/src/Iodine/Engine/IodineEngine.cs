@@ -100,7 +100,7 @@ namespace Iodine.Engine
 		/// <param name="assembly">The assembly.</param>
 		public void RegisterAssembly (Assembly assembly)
 		{
-			var classes = assembly.GetExportedTypes ().Where (p => p.IsClass);
+			var classes = assembly.GetExportedTypes ().Where (p => p.IsClass || p.IsValueType);
 			foreach (Type type in classes) {
 				if (type.Namespace != "") {
 					string moduleName = type.Namespace.Contains (".") ? 
@@ -122,7 +122,7 @@ namespace Iodine.Engine
 		/// <summary>
 		/// Executes a string of Iodine source code
 		/// </summary>
-		/// <returns>The last object evaluated during the execute of the source.</returns>
+		/// <returns>The last object evaluated during the execution of the source.</returns>
 		/// <param name="source">A string containing valid Iodine code..</param>
 		public dynamic DoString (string source)
 		{
@@ -132,6 +132,11 @@ namespace Iodine.Engine
 			return null;
 		}
 
+		/// <summary>
+		/// Executes and loads an Iodine source file
+		/// </summary>
+		/// <returns>Last object evaluated during the execution of the file</returns>
+		/// <param name="file">File path.</param>
 		public dynamic DoFile (string file)
 		{
 			SourceUnit line = SourceUnit.CreateFromFile (file);
@@ -140,6 +145,11 @@ namespace Iodine.Engine
 			return null;
 		}
 
+		/// <summary>
+		/// Calls an Iodine function in the current module
+		/// </summary>
+		/// <param name="name">Function name.</param>
+		/// <param name="args">Arguments.</param>
 		public dynamic Call (string name, params object[] args)
 		{
 			IodineObject[] arguments = new IodineObject[args.Length];

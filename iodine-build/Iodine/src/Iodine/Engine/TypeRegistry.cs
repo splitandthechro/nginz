@@ -77,13 +77,26 @@ namespace Iodine.Engine
 
 			Type key = obj.GetType ();
 
+			if (key.IsArray) {
+				return ConvertFromArray ((object[])obj);
+			}
+
 			TypeRegistryEntry entry = typeMappings.Where (p => p.NativeType.IsAssignableFrom (key))
 				.FirstOrDefault ();
 
 			if (entry != null) {
-				return entry.Mapping.ConvertFrom (obj);
+				return entry.Mapping.ConvertFrom (this, obj);
 			}
 			return null;
+		}
+
+		private IodineList ConvertFromArray (object[] array)
+		{
+			IodineObject[] iodineObjects = new IodineObject[array.Length];
+			for (int i = 0; i < array.Length; i++) {
+				iodineObjects [i] = ConvertToIodineObject (array [i]);
+			}
+			return new IodineList (iodineObjects);
 		}
 
 		public object ConvertToNativeObject (IodineObject obj)
@@ -94,18 +107,17 @@ namespace Iodine.Engine
 
 			IodineTypeDefinition key = obj.TypeDef;
 
-			TypeRegistryEntry entry = typeMappings.Where (p => p.IodineType == key).FirstOrDefault ();
+			TypeRegistryEntry entry = typeMappings.FirstOrDefault (p => p.IodineType == key);
 
 			if (entry != null) {
-				return entry.Mapping.ConvertFrom (obj);
+				return entry.Mapping.ConvertFrom (this, obj);
 			}
 			return null;
 		}
 
 		public bool TypeMappingExists (IodineTypeDefinition from, Type to)
 		{
-			TypeRegistryEntry entry = typeMappings.Where (p => p.IodineType == from &&
-				p.NativeType.IsAssignableFrom (to)).FirstOrDefault ();
+			TypeRegistryEntry entry = typeMappings.FirstOrDefault (p => p.IodineType == from && p.NativeType.IsAssignableFrom (to));
 			return entry != null;
 		}
 
@@ -117,14 +129,12 @@ namespace Iodine.Engine
 
 			IodineTypeDefinition key = obj.TypeDef;
 
-			TypeRegistryEntry entry = typeMappings.Where (p => p.IodineType == key &&
-				p.NativeType == expectedType).FirstOrDefault ();
+			TypeRegistryEntry entry = typeMappings.FirstOrDefault (p => p.IodineType == key && p.NativeType == expectedType);
 
 			if (entry != null) {
-				return entry.Mapping.ConvertFrom (obj);
+				return entry.Mapping.ConvertFrom (this, obj);
 			}
 			return null;
 		}
 	}
 }
-

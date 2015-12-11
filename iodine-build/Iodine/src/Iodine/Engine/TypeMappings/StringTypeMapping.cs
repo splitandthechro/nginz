@@ -34,12 +34,12 @@ namespace Iodine.Engine
 {
 	class StringTypeMapping : TypeMapping
 	{
-		public override object ConvertFrom (IodineObject obj)
+		public override object ConvertFrom (TypeRegistry registry, IodineObject obj)
 		{
 			return ((IodineString)obj).Value;
 		}
 
-		public override IodineObject ConvertFrom (object obj)
+		public override IodineObject ConvertFrom (TypeRegistry registry, object obj)
 		{
 			return new IodineString (obj.ToString ());
 		}

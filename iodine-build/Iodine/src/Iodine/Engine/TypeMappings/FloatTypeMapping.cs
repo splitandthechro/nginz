@@ -34,12 +34,12 @@ namespace Iodine.Engine
 {
 	class FloatTypeMapping : TypeMapping
 	{
-		public override object ConvertFrom (IodineObject obj)
+		public override object ConvertFrom (TypeRegistry registry, IodineObject obj)
 		{
 			return (Single)((IodineFloat)obj).Value;
 		}
 
-		public override IodineObject ConvertFrom (object obj)
+		public override IodineObject ConvertFrom (TypeRegistry registry, object obj)
 		{
 			return new IodineFloat (Convert.ToDouble (obj));
 		}

@@ -34,15 +34,14 @@ namespace Iodine.Engine
 {
 	class CharTypeMapping : TypeMapping
 	{
-		public override object ConvertFrom (IodineObject obj)
+		public override object ConvertFrom (TypeRegistry registry, IodineObject obj)
 		{
 			return Convert.ToChar (obj.ToString ());
 		}
 
-		public override IodineObject ConvertFrom (object obj)
+		public override IodineObject ConvertFrom (TypeRegistry registry, object obj)
 		{
 			return new IodineString (Convert.ToChar (obj).ToString ());
 		}
 	}
 }
-

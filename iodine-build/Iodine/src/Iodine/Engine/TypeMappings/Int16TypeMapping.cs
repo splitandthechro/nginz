@@ -34,12 +34,12 @@ namespace Iodine.Engine
 {
 	class Int16TypeMapping : TypeMapping
 	{
-		public override object ConvertFrom (IodineObject obj)
+		public override object ConvertFrom (TypeRegistry registry, IodineObject obj)
 		{
 			return (Int16)((IodineInteger)obj).Value;
 		}
 
-		public override IodineObject ConvertFrom (object obj)
+		public override IodineObject ConvertFrom (TypeRegistry registry, object obj)
 		{
 			return new IodineInteger (Convert.ToInt64 (obj));
 		}
