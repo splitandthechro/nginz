@@ -7,6 +7,8 @@ namespace FlappyMascot
 {
 	public class GameScene : UIScene
 	{
+		const float DAYNIGHT_CYCLE_SPEED = 0.0025f;
+		const float DAYNIGHT_CYCLE_MIN = 0.25f;
 		readonly Game game;
 		readonly TubeGenerator generator;
 		readonly Bird bird;
@@ -14,8 +16,8 @@ namespace FlappyMascot
 		readonly Texture2D texMap;
 		int score;
 		float scoreDelta;
-
 		float backgroundLeft;
+		float blueTint;
 
 		public GameScene () : base ("maingame") {
 			game = UIController.Instance.Game;
@@ -28,11 +30,13 @@ namespace FlappyMascot
 				Text = "Score: 0"
 			};
 			backgroundLeft = 0f;
+			blueTint = 0f;
 			texMap = game.Content.Load<Texture2D> ("flappymascot_map_new.png");
 			Controls.Add (lblScore);
 		}
 
 		public override void Update (GameTime time) {
+			blueTint = MathHelper.Clamp (blueTint + (DAYNIGHT_CYCLE_SPEED * (float) time.Elapsed.TotalSeconds), 0, DAYNIGHT_CYCLE_MIN);
 			scoreDelta += 2f * (float) time.Elapsed.TotalSeconds;
 			if (scoreDelta > 1f) {
 				score += 1;
@@ -58,9 +62,10 @@ namespace FlappyMascot
 		}
 
 		public override void Draw (GameTime time, SpriteBatch batch) {
-			batch.Draw (texMap, new Vector2 (backgroundLeft, 0), Color4.White);
+			var tint = new Color4 (1 - (blueTint * 3f), 1f - (blueTint * 2f), 1f - blueTint, 1);
+			batch.Draw (texMap, new Vector2 (backgroundLeft, 0), tint);
 			if (backgroundLeft < 640)
-				batch.Draw (texMap, new Vector2 (backgroundLeft + texMap.Width, 0), Color4.White);
+				batch.Draw (texMap, new Vector2 (backgroundLeft + texMap.Width, 0), tint);
 			bird.Draw (time, batch);
 			generator.Draw (time, batch);
 			base.Draw (time, batch);

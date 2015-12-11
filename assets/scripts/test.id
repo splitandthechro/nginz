@@ -16,6 +16,6 @@ func update (time) {
 
 func draw (time, batch) {
 	batch.Begin ();
-	batch.Draw (tex, Vector2 (0, 0), Color4.White);
+	batch.Draw (tex, Vector2 (0, 0), Color4.White, Vector2.One, 0);
 	batch.End ();
 }
