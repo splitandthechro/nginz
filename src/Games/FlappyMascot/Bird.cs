@@ -10,9 +10,9 @@ namespace FlappyMascot
 	{
 		const int MAX_CLICKS = 2;
 		const float CLICK_COUNT_RESET = 400f;
-		const float MAX_DRAG = 300;
+		const float MAX_DRAG = 500;
 		const float MIN_DRAG = 75;
-		const float UP_VELOCITY = 0.4f;
+		const float UP_VELOCITY = 0.5f;
 		readonly Game game;
 		readonly SpriteSheet2D sheet;
 		readonly TubeGenerator generator;

@@ -17,6 +17,9 @@ namespace iodinetestgame
 		protected override void Initialize () {
 			ContentRoot = "../../assets";
 			iodine = new IodineVM (this);
+			var script = Content.Load<IodineScript> ("test");
+			iodine.LoadLive (script);
+			iodine.Call ("initialize", this);
 		}
 
 		protected override void Update (GameTime time) {

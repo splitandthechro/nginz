@@ -7,8 +7,8 @@ namespace iodinetestgame
 	{
 		public static void Main (string[] args) {
 			var conf = new GameConfiguration {
-				Width = 1280,
-				Height = 720,
+				Width = 640,
+				Height = 480,
 				FixedFramerate = false,
 				Fullscreen = false,
 				FixedWindow = true,

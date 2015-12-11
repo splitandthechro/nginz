@@ -1,0 +1,9 @@
+func initialize (game) {
+	print ("Hello from Iodine!");
+}
+
+func update (time) {
+}
+
+func draw (time, batch) {
+}

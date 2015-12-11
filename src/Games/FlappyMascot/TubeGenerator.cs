@@ -11,7 +11,7 @@ namespace FlappyMascot
 	public class TubeGenerator : IUpdatable, IDrawable2D
 	{
 		const int MAX_TUBES = 2;
-		const float TUBE_SPEED = .2f;
+		const float TUBE_SPEED = .4f;
 		readonly Random rng;
 		readonly List<TubeInstance> tubes;
 		readonly Texture2D tube_top_large, tube_bottom_large;

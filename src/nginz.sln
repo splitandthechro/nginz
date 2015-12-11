@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Scripting.Iodine",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Scripting.Python", "Scripting\libnginz.Scripting.Python\libnginz.Scripting.Python.csproj", "{13523E0E-ADEC-4E45-9EB2-80A402934F2A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compatibility", "Compatibility", "{FE32E126-CC3F-4BD0-8DEC-D6AB6E0DB199}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
