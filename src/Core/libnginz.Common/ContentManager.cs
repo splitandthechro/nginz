@@ -22,24 +22,28 @@ namespace nginz.Common
 		public string ContentRoot {
 			get { return contentRoot; }
 			set {
-				contentRoot = value
-					.Replace ('/', Path.DirectorySeparatorChar)
-					.Replace ('\\', Path.DirectorySeparatorChar);
+				contentRoot = NormalizePath (value);
 			}
 		}
 
 		/// <summary>
-		/// The asset providers.
+		/// The asset handlers.
 		/// </summary>
-		public Dictionary<Type, object> AssetProviders;
+		public Dictionary<Type, object> AssetHandlers;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Common.ContentManager"/> class.
 		/// </summary>
 		/// <param name="root">Root.</param>
 		public ContentManager (string root = "") {
-			AssetProviders = new Dictionary<Type, object> ();
+			AssetHandlers = new Dictionary<Type, object> ();
 			ContentRoot = root;
+		}
+
+		public string NormalizePath (string path) {
+			return path
+				.Replace ('/', Path.DirectorySeparatorChar)
+				.Replace ('\\', Path.DirectorySeparatorChar);
 		}
 
 		/// <summary>
@@ -47,8 +51,8 @@ namespace nginz.Common
 		/// </summary>
 		/// <param name="type">Type.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void RegisterAssetProvider<T> (Type type) {
-			AssetProviders[typeof (T)] = Activator.CreateInstance (type, new object[] { this });
+		public void RegisterAssetHandler<T> (Type type) {
+			AssetHandlers[typeof (T)] = Activator.CreateInstance (type, new object[] { this });
 		}
 
 		/// <summary>
@@ -61,10 +65,10 @@ namespace nginz.Common
 			where T : IAsset {
 
 			// Check if there is an asset provider for the specified asset type
-			if (AssetProviders.ContainsKey (typeof (T))) {
+			if (AssetHandlers.ContainsKey (typeof (T))) {
 
 				// Get the asset provider
-				var provider = (AssetProvider<T>) AssetProviders[typeof (T)];
+				var provider = (AssetHandler<T>) AssetHandlers[typeof (T)];
 
 				// Load the asset
 				return LoadFrom<T> (provider.GetAssetPath (asset), args);
@@ -89,10 +93,10 @@ namespace nginz.Common
 			where T : IAsset {
 
 			// Check if there is an asset provider for the specified asset type
-			if (AssetProviders.ContainsKey (typeof (T))) {
+			if (AssetHandlers.ContainsKey (typeof (T))) {
 
 				// Get the asset provider
-				var provider = (AssetProvider<T>) AssetProviders[typeof (T)];
+				var provider = (AssetHandler<T>) AssetHandlers[typeof (T)];
 
 				// Log that the asset was loaded
 				// this.Log ("Loaded asset {0} as {1}", Path.GetFileName (path), typeof (T).Name);
@@ -107,6 +111,34 @@ namespace nginz.Common
 			// Return the default value for the specified asset type
 			// Usually null for reference types
 			return default (T);
+		}
+
+		public void Save<T> (T asset, string assetPath)
+			where T : IAsset {
+
+			// Check if there is an asset provider for the specified asset type
+			if (AssetHandlers.ContainsKey (typeof(T))) {
+
+				// Get the asset provider
+				var provider = (AssetHandler<T>) AssetHandlers[typeof (T)];
+
+				// Save the asset
+				SaveTo<T> (asset, provider.GetAssetPath (assetPath));
+				return;
+			}
+
+			// Log that the asset type is unsupported
+			this.Log ("Unsupported {0} asset type!", typeof(T).Name);
+		}
+
+		public void SaveTo<T> (T asset, string assetPath)
+			where T : IAsset {
+
+			// Check if there is an asset provider for the specified asset type
+			if (AssetHandlers.ContainsKey (typeof(T))) {
+				var provider = (AssetHandler<T>) AssetHandlers [typeof(T)];
+				provider.Save (asset, assetPath);
+			}
 		}
 	}
 }

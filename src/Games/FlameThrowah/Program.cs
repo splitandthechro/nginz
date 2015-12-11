@@ -7,8 +7,8 @@ namespace FlameThrowah
 	{
 		public static void Main (string[] args) {
 			var conf = new GameConfiguration {
-				Width = 1000,
-				Height = 1000,
+				Width = 480,
+				Height = 480,
 				FixedFramerate = false,
 				FixedWindow = true,
 				WindowTitle = "nginz :: FlameThrowah"

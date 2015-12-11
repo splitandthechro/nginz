@@ -8,7 +8,7 @@ namespace nginz
 	/// Texture2D asset provider.
 	/// </summary>
 	[CLSCompliant (false)]
-	public class Texture2DProvider : AssetProvider<Texture2D>
+	public class Texture2DProvider : AssetHandler<Texture2D>
 	{
 
 		/// <summary>

@@ -4,7 +4,7 @@ using nginz.Common;
 namespace nginz
 {
 	[CLSCompliant (false)]
-	public class ShaderProvider<TShader> : AssetProvider<TShader> where TShader: BasicShader
+	public class ShaderProvider<TShader> : AssetHandler<TShader> where TShader: BasicShader
 	{
 		public ShaderProvider (ContentManager manager)
 			: base (manager, "shaders") {

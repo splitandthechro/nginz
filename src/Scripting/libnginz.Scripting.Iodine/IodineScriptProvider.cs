@@ -3,7 +3,7 @@ using nginz.Common;
 
 namespace nginz.Scripting.Iodine
 {
-	public class IodineScriptProvider : AssetProvider<IodineScript>
+	public class IodineScriptProvider : AssetHandler<IodineScript>
 	{
 		public IodineScriptProvider (ContentManager manager)
 			: base (manager, "scripts") { }

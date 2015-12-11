@@ -2,7 +2,7 @@
 
 namespace nginz.Common
 {
-	public class ScriptProvider : AssetProvider<Script>
+	public class ScriptProvider : AssetHandler<Script>
 	{
 		public ScriptProvider (ContentManager manager)
 			: base (manager, "scripts") { }

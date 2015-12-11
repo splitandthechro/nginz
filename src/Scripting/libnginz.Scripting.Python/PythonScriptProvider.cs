@@ -3,7 +3,7 @@ using nginz.Common;
 
 namespace nginz.Scripting.Python
 {
-	public class PythonScriptProvider : AssetProvider<PythonScript>
+	public class PythonScriptProvider : AssetHandler<PythonScript>
 	{
 		public PythonScriptProvider (ContentManager manager)
 			: base (manager, "scripts") { }

@@ -17,7 +17,7 @@ namespace nginz.Scripting.Python
 				: assetRoot;
 			Python = new PythonVM ();
 			Content = new ContentManager (root);
-			Content.RegisterAssetProvider<PythonScript> (typeof(PythonScriptProvider));
+			Content.RegisterAssetHandler<PythonScript> (typeof(PythonScriptProvider));
 			exitLoop = false;
 		}
 

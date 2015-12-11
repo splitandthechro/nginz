@@ -1,0 +1,33 @@
+{
+  "Lookup": {
+    "Textures": [
+      {
+        "texname": "nginz_logo",
+        "tex": {
+          "TextureId": 2,
+          "Width": 640,
+          "Height": 480,
+          "Bounds": "0, 0, 640, 480"
+        },
+        "texindex": 0
+      }
+    ]
+  },
+  "Name": "ft_test",
+  "Fragments": [
+    {
+      "texid": 0,
+      "texpos": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "texid": 0,
+      "texpos": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    }
+  ]
+}

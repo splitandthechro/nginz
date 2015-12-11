@@ -8,7 +8,7 @@ namespace nginz
 {
 	
 	[CLSCompliant (false)]
-	public class ShaderProgramProvider : AssetProvider<ShaderProgram>
+	public class ShaderProgramProvider : AssetHandler<ShaderProgram>
 	{
 		public ShaderProgramProvider (ContentManager manager)
 			: base (manager, "shaders") { }

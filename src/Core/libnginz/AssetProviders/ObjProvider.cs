@@ -8,7 +8,7 @@ namespace nginz
 	/// Object file asset provider.
 	/// </summary>
 	[CLSCompliant (false)]
-	public class ObjProvider : AssetProvider<ObjFile>
+	public class ObjProvider : AssetHandler<ObjFile>
 	{
 
 		/// <summary>

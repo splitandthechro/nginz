@@ -31,7 +31,7 @@ namespace nginz.Scripting.Python
 			if (Game != null) {
 				Reloader.PauseGame = Game.Pause;
 				Reloader.ResumeGame = Game.Resume;
-				Game.Content.RegisterAssetProvider<PythonScript> (typeof(PythonScriptProvider));
+				Game.Content.RegisterAssetHandler<PythonScript> (typeof(PythonScriptProvider));
 			}
 			currentError = string.Empty;
 			SetupGlobals ();
@@ -117,7 +117,7 @@ namespace nginz.Scripting.Python
 			AddReference ("OpenTK");
 			AddReference ("libnginz");
 			AddReference ("libnginz.Common");
-			AddReference ("libnginz.Interop.IronPython");
+			AddReference ("libnginz.Scripting.Python");
 			if (Game != null)
 				Scope.SetVariable ("game", Game);
 		}

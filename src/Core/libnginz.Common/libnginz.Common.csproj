@@ -38,12 +38,12 @@
     <Compile Include="Interfaces\ICanThrow.cs" />
     <Compile Include="Extensions\LogExtensions.cs" />
     <Compile Include="TypeSwitch.cs" />
-    <Compile Include="AssetProvider.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="AssetProviders\ScriptProvider.cs" />
     <Compile Include="ScriptEvents.cs" />
     <Compile Include="Interfaces\IAsset.cs" />
     <Compile Include="ScriptReloader.cs" />
+    <Compile Include="AssetHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

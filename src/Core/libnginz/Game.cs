@@ -616,28 +616,28 @@ namespace nginz
 		void RegisterProviders () {
 
 			// Register an asset provider for the vertex shaders.
-			Content.RegisterAssetProvider<VertexShader> (typeof (ShaderProvider<VertexShader>));
+			Content.RegisterAssetHandler<VertexShader> (typeof (ShaderProvider<VertexShader>));
 
 			// Register an asset provider for fragment shaders.
-			Content.RegisterAssetProvider<FragmentShader> (typeof (ShaderProvider<FragmentShader>));
+			Content.RegisterAssetHandler<FragmentShader> (typeof (ShaderProvider<FragmentShader>));
 
 			// Register an asset provider for geometry shaders.
-			Content.RegisterAssetProvider<GeometryShader> (typeof (ShaderProvider<GeometryShader>));
+			Content.RegisterAssetHandler<GeometryShader> (typeof (ShaderProvider<GeometryShader>));
 
 			// Register an asset provider for 2D textures.
-			Content.RegisterAssetProvider<Texture2D> (typeof (Texture2DProvider));
+			Content.RegisterAssetHandler<Texture2D> (typeof (Texture2DProvider));
 
 			// Register an asset provider for the object files.
-			Content.RegisterAssetProvider<ObjFile> (typeof (ObjProvider));
+			Content.RegisterAssetHandler<ObjFile> (typeof (ObjProvider));
 
 			// Register an asset provider for shader programs.
-			Content.RegisterAssetProvider<ShaderProgram> (typeof (ShaderProgramProvider));
+			Content.RegisterAssetHandler<ShaderProgram> (typeof (ShaderProgramProvider));
 
 			// Register an asset provider for scripts.
-			Content.RegisterAssetProvider<Script> (typeof(ScriptProvider));
+			Content.RegisterAssetHandler<Script> (typeof(ScriptProvider));
 
 			// Register an asset provider for TTF fonts.
-			Content.RegisterAssetProvider<Font> (typeof (FontTTFProvider));
+			Content.RegisterAssetHandler<Font> (typeof (FontTTFProvider));
 		}
 
 		#region IDisposable implementation

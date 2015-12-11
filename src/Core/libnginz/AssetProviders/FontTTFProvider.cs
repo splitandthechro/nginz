@@ -6,7 +6,7 @@ using nginz.Common;
 
 namespace nginz {
 	[CLSCompliant (false)]
-	public class FontTTFProvider : AssetProvider<Font> {
+	public class FontTTFProvider : AssetHandler<Font> {
 		public FontTTFProvider (ContentManager manager)
 			: base (manager, "fonts") { }
 

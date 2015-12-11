@@ -29,7 +29,7 @@ namespace nginz.Scripting.Iodine
 			if (Game != null) {
 				Reloader.PauseGame = Game.Pause;
 				Reloader.ResumeGame = Game.Resume;
-				Game.Content.RegisterAssetProvider<IodineScript> (typeof(IodineScriptProvider));
+				Game.Content.RegisterAssetHandler<IodineScript> (typeof(IodineScriptProvider));
 			}
 			currentError = string.Empty;
 			SetupGlobals ();
