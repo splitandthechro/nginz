@@ -121,6 +121,8 @@ namespace nginz
 			}
 		}
 
+		Rectangle MouseClientRect;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.MouseBuffer"/> class.
 		/// </summary>
@@ -142,6 +144,9 @@ namespace nginz
 
 			// Initialize mouse state
 			State = Mouse.GetState ();
+
+			// Initialize mouse client rectangle
+			MouseClientRect = new Rectangle (State.X, State.Y, 1, 1);
 
 			// Set mouse centered state
 			ShouldCenterMouse = shouldCenterMouse;
@@ -171,6 +176,10 @@ namespace nginz
 			return State.IsButtonUp (button);
 		}
 
+		public bool IsInsideWindow () {
+			return window.ClientRectangle.IntersectsWith (MouseClientRect);
+		}
+
 		/// <summary>
 		/// Update this instance.
 		/// </summary>
@@ -185,10 +194,10 @@ namespace nginz
 			// Create a rectangle representing the cursor
 			var mouseRectRaw = new Rectangle (absoluteState.X, absoluteState.Y, 1, 1);
 			var mouseClientPoint = window.PointToClient (mouseRectRaw.Location);
-			var mouseClientRect = new Rectangle (mouseClientPoint, new Size (1, 1));
+			MouseClientRect = new Rectangle (mouseClientPoint, new Size (1, 1));
 
 			// Update if the window is focused
-			if (window.Focused && (window.ClientRectangle.IntersectsWith (mouseClientRect) || !wasUnfocused)) {
+			if (window.Focused && (IsInsideWindow () || !wasUnfocused)) {
 
 				// Check if updating the mouse is suppressed
 				if (suppressUpdate) {

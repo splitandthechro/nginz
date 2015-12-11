@@ -29,7 +29,7 @@ namespace nginz
 		const string frag_source = @"
 		#version 400
 		in vec4 f_col;
-		in	vec2 f_tex;
+		in vec2 f_tex;
 
 		out vec4 frag_color;
 

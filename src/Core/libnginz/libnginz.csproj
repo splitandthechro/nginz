@@ -111,7 +111,6 @@
     <Compile Include="Fonts\GlyphInfo.cs" />
     <Compile Include="Fonts\RGBA.cs" />
     <Compile Include="Fonts\CodepointIterator.cs" />
-    <Compile Include="Fonts\MouseBuffer.cs" />
     <Compile Include="Audio\SoundManager.cs" />
     <Compile Include="Audio\AudioDevice.cs" />
     <Compile Include="Audio\StreamingAudio.cs" />
@@ -122,6 +121,7 @@
     <Compile Include="Audio\WaveDecoder.cs" />
     <Compile Include="Audio\Sound.cs" />
     <Compile Include="AssetProviders\SoundProvider.cs" />
+    <Compile Include="Buffers\MouseBuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

@@ -583,8 +583,13 @@ namespace nginz
 				// Invoke waiting actions
 				for (var i = 0; i < ContextActions.Count; i++) {
 					Action action;
-					if (ContextActions.TryDequeue (out action))
-						action ();
+					if (ContextActions.TryDequeue (out action)) {
+						try {
+							action ();
+						} catch (Exception e) {
+							this.Throw (e.Message);
+						}
+					}
 				}
 
 				// Set the paused variable to true

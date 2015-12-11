@@ -8,7 +8,7 @@ namespace nginz.Common
 	/// </summary>
 	public static class LogExtensions
 	{
-		public static bool IsRunningInScriptedEnvironment;
+		public volatile static bool IsRunningInScriptedEnvironment;
 		static string LastErrorMessage;
 
 		static LogExtensions () {

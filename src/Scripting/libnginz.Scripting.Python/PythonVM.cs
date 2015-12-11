@@ -63,17 +63,19 @@ namespace nginz.Scripting.Python
 		}
 
 		public object Call (string name, params object[] args) {
+			LogExtensions.IsRunningInScriptedEnvironment = true;
+			object retVal = null;
 			try {
 				var func = Scope.GetVariable<PythonFunction> (name);
-				var result = PythonCalls.Call (func, args);
+				retVal = PythonCalls.Call (func, args);
 				currentError = string.Empty;
-				return result;
 			} catch (Exception e) {
 				if (currentError != e.Message)
 					this.Log (e.Message);
 				currentError = e.Message;
 			}
-			return null;
+			LogExtensions.IsRunningInScriptedEnvironment = false;
+			return retVal;
 		}
 
 		public object CallInstance (object instance, string name, params object[] args) {

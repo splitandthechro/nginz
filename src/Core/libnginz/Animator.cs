@@ -25,6 +25,11 @@ namespace nginz
 		public Vector2 Scale;
 
 		/// <summary>
+		/// The x rotation.
+		/// </summary>
+		public float RotationX;
+
+		/// <summary>
 		/// The tint.
 		/// </summary>
 		public Color4 Tint;
@@ -54,9 +59,22 @@ namespace nginz
 		}
 
 		/// <summary>
+		/// Gets the origin.
+		/// </summary>
+		/// <value>The origin.</value>
+		public Vector2 Origin {
+			get {
+				return new Vector2 (
+					x: Sheet [StartTile + Index].X + (Sheet [StartTile + Index].Width / 2f),
+					y: Sheet [StartTile + Index].Y + (Sheet [StartTile + Index].Height / 2f)
+				);
+			}
+		}
+
+		/// <summary>
 		/// The sprite sheet.
 		/// </summary>
-		readonly SpriteSheet2D Sheet;
+		readonly public SpriteSheet2D Sheet;
 
 		/// <summary>
 		/// The start tile.
@@ -103,6 +121,7 @@ namespace nginz
 			Position = Vector2.Zero;
 			Scale = Vector2.One;
 			Tint = Color4.White;
+			RotationX = 0;
 			UpdateTarget ();
 		}
 
@@ -139,12 +158,17 @@ namespace nginz
 		public void Draw (GameTime time, SpriteBatch batch) {
 
 			// Draw the tile
-			batch.Draw (
+			batch.DrawInternal (
 				texture: Sheet.Texture,
 				sourceRect: Sheet [StartTile + Index],
-				position: Position,
+				destRect: new System.Drawing.Rectangle ((int) Position.X, (int) Position.Y, Sheet.TileWidth, Sheet.TileHeight),
 				color: Tint,
-				scale: Scale
+				scale: Scale,
+				depth: 0,
+				dx: -(Sheet.TileWidth / 2f),
+				dy: -(Sheet.TileHeight / 2f),
+				sin: (float) Math.Sin (RotationX),
+				cos: (float) Math.Cos (RotationX)
 			);
 		}
 

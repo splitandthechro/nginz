@@ -510,7 +510,7 @@ namespace nginz
 			indexCount += 6;
 		}
 
-		void DrawInternal (Texture2D texture, Rectangle? sourceRect, Rectangle destRect, Color4 color, Vector2 scale, float dx, float dy, float depth, float sin, float cos) {
+		internal void DrawInternal (Texture2D texture, Rectangle? sourceRect, Rectangle destRect, Color4 color, Vector2 scale, float dx, float dy, float depth, float sin, float cos) {
 
 			// Flush if the current texture is valid
 			// and the new texture differs from the current texture
