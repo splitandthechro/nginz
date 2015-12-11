@@ -230,8 +230,7 @@ namespace nginz
 				dx: -(origin.X),
 				dy: -(origin.Y),
 				depth: depth,
-				sin: (float) Math.Sin (rotation),
-				cos: (float) Math.Cos (rotation)
+				rot: rotation
 			);
 		}
 
@@ -248,8 +247,7 @@ namespace nginz
 				dx: 0,
 				dy: 0,
 				depth: depth,
-				sin: (float) Math.Sin (rotation),
-				cos: (float) Math.Cos (rotation)
+				rot: rotation
 			);
 		}
 
@@ -265,18 +263,17 @@ namespace nginz
 				dx: -(origin.X),
 				dy: -(origin.Y),
 				depth: depth,
-				sin: (float) Math.Sin (rotation),
-				cos: (float) Math.Cos (rotation)
+				rot: rotation
 			);
 		}
 
-		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 dest, Color4 color, Vector2 origin, Vector2 scale, int depth = 0, float rotation = 0) {
+		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 position, Color4 color, Vector2 origin, Vector2 scale, int depth = 0, float rotation = 0) {
 
 			// Draw the texture
 			Draw (
 				texture: texture,
 				sourceRect: sourceRect,
-				destRect: new Rectangle ((int) dest.X, (int) dest.Y, texture.Width, texture.Height),
+				destRect: new Rectangle ((int) position.X, (int) position.Y, sourceRect.Value.Width, sourceRect.Value.Height),
 				color: color,
 				origin: origin,
 				scale: scale,
@@ -298,8 +295,7 @@ namespace nginz
 				depth: depth,
 				dx: 0,
 				dy: 0,
-				sin: (float) Math.Sin (rotation),
-				cos: (float) Math.Cos (rotation)
+				rot: rotation
 			);
 		}
 
@@ -332,7 +328,7 @@ namespace nginz
 		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 position, Color4 color, Vector2 scale, int depth = 0) {
 
 			// Create destination rectangle from position and texture size
-			var destRect = new Rectangle ((int) position.X, (int) position.Y, texture.Width, texture.Height);
+			var destRect = new Rectangle ((int) position.X, (int) position.Y, sourceRect.Value.Width, sourceRect.Value.Height);
 
 			// Create source rectangle if the specified source rectangle is null
 			if (sourceRect != null) {
@@ -377,13 +373,28 @@ namespace nginz
 			);
 		}
 
+		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 position, Color4 color, Vector2 scale, Vector2? origin = null, int depth = 0, float rotation = 0) {
+
+			// Draw the texture
+			Draw (
+				texture: texture,
+				sourceRect: sourceRect,
+				destRect: new Rectangle ((int) position.X, (int) position.Y, sourceRect.Value.Width, sourceRect.Value.Height),
+				color: color,
+				origin: origin ?? Vector2.Zero,
+				scale: scale,
+				depth: depth,
+				rotation: rotation
+			);
+		}
+
 		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 dest, Color4 color, Vector2 origin, int depth = 0, float rotation = 0) {
 
 			// Draw the texture
 			Draw (
 				texture: texture,
 				sourceRect: sourceRect,
-				destRect: new Rectangle ((int) dest.X, (int) dest.Y, texture.Width, texture.Height),
+				destRect: new Rectangle ((int) dest.X, (int) dest.Y, sourceRect.Value.Width, sourceRect.Value.Height),
 				color: color,
 				origin: origin,
 				scale: Vector2.One,
@@ -404,8 +415,7 @@ namespace nginz
 				dx: -(origin.X),
 				dy: -(origin.Y),
 				depth: depth,
-				sin: (float) Math.Sin (rotation),
-				cos: (float) Math.Cos (rotation)
+				rot: rotation
 			);
 		}
 		public void Draw (Texture2D texture, Vector2 position, Color4 color, int depth = 0) {
@@ -510,7 +520,7 @@ namespace nginz
 			indexCount += 6;
 		}
 
-		internal void DrawInternal (Texture2D texture, Rectangle? sourceRect, Rectangle destRect, Color4 color, Vector2 scale, float dx, float dy, float depth, float sin, float cos) {
+		internal void DrawInternal (Texture2D texture, Rectangle? sourceRect, Rectangle destRect, Color4 color, Vector2 scale, float dx, float dy, float depth, float rot) {
 
 			// Flush if the current texture is valid
 			// and the new texture differs from the current texture
@@ -527,17 +537,21 @@ namespace nginz
 			// Construct source rectangle
 			Rectangle source = sourceRect ?? new Rectangle (0, 0, texture.Width, texture.Height);
 
-			// Decompose source rectangle
-			float x = destRect.X;
-			float y = destRect.Y;
-			float w = destRect.Width * scale.X;
-			float h = destRect.Height * scale.Y;
+			var quat = new Quaternion (0, 0, rot);
+			var pos = new Vector2 (destRect.X, destRect.Y);
+			var size = new Vector2 (destRect.Width * scale.X, destRect.Height * scale.Y);
+			Console.WriteLine (size);
+
+			var tl = Vector2.Transform (new Vector2 (pos.X, destRect.Y), quat);
+			var tr = Vector2.Transform (new Vector2 (pos.X + size.X, pos.Y), quat);
+			var bl = Vector2.Transform (new Vector2 (pos.X, pos.Y + size.Y), quat);
+			var br = Vector2.Transform (new Vector2 (pos.X + size.X, pos.Y + size.Y), quat);
 
 			// Top left
 			Vertices[vertexCount++] = new Vertex2D (
 				pos: new Vector3 (
-					x: x + dx * cos - dy * sin,
-					y: y + dx * sin + dy * cos,
+					tl.X + dx,
+					tl.Y + dy,
 					z: depth
 				),
 				texcoord:
@@ -551,8 +565,8 @@ namespace nginz
 			// Top right
 			Vertices[vertexCount++] = new Vertex2D (
 				pos: new Vector3 (
-					x: x + (dx + w) * cos - dy * sin,
-					y: y + (dx + w) * sin + dy * cos,
+					tr.X + dx,
+					tr.Y + dy,
 					z: depth
 				),
 				texcoord: new Vector2 (
@@ -565,8 +579,8 @@ namespace nginz
 			// Bottom left
 			Vertices[vertexCount++] = new Vertex2D (
 				pos: new Vector3 (
-					x: x + dx * cos - (dy + h) * sin,
-					y: y + dx * sin + (dy + h) * cos,
+					bl.X + dx,
+					bl.Y + dy,
 					z: depth
 				),
 				texcoord: new Vector2 (
@@ -579,8 +593,8 @@ namespace nginz
 			// Bottom right
 			Vertices[vertexCount++] = new Vertex2D (
 				pos: new Vector3 (
-					x: x + (dx + w) * cos - (dy + h) * sin,
-					y: y + (dx + w) * sin + (dy + h) * cos,
+					br.X + dx,
+					br.Y + dy,
 					z: depth
 				),
 				texcoord: new Vector2 (

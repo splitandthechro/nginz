@@ -64,12 +64,14 @@ namespace nginz
 		/// <value>The origin.</value>
 		public Vector2 Origin {
 			get {
-				return new Vector2 (
-					x: Sheet [StartTile + Index].X + (Sheet [StartTile + Index].Width / 2f),
-					y: Sheet [StartTile + Index].Y + (Sheet [StartTile + Index].Height / 2f)
-				);
+				return origin * Scale;
+			}
+			set {
+				origin = value;
 			}
 		}
+
+		Vector2 origin;
 
 		/// <summary>
 		/// The sprite sheet.
@@ -121,6 +123,7 @@ namespace nginz
 			Position = Vector2.Zero;
 			Scale = Vector2.One;
 			Tint = Color4.White;
+			Origin = Vector2.Zero;
 			RotationX = 0;
 			UpdateTarget ();
 		}
@@ -156,19 +159,16 @@ namespace nginz
 		/// <param name="time">Time.</param>
 		/// <param name="batch">Batch.</param>
 		public void Draw (GameTime time, SpriteBatch batch) {
-
+			Console.WriteLine (Scale);
 			// Draw the tile
-			batch.DrawInternal (
+			batch.Draw (
 				texture: Sheet.Texture,
 				sourceRect: Sheet [StartTile + Index],
-				destRect: new System.Drawing.Rectangle ((int) Position.X, (int) Position.Y, Sheet.TileWidth, Sheet.TileHeight),
+				position: Position,
+				origin: Origin,
 				color: Tint,
 				scale: Scale,
-				depth: 0,
-				dx: -(Sheet.TileWidth / 2f),
-				dy: -(Sheet.TileHeight / 2f),
-				sin: (float) Math.Sin (RotationX),
-				cos: (float) Math.Cos (RotationX)
+				rotation: RotationX
 			);
 		}
 

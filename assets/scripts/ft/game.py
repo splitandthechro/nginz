@@ -32,6 +32,7 @@ def internalloadcontent ():
     animator_fireball.Scale = Vector2 (1, 1)
     animator_fireball.Speed = 1
     animator_fireball.Position = Vector2 (animator_fireball.Position.X, game.Bounds.Height)
+    animator_fireball.Origin = Vector2 (animator_fireball.Sheet [0].Width / 2, animator_fireball.Sheet [0].Height / 2)
     animator_character_walk = Animator (sheet_character_walk, 2, 1)
     animator_character_walk.DurationInMilliseconds = 500
     animator_character_walk.Position = Vector2 ((game.Bounds.Width / 2) - (tex_character_walk.Width / 2), (game.Bounds.Height / 2) - (tex_character_walk.Height / 2))
@@ -54,9 +55,11 @@ def update (game, time):
     if game.Mouse.IsButtonDown (MouseButton.Left) and game.Mouse.IsInsideWindow ():
         fireball_size += time.Elapsed.TotalSeconds
         animator_fireball.Scale = Vector2 (fireball_size, fireball_size)
-        animator_fireball.Position = Vector2 (animator_character_walk.Position.X + (animator_character_walk.Sheet [0].Width / 2) + (animator_fireball.Sheet [0].Width / 2), animator_character_walk.Position.Y + (animator_character_walk.Sheet [0].Height / 2) - (tex_fireball.Height / 2))
+        animator_fireball.Position = Vector2 (animator_character_walk.Position.X + (animator_character_walk.Sheet [0].Width / 2) + (animator_fireball.Sheet [0].Width / 2) + 18, animator_character_walk.Position.Y + (animator_character_walk.Sheet [0].Height / 2) - (tex_fireball.Height / 2))
+    else:
+    	animator_fireball.Position = Vector2 (animator_fireball.Position.X, animator_fireball.Position.Y - (750 * time.Elapsed.TotalSeconds))
+    
     animator_fireball.Update (time)
-    animator_fireball.Position = Vector2 (animator_fireball.Position.X, animator_fireball.Position.Y - (750 * time.Elapsed.TotalSeconds))
     #if (animator_fireball.Position.Y < -(sheet_fireball [0].Height)):
     #    animator_fireball.Position = Vector2 (animator_fireball.Position.X, game.Bounds.Height)
     animator_character_walk.Update (time)
