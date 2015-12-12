@@ -50,6 +50,8 @@
     <Compile Include="Geometry.cs" />
     <Compile Include="Interfaces\IBuffer.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\ParticleRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameConfiguration.cs" />
@@ -150,8 +152,5 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Fonts\" />
-    <Folder Include="Audio\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

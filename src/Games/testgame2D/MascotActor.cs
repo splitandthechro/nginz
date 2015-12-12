@@ -26,7 +26,7 @@ namespace testgame2D
 		}
 
 		public void Draw (GameTime time, SpriteBatch batch) {
-			batch.Draw (MascotTexture, Position, Color4.White, new Vector2 (1));
+			batch.Draw (MascotTexture, Position, Color4.White, 1, rotation: MathHelper.DegreesToRadians (90));
 		}
 
 		public void Initialize (ContentManager content) {

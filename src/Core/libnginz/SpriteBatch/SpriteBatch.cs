@@ -327,6 +327,8 @@ namespace nginz
 
 		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 position, Color4 color, Vector2 scale, int depth = 0) {
 
+			sourceRect = sourceRect ?? new Rectangle((int) position.X, (int) position.Y, texture.Width, texture.Height);
+
 			// Create destination rectangle from position and texture size
 			var destRect = new Rectangle ((int) position.X, (int) position.Y, sourceRect.Value.Width, sourceRect.Value.Height);
 
@@ -537,22 +539,24 @@ namespace nginz
 			// Construct source rectangle
 			Rectangle source = sourceRect ?? new Rectangle (0, 0, texture.Width, texture.Height);
 
-			var quat = new Quaternion (0, 0, rot);
+			var quat = new Quaternion (rot, 0, 0);
 			var pos = new Vector2 (destRect.X, destRect.Y);
 			var size = new Vector2 (destRect.Width * scale.X, destRect.Height * scale.Y);
-			Console.WriteLine (size);
 
-			var tl = Vector2.Transform (new Vector2 (pos.X, destRect.Y), quat);
-			var tr = Vector2.Transform (new Vector2 (pos.X + size.X, pos.Y), quat);
-			var bl = Vector2.Transform (new Vector2 (pos.X, pos.Y + size.Y), quat);
-			var br = Vector2.Transform (new Vector2 (pos.X + size.X, pos.Y + size.Y), quat);
+			var sin = (float) Math.Sin (rot);
+			var cos = (float) Math.Cos (rot);
+
+			float x = pos.X;
+			float y = pos.Y;
+			float w = size.X;
+			float h = size.Y;
 
 			// Top left
 			Vertices[vertexCount++] = new Vertex2D (
 				pos: new Vector3 (
-					tl.X + dx,
-					tl.Y + dy,
-					z: depth
+					x + dx * cos - dy * sin, 
+					y + dx * sin + dy * cos,
+                    z: depth
 				),
 				texcoord:
 				new Vector2 (
@@ -565,9 +569,9 @@ namespace nginz
 			// Top right
 			Vertices[vertexCount++] = new Vertex2D (
 				pos: new Vector3 (
-					tr.X + dx,
-					tr.Y + dy,
-					z: depth
+					x + (dx + w) * cos - dy * sin, 
+					y + (dx + w) * sin + dy * cos,
+                    z: depth
 				),
 				texcoord: new Vector2 (
 					x: (source.X + source.Width) / (float) texture.Width,
@@ -579,9 +583,9 @@ namespace nginz
 			// Bottom left
 			Vertices[vertexCount++] = new Vertex2D (
 				pos: new Vector3 (
-					bl.X + dx,
-					bl.Y + dy,
-					z: depth
+					x + dx * cos - (dy + h) * sin, 
+					y + dx * sin + (dy + h) * cos,
+                    z: depth
 				),
 				texcoord: new Vector2 (
 					x: source.X / (float) texture.Width,
@@ -593,9 +597,9 @@ namespace nginz
 			// Bottom right
 			Vertices[vertexCount++] = new Vertex2D (
 				pos: new Vector3 (
-					br.X + dx,
-					br.Y + dy,
-					z: depth
+					x + (dx + w) * cos - (dy + h) * sin,
+					y + (dx + w) * sin + (dy + h) * cos,
+                    z: depth
 				),
 				texcoord: new Vector2 (
 					x: (source.X + source.Width) / (float) texture.Width,

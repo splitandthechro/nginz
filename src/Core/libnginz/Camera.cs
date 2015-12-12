@@ -74,6 +74,24 @@ namespace nginz {
 			}
 		}
 
+		public Vector3 Forward {
+			get {
+				return Vector3.Transform (-Position, Orientation).Normalized ();
+			}
+		}
+
+		public Vector3 Right {
+			get {
+				return Vector3.Cross (Forward, Vector3.UnitY);
+			}
+		}
+
+		public Vector3 Up {
+			get {
+				return Vector3.Cross (Right, Forward);
+			}
+		}
+
 		public ProjectionType ProjectionType;
 
 		/// <summary>
