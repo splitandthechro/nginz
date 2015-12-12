@@ -327,7 +327,7 @@ namespace nginz
 
 		public void Draw (Texture2D texture, Rectangle? sourceRect, Vector2 position, Color4 color, Vector2 scale, int depth = 0) {
 
-			sourceRect = sourceRect ?? new Rectangle((int) position.X, (int) position.Y, texture.Width, texture.Height);
+			sourceRect = sourceRect ?? new Rectangle(0, 0, texture.Width, texture.Height);
 
 			// Create destination rectangle from position and texture size
 			var destRect = new Rectangle ((int) position.X, (int) position.Y, texture.Width, texture.Height);
