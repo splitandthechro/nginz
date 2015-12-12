@@ -72,7 +72,7 @@ namespace particlestest {
 				GL.BindVertexArray (abo);
 				indices.Bind ();
 				program["VP"] = camera.ViewProjectionMatrix;
-				program["Right"] = camera.Right;
+				//program["Right"] = camera.Right;
 				GL.DrawElements (BeginMode.Triangles, indices.Buffer.Count, DrawElementsType.UnsignedInt, 0);
 			});
 
