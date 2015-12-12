@@ -23,8 +23,8 @@ def internalloadcontent ():
     global game, content
     global tex_fireball, animator_fireball, sheet_fireball
     global tex_character_walk, animator_character_walk, sheet_character_walk
-    tex_fireball = content.Load [Texture2D] ("ft/fireball.png", TextureConfiguration.LinearMipmap)
-    tex_character_walk = content.Load [Texture2D] ("ft/char_walk.png", TextureConfiguration.LinearMipmap)
+    tex_fireball = content.Load [Texture2D] ("ft/fireball.png", TextureConfiguration.NearestMipmap)
+    tex_character_walk = content.Load [Texture2D] ("ft/char_walk.png", TextureConfiguration.NearestMipmap)
     sheet_fireball = SpriteSheet2D (tex_fireball, 8, 1)
     sheet_character_walk = SpriteSheet2D (tex_character_walk, 3, 1)
     animator_fireball = Animator (sheet_fireball, 8)

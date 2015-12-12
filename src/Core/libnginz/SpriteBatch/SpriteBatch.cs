@@ -330,7 +330,7 @@ namespace nginz
 			sourceRect = sourceRect ?? new Rectangle((int) position.X, (int) position.Y, texture.Width, texture.Height);
 
 			// Create destination rectangle from position and texture size
-			var destRect = new Rectangle ((int) position.X, (int) position.Y, sourceRect.Value.Width, sourceRect.Value.Height);
+			var destRect = new Rectangle ((int) position.X, (int) position.Y, texture.Width, texture.Height);
 
 			// Create source rectangle if the specified source rectangle is null
 			if (sourceRect != null) {

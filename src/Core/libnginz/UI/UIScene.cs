@@ -43,6 +43,9 @@ namespace nginz
 		}
 
 		#endregion
+
+		public virtual void OnSceneSwitch () {
+		}
 	}
 }
 

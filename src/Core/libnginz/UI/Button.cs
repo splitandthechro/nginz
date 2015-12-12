@@ -33,7 +33,15 @@ namespace nginz
 			set { Label.FontSize = value; }
 		}
 
-		public Color4 ForegroundColor { get; set; }
+		Color4 foregroundColor;
+		public Color4 ForegroundColor {
+			get { return foregroundColor; }
+			set {
+				foregroundColor = value;
+				if (!highlighted)
+					Label.ForegroundColor = value;
+			}
+		}
 		public Color4 HighlightForegroundColor { get; set; }
 		public Texture2D BackgroundTexture { get; set; }
 
@@ -44,6 +52,7 @@ namespace nginz
 			Label = new Label (width, height, font);
 			Label.CenterText = true;
 			FontSize = 14.25f;
+			ForegroundColor = Color4.White;
 			HighlightForegroundColor = Color4.White;
 			UseTexture = true;
 			transparency = 1f;
