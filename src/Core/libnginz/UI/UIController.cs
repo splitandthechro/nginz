@@ -47,8 +47,10 @@ namespace nginz
 		}
 
 		public void SwitchScene (Guid guid) {
-			if (Scenes.Any (s => s.SceneId.Equals (guid)))
+			if (Scenes.Any (s => s.SceneId.Equals (guid))) {
 				ActiveScene = Scenes.First (s => s.SceneId.Equals (guid));
+				ActiveScene.OnSceneSwitch ();
+			}
 		}
 
 		public void SwitchScene (string name) {
