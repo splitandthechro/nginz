@@ -18,7 +18,7 @@ namespace nginz
 		public float Transparency {
 			get { return transparency; }
 			set {
-				transparency = value;
+			 	transparency = value;
 				Label.Transparency = value;
 			}
 		}

@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenTK;
 using OpenTK.Graphics;
+using System.Drawing;
 
 namespace nginz
 {
@@ -72,6 +73,17 @@ namespace nginz
 		}
 
 		Vector2 origin;
+
+		public Rectangle Bounds {
+			get {
+				return new Rectangle (
+					x: (int) Position.X - (Sheet.TileWidth / 2),
+					y: (int) Position.Y - (Sheet.TileHeight / 2),
+					width: Sheet.TileWidth,
+					height: Sheet.TileHeight
+				);
+			}
+		}
 
 		/// <summary>
 		/// The sprite sheet.
@@ -159,13 +171,12 @@ namespace nginz
 		/// <param name="time">Time.</param>
 		/// <param name="batch">Batch.</param>
 		public void Draw (GameTime time, SpriteBatch batch) {
-			Console.WriteLine (Scale);
 			// Draw the tile
 			batch.Draw (
 				texture: Sheet.Texture,
 				sourceRect: Sheet [StartTile + Index],
 				position: Position,
-				origin: Origin,
+				origin: new Vector2 (Sheet [StartTile + Index].Width / 2f, Sheet [StartTile + Index].Height / 2f),
 				color: Tint,
 				scale: Scale,
 				rotation: RotationX

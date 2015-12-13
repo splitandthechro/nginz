@@ -78,17 +78,12 @@ namespace particlestest {
 				texture.Bind ();
 
 				program["VP"] = camera.ViewProjectionMatrix;
-<<<<<<< HEAD
 				program["Right"] = camera.Right;
 				program["Up"] = camera.Up;
 
 				program["tex"] = 0;
 
 				GL.DrawArrays (PrimitiveType.Quads, 0, 4);
-=======
-				//program["Right"] = camera.Right;
-				GL.DrawElements (BeginMode.Triangles, indices.Buffer.Count, DrawElementsType.UnsignedInt, 0);
->>>>>>> ffe3e7fc83336dad7be745c929926aa8144ffc0b
 			});
 
 			base.Draw (time);
