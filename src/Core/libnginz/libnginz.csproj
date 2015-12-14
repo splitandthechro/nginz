@@ -124,6 +124,7 @@
     <Compile Include="Audio\Sound.cs" />
     <Compile Include="AssetProviders\SoundProvider.cs" />
     <Compile Include="Buffers\MouseBuffer.cs" />
+    <Compile Include="Audio\SoundEffect.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -153,4 +154,9 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <None Include="OpenTK.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
