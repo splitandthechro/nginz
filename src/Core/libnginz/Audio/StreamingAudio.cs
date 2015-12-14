@@ -38,8 +38,7 @@ namespace nginz
 			bufferFormat = format;
 			while (!device.ready)
 				;
-			uint sid;
-			AL.GenSource (out sid);
+			var sid = AL.GenSource ();
 			sourceId = (int)sid;
 			AudioDevice.CheckALError ();
 			bufferIds = AL.GenBuffers (4);

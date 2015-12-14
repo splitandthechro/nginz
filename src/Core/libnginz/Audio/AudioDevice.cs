@@ -10,7 +10,7 @@ namespace nginz
 	public class AudioDevice
 	{
 		//Maximum amount of concurrent sfx playbacks
-		const int MAX_SOURCES = 200;
+		const int MAX_SOURCES = 30;
 
 		internal AudioContext context;
 		internal bool ready = false;
