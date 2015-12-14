@@ -18,11 +18,42 @@ namespace nginz
 		/// </summary>
 		readonly List<KeyState> Keys;
 
+		readonly public Dictionary<Key, char> Alphanumeric =
+			new Dictionary<Key, char> {
+			{ Key.A, 'A' }, { Key.B, 'B' },
+			{ Key.C, 'C' }, { Key.D, 'D' },
+			{ Key.E, 'E' }, { Key.F, 'F' },
+			{ Key.G, 'G' }, { Key.H, 'H' },
+			{ Key.I, 'I' }, { Key.J, 'J' },
+			{ Key.K, 'K' }, { Key.L, 'L' },
+			{ Key.M, 'M' }, { Key.N, 'N' },
+			{ Key.O, 'O' }, { Key.P, 'P' },
+			{ Key.Q, 'Q' }, { Key.R, 'R' },
+			{ Key.S, 'S' }, { Key.T, 'T' },
+			{ Key.U, 'U' }, { Key.V, 'V' },
+			{ Key.W, 'W' }, { Key.X, 'X' },
+			{ Key.Y, 'Y' }, { Key.Z, 'Z' },
+			{ Key.Number0, '0' }, { Key.Number1, '1' },
+			{ Key.Number2, '2' }, { Key.Number3, '3' },
+			{ Key.Number4, '4' }, { Key.Number5, '5' },
+			{ Key.Number6, '6' }, { Key.Number7, '7' },
+			{ Key.Number8, '8' }, { Key.Number9, '9' },
+			{ Key.Space, ' ' },
+		};
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.KeyboardBuffer"/> class.
 		/// </summary>
 		public KeyboardBuffer () {
 			Keys = new List<KeyState> ();
+		}
+
+		public bool IsAlphanumericKey (Key k) {
+			return Alphanumeric.ContainsKey (k);
+		}
+
+		public char GetKeyChar (Key k) {
+			return Alphanumeric [k];
 		}
 
 		/// <summary>
@@ -108,6 +139,13 @@ namespace nginz
 					return true;
 
 			// Return false
+			return false;
+		}
+
+		public bool IsAnyAlphanumericKeyTyped () {
+			foreach (var kvp in Alphanumeric)
+				if (IsKeyDown (kvp.Key))
+					return true;
 			return false;
 		}
 
