@@ -79,7 +79,7 @@ namespace nginz
 				int bid = AL.SourceUnqueueBuffer (sourceId);
 				if (bid != 0 && !finished) {
 					int length = BufferNeeded (this, buffer);
-					finished = length > 0;
+					finished = length <= 0;
 					if (!finished) {
 						AL.BufferData (bid, bufferFormat, buffer, length, sampleRate);
 						AL.SourceQueueBuffer (sourceId, bid);
