@@ -244,6 +244,7 @@ namespace nginz {
 
 		public void Draw (ShaderProgram shader, Action draw) {
 			this.Framebuffer.Bind ();
+			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			shader.Use (() => draw ());
 			this.Framebuffer.Unbind ();
 		}

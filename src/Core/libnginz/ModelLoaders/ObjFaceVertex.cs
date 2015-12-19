@@ -7,6 +7,7 @@ namespace nginz
 		public int VertexIndex;
 		public int TextureIndex;
 		public int NormalIndex;
+		public int Index;
 	}
 }
 

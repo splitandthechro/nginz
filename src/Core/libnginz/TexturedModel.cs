@@ -19,6 +19,9 @@ namespace nginz
 		public TexturedModel (ObjFile objModel, int groupNum, ShaderProgram program)
 			: base (objModel, groupNum, program) { }
 
+		public TexturedModel (Model model)
+			: base (model.Geometry) { }
+			 
 		/// <summary>
 		/// Draw the model.
 		/// </summary>

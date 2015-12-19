@@ -7,6 +7,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using System.Reflection;
+using nginz.Graphics;
 
 namespace othertestgame {
 	class Program {
@@ -31,10 +32,13 @@ namespace othertestgame {
 		FPSCamera camera;
 		ShaderProgram program;
 
+		Framebuffer framebuffer;
+
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
 		protected override void Initialize () {
+			GL.ClearColor (.25f, .30f, .35f, 1f);
 			Content.ContentRoot = "../../assets";
 			Mouse.ShouldCenterMouse = true;
 			Mouse.CursorVisible = false;
@@ -46,8 +50,11 @@ namespace othertestgame {
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 			camera.MouseRotation.X = MathHelper.DegreesToRadians (180);
-			var obj = Content.Load<ObjFile> ("box.obj");
-			testModel = new TexturedModel (obj, 0, program);
+			var obj = Content.Load<Model> ("box.obj", "", program);
+			testModel = new TexturedModel(obj);
+
+			framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, this.Configuration.Width, this.Configuration.Height);
+
 			base.Initialize ();
 		}
 
@@ -67,10 +74,10 @@ namespace othertestgame {
 		}
 
 		protected override void Draw (GameTime time) {
-			GL.ClearColor (.25f, .30f, .35f, 1f);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			program.Use (() => testModel.Draw (program, camera.Camera, testTexture));
+			camera.Camera.Draw (program, () => testModel.Draw (program, camera.Camera, testTexture));
+			camera.Camera.Display (Viewport);
 
 			base.Draw (time);
 		}

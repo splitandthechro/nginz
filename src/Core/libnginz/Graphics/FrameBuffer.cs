@@ -30,10 +30,11 @@ namespace nginz.Graphics {
 			this.Height = height;
 
 			this.ColorTexture = new Texture2D (TextureTarget.Texture2D, PixelInternalFormat.Rgba, PixelFormat.Rgba, PixelType.UnsignedByte, InterpolationMode.Nearest, false, this.Width, this.Height);
-			this.DepthTexture = new Texture2D (TextureTarget.Texture2D, PixelInternalFormat.DepthComponent24, PixelFormat.DepthComponent, PixelType.Float, InterpolationMode.Nearest, false, this.Width, this.Height);
+			this.DepthTexture = new Texture2D (TextureTarget.Texture2D, PixelInternalFormat.DepthComponent32, PixelFormat.DepthComponent, PixelType.Float, InterpolationMode.Linear, false, this.Width, this.Height);
 
 			this.ColorTexture.Bind ();
 			GL.FramebufferTexture (FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, this.ColorTexture.TextureId, 0);
+			this.DepthTexture.Bind ();
 			GL.FramebufferTexture (FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, this.DepthTexture.TextureId, 0);
 
 			GL.DrawBuffer (DrawBufferMode.ColorAttachment0);

@@ -348,6 +348,9 @@ namespace nginz
 		protected virtual void Initialize () {
 			GL.Enable (EnableCap.Blend);
 			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+			GL.Enable (EnableCap.DepthTest);
+			GL.ClearDepth (1.0f);
+			GL.DepthFunc (DepthFunction.Lequal);
 
 			Viewport = new Viewport (new Resolution (this.Configuration.Width, this.Configuration.Height));
 		}
@@ -670,6 +673,9 @@ namespace nginz
 
 			// Register an asset provider for sounds.
 			Content.RegisterAssetHandler<Sound> (typeof (SoundProvider));
+
+			// Register an asset provider for models.
+			Content.RegisterAssetHandler<Model> (typeof (ModelProvider));
 		}
 
 		#region IDisposable implementation

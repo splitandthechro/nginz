@@ -153,7 +153,13 @@ namespace nginz
 
 			// Calculate the updated camera position
 			var trans = Vector3.Transform (Movement, Camera.Orientation.Inverted ());
-			var pos = new Vector3 (trans.X, Height, trans.Z);
+
+			if (Keyboard.IsKeyDown (Key.Space))
+				trans.Y += distance;
+			if (Keyboard.IsKeyDown (Key.LShift))
+				trans.Y -= distance;
+
+			var pos = new Vector3 (trans.X, trans.Y, trans.Z);
 
 			// Update the camera position
 			Camera.SetRelativePosition (pos);

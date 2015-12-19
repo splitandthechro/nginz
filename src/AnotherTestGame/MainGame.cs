@@ -21,8 +21,12 @@ namespace AnotherTestGame {
 			Content.ContentRoot = "../../assets";
 
 			test = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
-			
+
 			base.Initialize ();
+		}
+
+		protected override void Update (GameTime time) {
+			base.Update (time);
 		}
 
 		protected override void Draw (GameTime time) {

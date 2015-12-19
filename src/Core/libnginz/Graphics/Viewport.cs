@@ -38,17 +38,17 @@ namespace nginz.Graphics {
 			this.Position = position ?? Vector2.Zero;
 
 			var pos = new Vector3[] {
-				new Vector3 (0, 0, 0),
-				new Vector3 (0, this.Resolution.Height, 0),
-				new Vector3 (this.Resolution.Width, this.Resolution.Height, 0),
 				new Vector3 (this.Resolution.Width, 0, 0),
+				new Vector3 (this.Resolution.Width, this.Resolution.Height, 0),
+				new Vector3 (0, this.Resolution.Height, 0),
+				new Vector3 (0, 0, 0),
 			};
 
 			var tex = new Vector2[] {
-				new Vector2 (0.0f, 0.0f),
-				new Vector2 (0.0f, 1.0f),
-				new Vector2 (1.0f, 1.0f),
 				new Vector2 (1.0f, 0.0f),
+				new Vector2 (1.0f, 1.0f),
+				new Vector2 (0.0f, 1.0f),
+				new Vector2 (0.0f, 0.0f),
 			};
 
 			ViewportShader = Game.ContentManager.Load<ShaderProgram> ("viewport");

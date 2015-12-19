@@ -44,9 +44,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetProviders\ModelProvider.cs" />
+    <Compile Include="AssimpLoader.cs" />
     <Compile Include="Buffers\GLBuffer.cs" />
     <Compile Include="Buffers\GLBufferDynamic.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="Extensions\AssimpHelper.cs" />
     <Compile Include="Extensions\TypeHelper.cs" />
     <Compile Include="AssetProviders\FontTTFProvider.cs" />
     <Compile Include="FPSCamera.cs" />
