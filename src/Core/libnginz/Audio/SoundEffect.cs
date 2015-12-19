@@ -9,6 +9,7 @@ namespace nginz
 	{
 		int alBuffer;
 		AudioDevice dev;
+
 		public SoundEffect (AudioDevice device, string filename)
 		{
 			dev = device;
@@ -36,6 +37,9 @@ namespace nginz
 					sampleRate
 				);
 			});
+		}
+
+		public SoundEffect (AudioDevice device, Sound sound) : this (device, sound.Filename) {
 		}
 
 		public void Play(float volume = 1f)
