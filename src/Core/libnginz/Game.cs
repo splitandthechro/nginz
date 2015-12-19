@@ -7,6 +7,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using nginz.Graphics;
 
 namespace nginz
 {
@@ -27,6 +28,8 @@ namespace nginz
 		static Game () {
 			syncRoot = new object ();
 		}
+
+		public static Game Instance = null;
 
 		/// <summary>
 		/// The game configuration.
@@ -57,17 +60,24 @@ namespace nginz
 		/// The sprite batch.
 		/// </summary>
 		public SpriteBatch SpriteBatch;
-
+		
 		/// <summary>
 		/// The content manager.
 		/// </summary>
 		[CLSCompliant (false)]
 		public ContentManager Content;
+		/// <summary>
+		/// The content manager.
+		/// </summary>
+		[CLSCompliant (false)]
+		public static ContentManager ContentManager;
 
 		/// <summary>
 		/// The mouse.
 		/// </summary>
 		public MouseBuffer Mouse;
+
+		public static Viewport Viewport;
 
 		/// <summary>
 		/// The sound manager.
@@ -285,6 +295,7 @@ namespace nginz
 			// Wait till all updates finished
 			this.Log ("Waiting for updates to finish");
 			while (updating) { }
+			SoundManager.Dispose ();
 			exited = true;
 		}
 
@@ -337,6 +348,8 @@ namespace nginz
 		protected virtual void Initialize () {
 			GL.Enable (EnableCap.Blend);
 			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+			Viewport = new Viewport (new Resolution (this.Configuration.Width, this.Configuration.Height));
 		}
 
 		/// <summary>
@@ -436,7 +449,10 @@ namespace nginz
 
 			// Initialize the context manager
 			Content = new ContentManager (AppDomain.CurrentDomain.BaseDirectory);
+			ContentManager = Content;
 			RegisterProviders ();
+
+			Instance = this;
 		}
 
 		/// <summary>

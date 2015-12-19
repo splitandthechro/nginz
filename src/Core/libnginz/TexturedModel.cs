@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace nginz
@@ -34,6 +35,27 @@ namespace nginz
 
 			// Draw the geometry
 			base.Draw (program, camera);
+
+			// Unbind the texture
+			texture.Unbind (TextureUnit.Texture0);
+		}
+
+		/// <summary>
+		/// Draw the model.
+		/// </summary>
+		/// <param name="program">Shader program.</param>
+		/// <param name="camera">Camera.</param>
+		/// <param name="texture">Texture.</param>
+		public void Draw (ShaderProgram program, Matrix4 VP, Texture2D texture) {
+
+			// Bind the texture
+			texture.Bind (TextureUnit.Texture0);
+
+			// Set the texture uniform in the shader program
+			program["tex"] = 0;
+
+			// Draw the geometry
+			base.Draw (program, VP);
 
 			// Unbind the texture
 			texture.Unbind (TextureUnit.Texture0);

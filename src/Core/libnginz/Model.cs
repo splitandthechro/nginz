@@ -104,5 +104,16 @@ namespace nginz
 			// Draw the geometry
 			Geometry.Draw (program, Matrix, camera);
 		}
+
+		/// <summary>
+		/// Draw the specified program and camera.
+		/// </summary>
+		/// <param name="program">Program.</param>
+		/// <param name="camera">Camera.</param>
+		public void Draw (ShaderProgram program, Matrix4 VP) {
+
+			// Draw the geometry
+			Geometry.Draw (program, Matrix, VP);
+		}
 	}
 }

@@ -29,7 +29,7 @@ namespace nginz
 			get { return new Rectangle (0, 0, Width, Height); }
 		}
 
-		public Texture2D (TextureConfiguration config, int width, int height) {
+		public Texture2D (TextureTarget target, PixelInternalFormat internalFormat, GLPixelFormat format, PixelType type, InterpolationMode mode, bool mipmap, int width, int height) {
 			Width = width;
 			Height = height;
 
@@ -42,15 +42,15 @@ namespace nginz
 			// Choose which filters to use
 			TextureMinFilter minfilter = TextureMinFilter.Linear;
 			TextureMagFilter magfilter = TextureMagFilter.Linear;
-			switch (config.Interpolation) {
+			switch (mode) {
 				case InterpolationMode.Linear:
-					minfilter = config.Mipmap
+					minfilter = mipmap
 						? TextureMinFilter.LinearMipmapLinear
 						: TextureMinFilter.Linear;
 					magfilter = TextureMagFilter.Linear;
 					break;
 				case InterpolationMode.Nearest:
-					minfilter = config.Mipmap
+					minfilter = mipmap
 						? TextureMinFilter.LinearMipmapNearest
 						: TextureMinFilter.Nearest;
 					magfilter = TextureMagFilter.Nearest;
@@ -73,23 +73,26 @@ namespace nginz
 
 			// Create the texture
 			GL.TexImage2D (
-				target: TextureTarget.Texture2D,
+				target: target,
 				level: 0,
-				internalformat: PixelInternalFormat.Rgba,
+				internalformat: internalFormat,
 				width: Width,
 				height: Height,
 				border: 0,
-				format: GLPixelFormat.Bgra,
-				type: PixelType.UnsignedByte,
+				format: format,
+				type: type,
 				pixels: IntPtr.Zero
 			);
 
 			// Create a mipmap if requested
-			if (config.Mipmap)
+			if (mipmap)
 				GL.GenerateMipmap (GenerateMipmapTarget.Texture2D);
 
 			Unbind (TextureUnit.Texture0);
 		}
+
+		public Texture2D (TextureConfiguration config, int width, int height) 
+			: this (TextureTarget.Texture2D, PixelInternalFormat.Rgba, GLPixelFormat.Bgra, PixelType.UnsignedByte, config.Interpolation, config.Mipmap, width, height) { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="nginz.Texture2D"/> class.

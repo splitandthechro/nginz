@@ -214,6 +214,8 @@ namespace nginz
 			// Flush the sprites
 			Flush ();
 
+			this.CurrentCamera.Display (Game.Viewport);
+
 			// Mark the sprite batch as inactive
 			active = false;
 		}
@@ -619,13 +621,12 @@ namespace nginz
 				return;
 
 			// Use the shader program
-			Program.Use (() => {
-
+			CurrentCamera.Draw (Program, () => {
 				// Bind the array buffer object
 				GL.BindVertexArray (abo);
 
 				// Upload vertices to the vertex buffer object
-				vbo.UploadData (dataArray:Vertices);
+				vbo.UploadData (dataArray: Vertices);
 
 				// Point the vertex buffer object to the right point
 				vbo.PointTo (Program.Attrib ("v_pos"), 2, 0);
@@ -639,7 +640,7 @@ namespace nginz
 				ibo.Bind ();
 
 				// Set the MVP uniform to the view projection matrix of the camera
-				Program ["MVP"] = CurrentCamera.ViewProjectionMatrix;
+				Program["MVP"] = CurrentCamera.ViewProjectionMatrix;
 
 				// Draw the elements
 				GL.DrawElements (BeginMode.Triangles, ibo.Buffer.Count, DrawElementsType.UnsignedInt, 0);

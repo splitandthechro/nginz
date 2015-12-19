@@ -137,5 +137,15 @@ namespace nginz {
 				GL.DrawArrays (mode == BeginMode.Triangles ? PrimitiveType.Triangles : PrimitiveType.Quads, 0, Buffers["v_pos"].BufferSize);
 			Unbind ();
 		}
+
+		public void Draw (ShaderProgram program, Matrix4 Model, Matrix4 VP, int offset = 0) {
+			Bind ();
+			program["MVP"] = Model * VP;
+			if (Indices != null)
+				GL.DrawElements (mode, Indices.Buffer.Count, DrawElementsType.UnsignedInt, offset);
+			else
+				GL.DrawArrays (mode == BeginMode.Triangles ? PrimitiveType.Triangles : PrimitiveType.Quads, 0, Buffers["v_pos"].BufferSize);
+			Unbind ();
+		}
 	}
 }

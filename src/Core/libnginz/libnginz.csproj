@@ -48,6 +48,8 @@
     <Compile Include="AssetProviders\FontTTFProvider.cs" />
     <Compile Include="FPSCamera.cs" />
     <Compile Include="Geometry.cs" />
+    <Compile Include="Graphics\FrameBuffer.cs" />
+    <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Interfaces\IBuffer.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Particles\Particle.cs" />

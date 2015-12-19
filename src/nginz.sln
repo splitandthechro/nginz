@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interoperability", "Interoperability", "{75CB3C70-0C8B-47AC-B0F5-03B981EB221C}"
 EndProject
@@ -46,6 +46,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libnginz.Compatibility.Iodine", "Compatibility\libnginz.Compatibility.Iodine\libnginz.Compatibility.Iodine.csproj", "{02D1D390-B917-4400-B871-80CC8D4B34C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "particlestest", "particlestest\particlestest.csproj", "{C1DBDD42-19A5-4410-AF16-3789284733A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherTestGame", "AnotherTestGame\AnotherTestGame.csproj", "{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -183,6 +185,14 @@ Global
 		{C1DBDD42-19A5-4410-AF16-3789284733A4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1DBDD42-19A5-4410-AF16-3789284733A4}.Release|x86.ActiveCfg = Release|Any CPU
 		{C1DBDD42-19A5-4410-AF16-3789284733A4}.Release|x86.Build.0 = Release|Any CPU
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}.Debug|x86.Build.0 = Debug|Any CPU
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}.Release|x86.ActiveCfg = Release|Any CPU
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,6 +214,7 @@ Global
 		{13523E0E-ADEC-4E45-9EB2-80A402934F2A} = {9F2F3C49-61AF-40C7-8F7D-D2093BCD5586}
 		{02D1D390-B917-4400-B871-80CC8D4B34C3} = {FE32E126-CC3F-4BD0-8DEC-D6AB6E0DB199}
 		{C1DBDD42-19A5-4410-AF16-3789284733A4} = {17686208-D022-468E-8CA5-3FD86D9A866A}
+		{C9FDA812-0E63-41F1-B7D4-58BDCA933EAE} = {17686208-D022-468E-8CA5-3FD86D9A866A}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
