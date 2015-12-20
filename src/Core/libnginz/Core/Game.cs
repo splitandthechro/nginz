@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL4;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using nginz.Graphics;
+using nginz.Rendering;
 
 namespace nginz
 {
@@ -78,6 +79,9 @@ namespace nginz
 		public MouseBuffer Mouse;
 
 		public static Viewport Viewport;
+		public Viewport MainViewport;
+
+		public RenderingPipeline RenderingPipeline;
 
 		/// <summary>
 		/// The sound manager.
@@ -353,6 +357,9 @@ namespace nginz
 			GL.DepthFunc (DepthFunction.Lequal);
 
 			Viewport = new Viewport (new Resolution (this.Configuration.Width, this.Configuration.Height));
+			MainViewport = Viewport;
+
+			RenderingPipeline = new RenderingPipeline (this);
 		}
 
 		/// <summary>
@@ -370,7 +377,7 @@ namespace nginz
 		/// </summary>
 		/// <param name="time">Time.</param>
 		protected virtual void Draw (GameTime time) {
-			
+
 			// Present the rendered scene to the user
 			if (!context.IsDisposed)
 				context.SwapBuffers ();
@@ -484,7 +491,7 @@ namespace nginz
 			updateDeltaTime = 1d / (double) targetFramerate;
 			updateCurrentTime = currentTime.Subtract (startTime).TotalSeconds;
 		}
-
+		
 		void InternalUpdate (DateTime now) {
 			
 			// Use fixed framerate if requested
@@ -675,7 +682,7 @@ namespace nginz
 			Content.RegisterAssetHandler<Sound> (typeof (SoundProvider));
 
 			// Register an asset provider for models.
-			Content.RegisterAssetHandler<Model> (typeof (ModelProvider));
+			Content.RegisterAssetHandler<Geometry> (typeof (GeometryProvider));
 		}
 
 		#region IDisposable implementation

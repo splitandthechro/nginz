@@ -30,7 +30,7 @@ namespace nginz
 		/// <summary>
 		/// The materials.
 		/// </summary>
-		readonly public List<Material> Materials;
+		readonly public List<OldMaterial> Materials;
 
 		/// <summary>
 		/// The face groups.
@@ -49,7 +49,7 @@ namespace nginz
 			Vertices = new List<Vector3> ();
 			Textures = new List<Vector2> ();
 			Normals = new List<Vector3> ();
-			Materials = new List<Material> ();
+			Materials = new List<OldMaterial> ();
 			Groups = new List<ObjFaceGroup> ();
 			SurfaceType = ObjSurfaceType.FlatShading;
 		}

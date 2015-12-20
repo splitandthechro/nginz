@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using nginz.Common;
+using nginz.Lighting;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -10,7 +11,7 @@ namespace nginz {
 	/// <summary>
 	/// Geometry.
 	/// </summary>
-	public class Geometry : IBind {
+	public class Geometry : IBind, IAsset {
 
 		/// <summary>
 		/// The buffers.
@@ -23,6 +24,8 @@ namespace nginz {
 		/// </summary>
 		[CLSCompliant (false)]
 		public GLBuffer<uint> Indices = null;
+
+		public Material Material = Material.DefaultMaterial;
 
 		/// <summary>
 		/// The array buffer.
@@ -111,17 +114,6 @@ namespace nginz {
 		}
 
 		/// <summary>
-		/// Construct the geometry object.
-		/// </summary>
-		/// <param name="program">Program.</param>
-		public Geometry Construct (ShaderProgram program) {
-			Bind ();
-			Buffers.ToList ().ForEach (kvp => kvp.Value.PointTo (program.Attrib (kvp.Key)));
-			Unbind ();
-			return this;
-		}
-
-		/// <summary>
 		/// Draw the geometry object.
 		/// </summary>
 		/// <param name="program">Shader Program.</param>
@@ -129,18 +121,21 @@ namespace nginz {
 		/// <param name="camera">Camera.</param>
 		/// <param name="offset">Offset.</param>
 		public void Draw (ShaderProgram program, Matrix4 Model, Camera camera, int offset = 0) {
-			Bind ();
-			program["MVP"] = Model * camera.ViewProjectionMatrix;
-			if (Indices != null)
-				GL.DrawElements (mode, Indices.Buffer.Count, DrawElementsType.UnsignedInt, offset);
-			else
-				GL.DrawArrays (mode == BeginMode.Triangles ? PrimitiveType.Triangles : PrimitiveType.Quads, 0, Buffers["v_pos"].BufferSize);
-			Unbind ();
+			this.Draw (program, Model, camera.ViewProjectionMatrix, offset);
 		}
 
 		public void Draw (ShaderProgram program, Matrix4 Model, Matrix4 VP, int offset = 0) {
 			Bind ();
+			Buffers.ToList ().ForEach (kvp => kvp.Value.PointTo (program.Attrib (kvp.Key)));
 			program["MVP"] = Model * VP;
+			var NRM = Model.Inverted ();
+			NRM.Transpose ();
+			program["NRM"] = NRM;
+
+			program.SetMaterial ("material", this.Material);
+
+			Material.Texture.Bind ();
+
 			if (Indices != null)
 				GL.DrawElements (mode, Indices.Buffer.Count, DrawElementsType.UnsignedInt, offset);
 			else

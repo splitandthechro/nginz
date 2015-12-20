@@ -73,15 +73,15 @@ namespace particlestest {
 			GL.ClearColor (.25f, .30f, .35f, 1f);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			program.Use (() => {
+			program.Use (shader => {
 				GL.BindVertexArray (abo);
 				texture.Bind ();
 
-				program["VP"] = camera.ViewProjectionMatrix;
-				program["Right"] = camera.Right;
-				program["Up"] = camera.Up;
+				shader["VP"] = camera.ViewProjectionMatrix;
+				shader["Right"] = camera.Right;
+				shader["Up"] = camera.Up;
 
-				program["tex"] = 0;
+				shader["tex"] = 0;
 
 				GL.DrawArrays (PrimitiveType.Quads, 0, 4);
 			});

@@ -159,7 +159,7 @@ namespace nginz
 			SkipWhitespace ();
 			var name = ReadRawString ();
 			this.Log ("Read material: {0}", name);
-			result.Materials.Add (new Material (name));
+			result.Materials.Add (new OldMaterial (name));
 		}
 
 		/// <summary>

@@ -12,7 +12,7 @@ namespace nginz
 	/// <summary>
 	/// Model.
 	/// </summary>
-	public class Model : IAsset {
+	public class Model {
 
 		/// <summary>
 		/// The geometry.
@@ -87,8 +87,7 @@ namespace nginz
 			var m_ind = new GLBuffer<uint> (GLBufferSettings.StaticIndices, Array.ConvertAll<int, uint> (Enumerable.Range (0, tempPos.Count).ToArray (), x => (uint) x));
 			Geometry = new Geometry (BeginMode.Quads)
 				.AddBuffer ("v_pos", v_pos)
-				.AddBuffer ("v_tex", v_tex)
-				.Construct (program);
+				.AddBuffer ("v_tex", v_tex);
 
 			Position = Vector3.Zero;
 			Scale = Vector3.One;
