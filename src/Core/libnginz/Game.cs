@@ -29,7 +29,10 @@ namespace nginz
 			syncRoot = new object ();
 		}
 
-		public static Game Instance = null;
+		/// <summary>
+		/// The instance.
+		/// </summary>
+		public static Game Instance;
 
 		/// <summary>
 		/// The game configuration.
