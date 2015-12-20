@@ -94,7 +94,6 @@
     <Compile Include="Buffers\GLBufferSettings.cs" />
     <Compile Include="Graphics\Textures\Texture2D.cs" />
     <Compile Include="Graphics\Rendering\ProjectionType.cs" />
-    <Compile Include="Graphics\Models\TexturedModel.cs" />
     <Compile Include="Graphics\Textures\InterpolationMode.cs" />
     <Compile Include="Buffers\KeyboardBuffer.cs" />
     <Compile Include="Buffers\KeyState.cs" />
