@@ -8,7 +8,7 @@ namespace nginz
 	/// <summary>
 	/// Material.
 	/// </summary>
-	public class Material
+	public class OldMaterial
 	{
 
 		/// <summary>
@@ -90,7 +90,7 @@ namespace nginz
 		/// Initializes a new instance of the <see cref="nginz.Material"/> class.
 		/// </summary>
 		/// <param name="name">Name.</param>
-		public Material (string name) {
+		public OldMaterial (string name) {
 			Name = name;
 		}
 	}

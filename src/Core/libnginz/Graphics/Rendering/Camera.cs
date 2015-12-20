@@ -96,8 +96,6 @@ namespace nginz {
 
 		public ProjectionType ProjectionType;
 
-		public Framebuffer Framebuffer;
-
 		/// <summary>
 		/// Gets the view projection matrix.
 		/// </summary>
@@ -143,8 +141,6 @@ namespace nginz {
 
 			// Set the camera projection type
 			ProjectionType = type;
-
-			Framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, this.Resolution.Width, this.Resolution.Height);
 
 			// Calculate the projection graphics
 			ProjectionMatrix =
@@ -240,18 +236,6 @@ namespace nginz {
 
 			// Set the orientation
 			Orientation = startValue * Quaternion.FromEulerAngles (pitch, yaw, roll);
-		}
-
-		public void Draw (ShaderProgram shader, Action draw) {
-			this.Framebuffer.Bind ();
-			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			shader.Use (() => draw ());
-			this.Framebuffer.Unbind ();
-		}
-
-		public void Display (Viewport viewport) {
-			this.Framebuffer.ColorTexture.Bind ();
-			viewport.DrawTexture (this.Framebuffer.ColorTexture);
 		}
 	}
 }

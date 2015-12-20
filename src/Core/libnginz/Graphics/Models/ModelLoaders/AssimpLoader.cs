@@ -10,7 +10,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace nginz {
 	public class AssimpLoader : ICanLog {
-		public static Dictionary<string, Model> LoadModels (string path, ShaderProgram program) {
+		public static Dictionary<string, Geometry> LoadGeometry (string path) {
 			AssimpContext importer = new AssimpContext ();
 			NormalSmoothingAngleConfig config = new NormalSmoothingAngleConfig (66.0f);
 			importer.SetConfig (config);
@@ -26,7 +26,7 @@ namespace nginz {
 												PostProcessSteps.CalculateTangentSpace |
 												PostProcessSteps.Triangulate |
 												PostProcessSteps.GenerateSmoothNormals);
-			Dictionary<string, Model> models = new Dictionary<string, Model> ();
+			Dictionary<string, Geometry> geometry = new Dictionary<string, Geometry> ();
 
 			foreach (var mesh in scene.Meshes) {
 				List<Vector3> pos = new List<Vector3> ();
@@ -41,13 +41,13 @@ namespace nginz {
 					}
 				}
 
-				models.Add (mesh.Name, new Model (new Geometry (BeginMode.Triangles)
+				geometry.Add (mesh.Name, new Geometry (BeginMode.Triangles)
 																.AddBuffer ("v_pos", pos.ToGLBuffer ())
 																.AddBuffer ("v_tex", tex.ToGLBuffer ())
-																.Construct (program)));
+																.AddBuffer ("v_nrm", nrm.ToGLBuffer ()));
 			}
 
-			return models;
+			return geometry;
 		}
 	}
 }

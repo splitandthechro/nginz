@@ -35,11 +35,6 @@ namespace nginz
 		Game Game;
 
 		/// <summary>
-		/// The default texture.
-		/// </summary>
-		Texture2D Dot;
-
-		/// <summary>
 		/// The current texture.
 		/// </summary>
 		Texture2D CurrentTexture;
@@ -115,10 +110,6 @@ namespace nginz
 			// Set the game
 			Game = game;
 
-			// Set dot texture
-			Dot = new Texture2D (TextureConfiguration.Nearest, 1, 1);
-			Dot.SetData (new[] { Color4.White } , null, pixelType: PixelType.Float);
-
 			// Compile predefined shaders if no shader program is given
 			if (shader == null) {
 				var vertShader = new VertexShader (vert_source);
@@ -160,7 +151,7 @@ namespace nginz
 			InternalCamera = new Camera (60f, game.Resolution, 0, 16, type: ProjectionType.Orthographic);
 
 			// Set current texture
-			CurrentTexture = Dot;
+			CurrentTexture = Texture2D.Dot;
 
 			// Generate array buffer object
 			abo = GL.GenVertexArray ();
@@ -213,8 +204,6 @@ namespace nginz
 
 			// Flush the sprites
 			Flush ();
-
-			this.CurrentCamera.Display (Game.Viewport);
 
 			// Mark the sprite batch as inactive
 			active = false;
@@ -621,7 +610,7 @@ namespace nginz
 				return;
 
 			// Use the shader program
-			CurrentCamera.Draw (Program, () => {
+			Program.Use (shader => {
 				// Bind the array buffer object
 				GL.BindVertexArray (abo);
 
@@ -629,9 +618,9 @@ namespace nginz
 				vbo.UploadData (dataArray: Vertices);
 
 				// Point the vertex buffer object to the right point
-				vbo.PointTo (Program.Attrib ("v_pos"), 2, 0);
-				vbo.PointTo (Program.Attrib ("v_tex"), 2, 3 * sizeof (float));
-				vbo.PointTo (Program.Attrib ("v_col"), 4, 5 * sizeof (float));
+				vbo.PointTo (shader.Attrib ("v_pos"), 2, 0);
+				vbo.PointTo (shader.Attrib ("v_tex"), 2, 3 * sizeof (float));
+				vbo.PointTo (shader.Attrib ("v_col"), 4, 5 * sizeof (float));
 
 				// Bind the current texture to texture unit 0
 				CurrentTexture.Bind (TextureUnit.Texture0);
@@ -640,7 +629,7 @@ namespace nginz
 				ibo.Bind ();
 
 				// Set the MVP uniform to the view projection matrix of the camera
-				Program["MVP"] = CurrentCamera.ViewProjectionMatrix;
+				shader["MVP"] = CurrentCamera.ViewProjectionMatrix;
 
 				// Draw the elements
 				GL.DrawElements (BeginMode.Triangles, ibo.Buffer.Count, DrawElementsType.UnsignedInt, 0);

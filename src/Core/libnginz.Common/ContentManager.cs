@@ -52,6 +52,7 @@ namespace nginz.Common
 		/// <param name="type">Type.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void RegisterAssetHandler<T> (Type type) {
+			var v = type.GetInterfaces ();
 			AssetHandlers[typeof (T)] = Activator.CreateInstance (type, new object[] { this });
 		}
 

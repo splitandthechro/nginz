@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using nginz.Lighting;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -28,7 +29,7 @@ namespace nginz.Graphics {
 
 		public Rectangle ViewportRect = Rectangle.Empty;
 
-		private TexturedModel ViewportTarget;
+		private Model ViewportTarget;
 		private ShaderProgram ViewportShader;
 
 		private Matrix4 Matrix;
@@ -53,19 +54,19 @@ namespace nginz.Graphics {
 
 			ViewportShader = Game.ContentManager.Load<ShaderProgram> ("viewport");
 
-			this.ViewportTarget = new TexturedModel (new Geometry (BeginMode.Quads)
+			this.ViewportTarget = new Model (new Geometry (BeginMode.Quads)
 													.AddBuffer ("v_pos", new GLBuffer<Vector3> (GLBufferSettings.StaticDraw3FloatArray, pos))
-													.AddBuffer ("v_tex", new GLBuffer<Vector2> (GLBufferSettings.StaticDraw2FloatArray, tex))
-													.Construct (this.ViewportShader));
+													.AddBuffer ("v_tex", new GLBuffer<Vector2> (GLBufferSettings.StaticDraw2FloatArray, tex)));
 
 			Matrix = Matrix4.CreateOrthographicOffCenter (0, this.Resolution.Width, 0, this.Resolution.Height, 0, 16);
 		}
 
 		public void DrawTexture (Texture2D texture) {
 			GL.Viewport (this.ViewportRect);
-			this.ViewportShader.Use (() => {
+			this.ViewportShader.Use (shader => {
+				this.ViewportTarget.Geometry.Material.Texture = texture;
 				this.ViewportTarget.Position = new Vector3(this.Position.X, this.Position.Y, 0);
-				this.ViewportTarget.Draw (this.ViewportShader, Matrix, texture);
+				this.ViewportTarget.Draw (shader, Matrix);
 			});
 		}
 	}

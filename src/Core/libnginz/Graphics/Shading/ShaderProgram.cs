@@ -62,9 +62,9 @@ namespace nginz
 				Attach (shader);
 		}
 
-		public void Use (Action act) {
+		public void Use (Action<ShaderProgram> act) {
 			using (UseProgram ())
-				act ();
+				act (this);
 		}
 
 		/// <summary>

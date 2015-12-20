@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using System.Reflection;
 using nginz.Graphics;
+using nginz.Lighting;
 
 namespace othertestgame {
 	class Program {
@@ -27,10 +28,9 @@ namespace othertestgame {
 	}
 
 	class TestGame : Game, ICanLog {
-		TexturedModel testModel;
+		Model testModel;
 		Texture2D testTexture;
 		FPSCamera camera;
-		ShaderProgram program;
 
 		Framebuffer framebuffer;
 
@@ -44,14 +44,15 @@ namespace othertestgame {
 			Mouse.CursorVisible = false;
 			GL.CullFace (CullFaceMode.Back);
 			GL.Enable (EnableCap.CullFace);
-			program = Content.Load <ShaderProgram> ("passTex");
+
 			testTexture = Content.Load<Texture2D> ("testWood.jpg", TextureConfiguration.Linear);
 			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 			camera.MouseRotation.X = MathHelper.DegreesToRadians (180);
-			var obj = Content.Load<Model> ("box.obj", "", program);
-			testModel = new TexturedModel(obj);
+			var obj = Content.Load<Geometry> ("suzanne.obj", "");
+			obj.Material = new Material (Color4.White, testTexture, 2, 4);
+			testModel = new Model(obj);
 
 			framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, this.Configuration.Width, this.Configuration.Height);
 
@@ -76,8 +77,10 @@ namespace othertestgame {
 		protected override void Draw (GameTime time) {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			camera.Camera.Draw (program, () => testModel.Draw (program, camera.Camera, testTexture));
-			camera.Camera.Display (Viewport);
+			RenderingPipeline.Draw (camera.Camera, shader => {
+				testModel.Draw (shader, camera.Camera);
+			});
+			RenderingPipeline.Display ();
 
 			base.Draw (time);
 		}

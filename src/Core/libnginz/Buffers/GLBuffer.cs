@@ -75,17 +75,20 @@ namespace nginz {
 		/// <param name="index">Index.</param>
 		public void PointTo (int index) {
 
-			// Bind buffer
-			Bind ();
+			if (index != -1) {
 
-			// Enable vertex attribute array
-			GL.EnableVertexAttribArray (index);
+				// Bind buffer
+				Bind ();
 
-			// Set vertex attribute pointer
-			GL.VertexAttribPointer (index, Settings.AttribSize, Settings.Type, Settings.Normalized, ElementSize, Settings.Offset);
+				// Enable vertex attribute array
+				GL.EnableVertexAttribArray (index);
 
-			// Unbind buffer
-			Unbind ();
+				// Set vertex attribute pointer
+				GL.VertexAttribPointer (index, Settings.AttribSize, Settings.Type, Settings.Normalized, ElementSize, Settings.Offset);
+
+				// Unbind buffer
+				Unbind ();
+			}
 		}
 
 		public void PointTo (int where, int offset) {

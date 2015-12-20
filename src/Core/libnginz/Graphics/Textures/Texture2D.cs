@@ -29,6 +29,8 @@ namespace nginz
 			get { return new Rectangle (0, 0, Width, Height); }
 		}
 
+		public static Texture2D Dot = new Texture2D (TextureConfiguration.LinearMipmap, 1, 1).SetData (new Color4[] { Color4.White });
+
 		public Texture2D (TextureTarget target, PixelInternalFormat internalFormat, GLPixelFormat format, PixelType type, InterpolationMode mode, bool mipmap, int width, int height) {
 			Width = width;
 			Height = height;
@@ -132,7 +134,7 @@ namespace nginz
 			Unbind (TextureUnit.Texture0);
 		}
 
-		public void SetData (IntPtr data, Rectangle? rect, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) {
+		public Texture2D SetData (IntPtr data, Rectangle? rect = null, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) {
 			Rectangle r = rect ?? new Rectangle (0, 0, Width, Height);
 			Bind (TextureUnit.Texture0);
 			GL.TexSubImage2D (
@@ -147,9 +149,11 @@ namespace nginz
 				pixels: data
 			);
 			Unbind (TextureUnit.Texture0);
+
+			return this;
 		}
 
-		public void SetData<T> (T[] data, Rectangle? rect, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) where T: struct {
+		public Texture2D SetData<T> (T[] data, Rectangle? rect = null, GLPixelFormat pixelFormat = GLPixelFormat.Rgba, PixelType pixelType = PixelType.UnsignedByte) where T: struct {
 			Rectangle r = rect ?? new Rectangle (0, 0, Width, Height);
 			Bind (TextureUnit.Texture0);
 			GL.TexSubImage2D (
@@ -164,6 +168,8 @@ namespace nginz
 				pixels: data
 			);
 			Unbind (TextureUnit.Texture0);
+
+			return this;
 		}
 
 		/// <summary>
