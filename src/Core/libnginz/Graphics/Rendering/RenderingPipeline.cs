@@ -15,13 +15,7 @@ namespace nginz.Rendering {
 
 		private Game game;
 
-		DirectionalLight light = new DirectionalLight {
-			@base = new BaseLight {
-				Color = new Vector3 (1),
-				Intensity = .75f,
-			},
-			direction = new Vector3 (1, 1, 1)
-		};
+		public List<DirectionalLight> DirectionalLights = new List<DirectionalLight> ();
 
 		public Framebuffer Framebuffer;
 
@@ -35,6 +29,10 @@ namespace nginz.Rendering {
 			AmbientShader = this.game.Content.Load<ShaderProgram> ("forwardAmbient");
 			DirectionalShader = this.game.Content.Load<ShaderProgram> ("forwardDirectional");
 			this.AmbientColor = new Vector3 (.25f, .25f, .25f);
+		}
+
+		public void AddDirectionalLight (DirectionalLight light) {
+			this.DirectionalLights.Add (light);
 		}
 
 		public void Draw (Camera camera, Action<ShaderProgram> draw) {
@@ -51,8 +49,10 @@ namespace nginz.Rendering {
 			GL.DepthFunc (DepthFunction.Equal);
 
 			this.DirectionalShader["eye_pos"] = camera.Position;
-			this.DirectionalShader.SetDirectionalLight ("directionalLight", light);
-			this.DirectionalShader.Use (draw);
+			foreach (DirectionalLight light in this.DirectionalLights) {
+				this.DirectionalShader.SetDirectionalLight ("directionalLight", light);
+				this.DirectionalShader.Use (draw);
+			}
 
 			GL.DepthFunc (DepthFunction.Less);
 			GL.DepthMask (true);

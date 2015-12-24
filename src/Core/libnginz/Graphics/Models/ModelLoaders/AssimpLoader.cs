@@ -20,7 +20,7 @@ namespace nginz
 		/// </summary>
 		/// <returns>The geometry data.</returns>
 		/// <param name="path">Path.</param>
-		public static Dictionary<string, Geometry> LoadGeometry (string path) {
+		public static List<Geometry> LoadGeometry (string path) {
 
 			// Create assimp context
 			var importer = new AssimpContext ();
@@ -40,12 +40,13 @@ namespace nginz
 			var flags =
 				PostProcessSteps.CalculateTangentSpace
 				| PostProcessSteps.Triangulate
-				| PostProcessSteps.GenerateSmoothNormals;
+				| PostProcessSteps.GenerateSmoothNormals
+				| PostProcessSteps.TransformUVCoords;
 
 			// Import scene
 			var scene = importer.ImportFile (path, flags);
 
-			var geometry = new Dictionary<string, Geometry> ();
+			var geometry = new List<Geometry> ();
 
 			// Iterate over meshes
 			foreach (var mesh in scene.Meshes) {
@@ -53,24 +54,27 @@ namespace nginz
 				var tex = new List<Vector2> ();
 				var nrm = new List<Vector3> ();
 
+				var hasTexture = mesh.HasTextureCoords (0);
+
 				// Iterate over face groups
 				foreach (var group in mesh.Faces) {
 
 					// Iterate over indices
 					foreach (var ind in group.Indices) {
 						pos.Add (mesh.Vertices[ind].ToVector3 ());
-						tex.Add (mesh.TextureCoordinateChannels [0][ind].ToVector3 ().ToVector2 ());
+						if (hasTexture)
+							tex.Add (mesh.TextureCoordinateChannels [0][ind].ToVector3 ().ToVector2 ());
 						nrm.Add (mesh.Normals[ind].ToVector3 ());
 					}
 				}
 
-				geometry.Add (
-					mesh.Name,
-					new Geometry (BeginMode.Triangles)
-						.AddBuffer ("v_pos", pos.ToGLBuffer ())
-						.AddBuffer ("v_tex", tex.ToGLBuffer ())
-						.AddBuffer ("v_nrm", nrm.ToGLBuffer ())
-				);
+				var geom = new Geometry (BeginMode.Triangles)
+						.AddBuffer ("v_pos", pos.ToGLBuffer ());
+				if (hasTexture)
+					geom.AddBuffer ("v_tex", tex.ToGLBuffer ());
+					geom.AddBuffer ("v_nrm", nrm.ToGLBuffer ());
+
+				geometry.Add (geom);
 			}
 
 			return geometry;

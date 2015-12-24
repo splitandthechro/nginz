@@ -31,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentManager.cs" />
+    <Compile Include="IList.cs" />
     <Compile Include="Interfaces\IBind.cs" />
     <Compile Include="Interfaces\IPointTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -47,7 +48,5 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="AssetProviders\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

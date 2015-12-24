@@ -9,6 +9,7 @@ using OpenTK.Input;
 using System.Reflection;
 using nginz.Graphics;
 using nginz.Lighting;
+using System.Collections.Generic;
 
 namespace othertestgame {
 	class Program {
@@ -28,7 +29,7 @@ namespace othertestgame {
 	}
 
 	class TestGame : Game, ICanLog {
-		Model testModel;
+		List<Model> models = new List<Model> ();
 		Texture2D testTexture;
 		FPSCamera camera;
 
@@ -38,8 +39,10 @@ namespace othertestgame {
 		}
 
 		protected override void Initialize () {
-			GL.ClearColor (.25f, .30f, .35f, 1f);
 			Content.ContentRoot = "../../assets";
+			base.Initialize ();
+
+			GL.ClearColor (.25f, .30f, .35f, 1f);
 			Mouse.ShouldCenterMouse = true;
 			Mouse.CursorVisible = false;
 			GL.CullFace (CullFaceMode.Back);
@@ -50,13 +53,22 @@ namespace othertestgame {
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 			camera.MouseRotation.X = MathHelper.DegreesToRadians (180);
-			var obj = Content.Load<Geometry> ("suzanne.obj", "");
-			obj.Material = new Material (Color4.White, testTexture, 2, 4);
-			testModel = new Model(obj);
+			var obj = Content.LoadMultiple<Geometry> ("fruit_v2.obj");
+			var rand = new Random ();
+			foreach (Geometry geom in obj) {
+				geom.Material = new Material (new Color4((byte) rand.Next(0, 255), (byte) rand.Next (0, 255), (byte) rand.Next (0, 255), 255), testTexture, 32, 16);
+				models.Add (new Model (geom));
+			}
 
 			framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, this.Configuration.Width, this.Configuration.Height);
 
-			base.Initialize ();
+			this.RenderingPipeline.AddDirectionalLight (new DirectionalLight {
+				@base = new BaseLight {
+					Color = new Vector3 (1),
+					Intensity = 1f,
+				},
+				direction = new Vector3 (0, 1, -1)
+			});
 		}
 
 		protected override void Update (GameTime time) {
@@ -78,7 +90,8 @@ namespace othertestgame {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			RenderingPipeline.Draw (camera.Camera, shader => {
-				testModel.Draw (shader, camera.Camera);
+				foreach (Model model in models)
+					model.Draw (shader, camera.Camera);
 			});
 			RenderingPipeline.Display ();
 

@@ -90,7 +90,7 @@ namespace nginz
 		public FPSCamera (float fieldOfView, Resolution resolution, MouseBuffer mouse, KeyboardBuffer keyboard) {
 
 			// Create the base camera
-			Camera = new Camera (fieldOfView, resolution, 0.01f, 64f);
+			Camera = new Camera (fieldOfView, resolution, 0.01f, 256f);
 
 			// Set the mouse and the keyboard
 			Mouse = mouse;

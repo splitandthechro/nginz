@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace nginz.Common
@@ -41,6 +42,9 @@ namespace nginz.Common
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="args">Arguments.</param>
 		public abstract T Load (string assetName, params object[] args);
+		public virtual List<T> LoadMultiple (string assetName, params object[] args) {
+			return new List<T> () { this.Load (assetName, args) };
+		}
 
 		/// <summary>
 		/// Save the specified asset.

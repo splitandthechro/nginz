@@ -114,6 +114,64 @@ namespace nginz.Common
 			return default (T);
 		}
 
+		/// <summary>
+		/// Load the specified asset.
+		/// </summary>
+		/// <param name="asset">Asset.</param>
+		/// <param name="args">Arguments.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<T> LoadMultiple<T> (string asset, params object[] args)
+			where T : IAsset {
+
+			// Check if there is an asset provider for the specified asset type
+			if (AssetHandlers.ContainsKey (typeof (T))) {
+
+				// Get the asset provider
+				var provider = (AssetHandler<T>) AssetHandlers[typeof (T)];
+
+				// Load the asset
+				return LoadFromMultiple<T> (provider.GetAssetPath (asset), args);
+			}
+
+			// Log that the asset type is unsupported
+			this.Log ("Unsupported {0} asset type!", typeof (T).Name);
+
+			// Return the default value for the specified asset type
+			// Usually null for reference types
+			return null;
+		}
+
+		/// <summary>
+		/// Load the specified asset from the specified path.
+		/// </summary>
+		/// <returns>The from.</returns>
+		/// <param name="path">Asset path.</param>
+		/// <param name="args">Arguments.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<T> LoadFromMultiple<T> (string path, params object[] args)
+			where T : IAsset {
+
+			// Check if there is an asset provider for the specified asset type
+			if (AssetHandlers.ContainsKey (typeof (T))) {
+
+				// Get the asset provider
+				var provider = (AssetHandler<T>) AssetHandlers[typeof (T)];
+
+				// Log that the asset was loaded
+				// this.Log ("Loaded asset {0} as {1}", Path.GetFileName (path), typeof (T).Name);
+
+				// Return the asset
+				return provider.LoadMultiple (path, args);
+			}
+
+			// Log that the asset type is unsupported
+			this.Log ("Unsupported {0} asset type!", typeof (T).Name);
+
+			// Return the default value for the specified asset type
+			// Usually null for reference types
+			return null;
+		}
+
 		public void Save<T> (T asset, string assetPath)
 			where T : IAsset {
 

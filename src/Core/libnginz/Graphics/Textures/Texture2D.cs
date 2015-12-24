@@ -8,6 +8,8 @@ using OpenTK.Graphics.OpenGL4;
 using GDIPixelFormat = System.Drawing.Imaging.PixelFormat;
 using GLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 using nginz.Interop.StbImage;
+using OpenTK;
+
 namespace nginz
 {
 
@@ -29,7 +31,7 @@ namespace nginz
 			get { return new Rectangle (0, 0, Width, Height); }
 		}
 
-		public static Texture2D Dot = new Texture2D (TextureConfiguration.LinearMipmap, 1, 1).SetData (new Color4[] { Color4.White });
+		public static Texture2D Dot = new Texture2D (TextureConfiguration.LinearMipmap, 1, 1).SetData (new[] { Color4.White }, pixelType: PixelType.Float);
 
 		public Texture2D (TextureTarget target, PixelInternalFormat internalFormat, GLPixelFormat format, PixelType type, InterpolationMode mode, bool mipmap, int width, int height) {
 			Width = width;

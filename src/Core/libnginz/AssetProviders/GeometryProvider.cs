@@ -6,7 +6,7 @@ using nginz.Common;
 
 namespace nginz {
 	class GeometryProvider : AssetHandler<Geometry> {
-		public Dictionary<string, Dictionary<string, Geometry>> modelCache = new Dictionary<string, Dictionary<string, Geometry>> ();
+		public Dictionary<string, List<Geometry>> modelCache = new Dictionary<string, List<Geometry>> ();
 
 		public GeometryProvider (ContentManager manager)
 			: base (manager, "models") { }
@@ -14,7 +14,13 @@ namespace nginz {
 		public override Geometry Load (string assetName, params object[] args) {
 			if (!modelCache.ContainsKey (assetName))
 				modelCache.Add (assetName, AssimpLoader.LoadGeometry (assetName));
-			return modelCache[assetName][(string) args[0]];
+			return modelCache[assetName][(int) args[0]];
+		}
+
+		public override List<Geometry> LoadMultiple (string assetName, params object[] args) {
+			if (!modelCache.ContainsKey (assetName))
+				modelCache.Add (assetName, AssimpLoader.LoadGeometry (assetName));
+			return modelCache[assetName];
 		}
 	}
 }
