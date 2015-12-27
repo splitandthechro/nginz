@@ -33,8 +33,6 @@ namespace othertestgame {
 		Texture2D testTexture;
 		FPSCamera camera;
 
-		Framebuffer framebuffer;
-
 		public TestGame (GameConfiguration conf) : base (conf) {
 		}
 
@@ -59,8 +57,6 @@ namespace othertestgame {
 				geom.Material = new Material (new Color4((byte) rand.Next(0, 255), (byte) rand.Next (0, 255), (byte) rand.Next (0, 255), 255), testTexture, 32, 16);
 				models.Add (new Model (geom));
 			}
-
-			framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, this.Configuration.Width, this.Configuration.Height);
 
 			this.RenderingPipeline.AddDirectionalLight (new DirectionalLight {
 				@base = new BaseLight {

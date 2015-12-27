@@ -29,7 +29,7 @@ namespace nginz.Graphics {
 			this.Width = width;
 			this.Height = height;
 
-			this.ColorTexture = new Texture2D (TextureTarget.Texture2D, PixelInternalFormat.Rgba, PixelFormat.Rgba, PixelType.UnsignedByte, InterpolationMode.Nearest, false, this.Width, this.Height);
+			this.ColorTexture = new Texture2D (TextureTarget.Texture2D, PixelInternalFormat.Rgba, PixelFormat.Rgba, PixelType.UnsignedByte, InterpolationMode.Linear, false, this.Width, this.Height);
 			this.DepthTexture = new Texture2D (TextureTarget.Texture2D, PixelInternalFormat.DepthComponent32, PixelFormat.DepthComponent, PixelType.Float, InterpolationMode.Linear, false, this.Width, this.Height);
 
 			this.ColorTexture.Bind ();
@@ -44,6 +44,7 @@ namespace nginz.Graphics {
 
 		public static void Bind (Framebuffer @this) {
 			GL.BindFramebuffer (@this.Target, @this.FramebufferId);
+			GL.Viewport (0, 0, @this.Width, @this.Height);
 		}
 
 		public static void Unbind (Framebuffer @this) {
