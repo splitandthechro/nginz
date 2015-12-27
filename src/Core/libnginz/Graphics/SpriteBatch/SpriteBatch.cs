@@ -89,6 +89,8 @@ namespace nginz
 		/// </summary>
 		volatile bool active;
 
+		nginz.Graphics.Framebuffer framebuffer;
+
 		/// <summary>
 		/// Swap two vertices.
 		/// </summary>
@@ -164,12 +166,15 @@ namespace nginz
 
 			// Initialize vertices
 			Vertices = new Vertex2D[MAX_VERTICES];
+
+			framebuffer = new Graphics.Framebuffer (FramebufferTarget.Framebuffer, Game.Resolution.Width, game.Resolution.Height);
         }
 
 		/// <summary>
 		/// Begin batching sprites.
 		/// </summary>
 		public void Begin () {
+			framebuffer.Bind ();
 			Begin (null);
 		}
 
@@ -204,6 +209,9 @@ namespace nginz
 
 			// Flush the sprites
 			Flush ();
+
+			framebuffer.Unbind ();
+			Game.Viewport.DrawTexture (framebuffer.ColorTexture);
 
 			// Mark the sprite batch as inactive
 			active = false;

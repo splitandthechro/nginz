@@ -24,6 +24,7 @@ namespace TowerDefense {
 				Vsync = VsyncMode.Off,
 				FixedFramerate = false,
 				TargetFramerate = 60,
+				ContentRoot = "../../assets"
 			};
 
 			new MainGame (conf).Run ();

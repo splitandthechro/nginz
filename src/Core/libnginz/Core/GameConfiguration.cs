@@ -25,6 +25,7 @@ namespace nginz
 				FixedFramerate = true,
 				WindowTitle = "nginZ Engine",
 				Vsync = VsyncMode.Adaptive,
+				ContentRoot = "Assets",
 			};
 		}
 
@@ -68,6 +69,11 @@ namespace nginz
 		/// The window title.
 		/// </summary>
 		public string WindowTitle;
+
+		/// <summary>
+		/// The path to the base assets directory.
+		/// </summary>
+		public string ContentRoot;
 	}
 }
 

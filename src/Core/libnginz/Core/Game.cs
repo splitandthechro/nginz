@@ -358,11 +358,6 @@ namespace nginz
 			GL.Enable (EnableCap.DepthTest);
 			GL.ClearDepth (1.0f);
 			GL.DepthFunc (DepthFunction.Lequal);
-
-			Viewport = new Viewport (new Resolution (this.Configuration.Width, this.Configuration.Height));
-			MainViewport = Viewport;
-
-			RenderingPipeline = new RenderingPipeline (this);
 		}
 
 		/// <summary>
@@ -462,6 +457,7 @@ namespace nginz
 
 			// Initialize the context manager
 			Content = new ContentManager (AppDomain.CurrentDomain.BaseDirectory);
+			Content.ContentRoot = this.Configuration.ContentRoot;
 			ContentManager = Content;
 			RegisterProviders ();
 
@@ -552,6 +548,15 @@ namespace nginz
 
 		}
 
+		public void PreInitialize () {
+			// Initialize the viewport
+			Viewport = new Viewport (new Resolution (this.Configuration.Width, this.Configuration.Height));
+			MainViewport = Viewport;
+
+			// Initialize the rendering pipeline
+			RenderingPipeline = new RenderingPipeline (this);
+		}
+
 		/// <summary>
 		/// Enter the gameloop.
 		/// </summary>
@@ -588,6 +593,7 @@ namespace nginz
 
 			// Initialize the game
 			this.Log ("Initializing game");
+			PreInitialize ();
 			Initialize ();
 
 			// Set target framerate

@@ -22,6 +22,7 @@ namespace othertestgame {
 				Vsync = VsyncMode.Off,
 				FixedFramerate = false,
 				TargetFramerate = 60,
+				ContentRoot = "../../assets",
 			};
 			var game = new TestGame (conf);
 			game.Run ();
@@ -37,9 +38,6 @@ namespace othertestgame {
 		}
 
 		protected override void Initialize () {
-			Content.ContentRoot = "../../assets";
-			base.Initialize ();
-
 			GL.ClearColor (.25f, .30f, .35f, 1f);
 			Mouse.ShouldCenterMouse = true;
 			Mouse.CursorVisible = false;
@@ -60,11 +58,13 @@ namespace othertestgame {
 
 			this.RenderingPipeline.AddDirectionalLight (new DirectionalLight {
 				@base = new BaseLight {
-					Color = new Vector3 (1),
+					Color = new Vector3 (1f),
 					Intensity = 1f,
 				},
 				direction = new Vector3 (0, 1, -1)
 			});
+
+			base.Initialize ();
 		}
 
 		protected override void Update (GameTime time) {

@@ -13,7 +13,8 @@ namespace FlappyMascot
 				FixedFramerate = false,
 				Vsync = VsyncMode.Off,
 				Fullscreen = false,
-				WindowTitle = "nginz :: Flappy Mascot"
+				WindowTitle = "nginz :: Flappy Mascot",
+				ContentRoot = "../../assets"
 			};
 			using (var game = new MainGame (conf))
 				game.Run ();

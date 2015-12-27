@@ -16,7 +16,6 @@ namespace FlappyMascot
 		}
 
 		protected override void Initialize () {
-			Content.ContentRoot = "../../assets";
 			UI.LoadDefaultFonts ();
 			menuScene = new MenuScene ();
 			gameScene = new GameScene ();

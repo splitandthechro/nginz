@@ -16,8 +16,6 @@ namespace TowerDefense {
 			: base (config) { }
 
 		protected override void Initialize () {
-			Content.ContentRoot = "../../assets";
-
 			UITexture = Content.Load<Texture2D> ("TDUserInterface.png", TextureConfiguration.Nearest);
 			SpriteSheet = new SpriteSheet2D (Content.Load<Texture2D> ("TDSheet.png", TextureConfiguration.Nearest), 16, 16);
 
