@@ -22,7 +22,7 @@ vec3 calcPositionFromDepth (float depth) {
 	float y_hs = 2.0 * f_tex.y - 1.0;
 	float z_hs = 2.0 * depth - 1.0;
 
-	vec4 position_hs = vec4 (x_hs, y_hs, z_hs, 1.0) * LinearizeDepth (f_tex);
+	vec4 position_hs = vec4 (x_hs, y_hs, z_hs, 1.0);
 	vec4 position_ws = inverseCamera * position_hs;
 
 	return position_ws.xyz / position_ws.w;
@@ -120,6 +120,15 @@ vec4 calcDirectionalLigh (DirectionalLight light, vec3 normal, float specularPow
 	return calcLight (light.base, -light.direction, normal, specularPower, specularIntensity, pos);
 }
 
+vec3 decode (vec4 enc)
+{
+    vec4 nn = enc*vec4(2,2,0,0) + vec4(-1,-1,1,-1);
+    float l = dot(nn.xyz,-nn.xyw);
+    nn.z = l;
+    nn.xy *= sqrt(l);
+    return nn.xyz * 2 + vec3(0,0,-1);
+}
+
 void main () {
 	vec3 diffuseColor = texture (u_diffuse, f_tex).rgb;
 	vec3 normalEncoded = texture2D (u_normal, f_tex).xyz;
@@ -127,7 +136,7 @@ void main () {
 	float depth = texture2D (u_depth, f_tex).r;
 
 	vec3 position = calcPositionFromDepth (depth);
-	vec3 normal = normalize (2.0 * normalEncoded - vec3 (1.0));
+	vec3 normal = decode (vec4(normalEncoded, 1.0));
 
 	//frag_color = lineartoSRGB(vec4(diffuseColor, 1.0));
 	frag_color = vec4(diffuseColor, 1.0) * calcDirectionalLigh (directionalLight, normal, specularColor.x * 32, specularColor.y * 32, position);

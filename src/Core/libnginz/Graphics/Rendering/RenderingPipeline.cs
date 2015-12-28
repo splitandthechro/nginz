@@ -25,7 +25,7 @@ namespace nginz.Rendering {
 		public RenderingPipeline (Game game) {
 			this.game = game;
 
-			this.GBuffer = new GBuffer (game, game.Configuration.Width, game.Configuration.Height);
+			this.GBuffer = new GBuffer (game, game.Configuration.Width * 2, game.Configuration.Height * 2);
 
 			Framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, game.Configuration.Width, game.Configuration.Height)
 				.AttachTexture (FboAttachment.DiffuseAttachment, DrawBuffersEnum.ColorAttachment0, PixelInternalFormat.Rgb10A2, PixelFormat.Rgb, PixelType.UnsignedByte, InterpolationMode.Linear)
@@ -45,13 +45,16 @@ namespace nginz.Rendering {
 			var vp = viewport ?? game.MainViewport;
 
 			GBuffer.Use (shader => {
-				GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 				shader.Use (draw);
 			});
 
 
 			Framebuffer.Bind ();
 			GBuffer.fbo.BufferTextures[FboAttachment.DiffuseAttachment].Bind (TextureUnit.Texture0);
+			GBuffer.fbo.BufferTextures[FboAttachment.NormalAttachment].Bind (TextureUnit.Texture1);
+			GBuffer.fbo.BufferTextures[FboAttachment.SpecularAttachment].Bind (TextureUnit.Texture2);
+			GBuffer.fbo.BufferTextures[FboAttachment.DepthAttachment].Bind (TextureUnit.Texture3);
+
 			this.AmbientShader["u_diffuse"] = 0;
 
 			this.AmbientShader["ambient_color"] = this.AmbientColor;
@@ -59,12 +62,6 @@ namespace nginz.Rendering {
 
 			GL.Enable (EnableCap.Blend);
 			GL.BlendFunc (BlendingFactorSrc.One, BlendingFactorDest.One);
-			GL.DepthMask (false);
-
-			GBuffer.fbo.BufferTextures[FboAttachment.DiffuseAttachment].Bind (TextureUnit.Texture0);
-			GBuffer.fbo.BufferTextures[FboAttachment.NormalAttachment].Bind (TextureUnit.Texture1);
-			GBuffer.fbo.BufferTextures[FboAttachment.SpecularAttachment].Bind (TextureUnit.Texture2);
-			GBuffer.fbo.BufferTextures[FboAttachment.DepthAttachment].Bind (TextureUnit.Texture3);
 
 			this.LightingPass["u_diffuse"] = 0;
 			this.LightingPass["u_normal"] = 1;
@@ -79,7 +76,6 @@ namespace nginz.Rendering {
 
 			vp.Draw (this.LightingPass);
 			
-			GL.DepthMask (true);
 			GL.Disable (EnableCap.Blend);
 			this.Framebuffer.Unbind ();
 

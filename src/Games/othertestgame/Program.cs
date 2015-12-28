@@ -87,6 +87,7 @@ namespace othertestgame {
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			RenderingPipeline.Draw (camera.Camera, shader => {
+				GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 				foreach (Model model in models)
 					model.Draw (shader, camera.Camera);
 			});

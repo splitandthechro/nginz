@@ -13,9 +13,9 @@ namespace nginz.Graphics {
 		public GBuffer (Game game, int width, int height) {
 			this.fbo = new Framebuffer (FramebufferTarget.Framebuffer, width, height)
 				.AttachTexture (FboAttachment.DiffuseAttachment, DrawBuffersEnum.ColorAttachment0, PixelInternalFormat.Srgb, PixelFormat.Rgb, PixelType.UnsignedByte, InterpolationMode.Linear)
-				.AttachTexture (FboAttachment.NormalAttachment, DrawBuffersEnum.ColorAttachment1, PixelInternalFormat.Rgb10A2, PixelFormat.Rgb, PixelType.Float, InterpolationMode.Linear)
-				.AttachTexture (FboAttachment.SpecularAttachment, DrawBuffersEnum.ColorAttachment2, PixelInternalFormat.Rgb, PixelFormat.Rgb, PixelType.UnsignedInt, InterpolationMode.Linear)
-				.AttachDepth (PixelInternalFormat.DepthComponent24, PixelFormat.DepthComponent, PixelType.Float, InterpolationMode.Linear)
+				.AttachTexture (FboAttachment.NormalAttachment, DrawBuffersEnum.ColorAttachment1, PixelInternalFormat.Rgb16f, PixelFormat.Rgb, PixelType.Float, InterpolationMode.Linear)
+				.AttachTexture (FboAttachment.SpecularAttachment, DrawBuffersEnum.ColorAttachment2, PixelInternalFormat.Rgb10A2, PixelFormat.Rgb, PixelType.UnsignedByte, InterpolationMode.Linear)
+				.AttachDepth (PixelInternalFormat.DepthComponent32, PixelFormat.DepthComponent, PixelType.Float, InterpolationMode.Linear)
 				.Construct ();
 
 			GeometryPass = game.Content.Load<ShaderProgram> ("geometryPass");
@@ -24,7 +24,6 @@ namespace nginz.Graphics {
 		public void Use (Action<ShaderProgram> draw) {
 			this.fbo.Bind ();
 			draw (GeometryPass);
-			this.fbo.Unbind ();
 		}
 	}
 }
