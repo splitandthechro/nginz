@@ -10,24 +10,30 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace nginz.Rendering {
 	public class RenderingPipeline {
+		public ShaderProgram LightingPass;
 		public ShaderProgram AmbientShader;
-		public ShaderProgram DirectionalShader;
 
 		private Game game;
 
-		public List<DirectionalLight> DirectionalLights = new List<DirectionalLight> ();
-
+		public GBuffer GBuffer;
 		public Framebuffer Framebuffer;
+
+		public List<DirectionalLight> DirectionalLights = new List<DirectionalLight> ();
 
 		public Vector3 AmbientColor { get; set; }
 
 		public RenderingPipeline (Game game) {
 			this.game = game;
 
-			Framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, this.game.Configuration.Width, this.game.Configuration.Height);
+			this.GBuffer = new GBuffer (game, game.Configuration.Width, game.Configuration.Height);
 
-			AmbientShader = this.game.Content.Load<ShaderProgram> ("forwardAmbient");
-			DirectionalShader = this.game.Content.Load<ShaderProgram> ("forwardDirectional");
+			Framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, game.Configuration.Width, game.Configuration.Height)
+				.AttachTexture (FboAttachment.DiffuseAttachment, DrawBuffersEnum.ColorAttachment0, PixelInternalFormat.Rgb10A2, PixelFormat.Rgb, PixelType.UnsignedByte, InterpolationMode.Linear)
+				.Construct ();
+
+			LightingPass = game.Content.Load<ShaderProgram> ("lightingPass");
+			AmbientShader = game.Content.Load<ShaderProgram> ("deferredAmbient");
+
 			this.AmbientColor = new Vector3 (.25f, .25f, .25f);
 		}
 
@@ -35,35 +41,49 @@ namespace nginz.Rendering {
 			this.DirectionalLights.Add (light);
 		}
 
-		public void Draw (Camera camera, Action<ShaderProgram> draw) {
-			this.Framebuffer.Bind ();
-			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+		public void Draw (Camera camera, Action<ShaderProgram> draw, Viewport viewport = null) {
+			var vp = viewport ?? game.MainViewport;
+
+			GBuffer.Use (shader => {
+				GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+				shader.Use (draw);
+			});
+
+
+			Framebuffer.Bind ();
+			GBuffer.fbo.BufferTextures[FboAttachment.DiffuseAttachment].Bind (TextureUnit.Texture0);
+			this.AmbientShader["u_diffuse"] = 0;
 
 			this.AmbientShader["ambient_color"] = this.AmbientColor;
-
-			this.AmbientShader.Use (draw);
+			vp.Draw (this.AmbientShader);
 
 			GL.Enable (EnableCap.Blend);
 			GL.BlendFunc (BlendingFactorSrc.One, BlendingFactorDest.One);
 			GL.DepthMask (false);
-			GL.DepthFunc (DepthFunction.Equal);
 
-			this.DirectionalShader["eye_pos"] = camera.Position;
-			foreach (DirectionalLight light in this.DirectionalLights) {
-				this.DirectionalShader.SetDirectionalLight ("directionalLight", light);
-				this.DirectionalShader.Use (draw);
-			}
+			GBuffer.fbo.BufferTextures[FboAttachment.DiffuseAttachment].Bind (TextureUnit.Texture0);
+			GBuffer.fbo.BufferTextures[FboAttachment.NormalAttachment].Bind (TextureUnit.Texture1);
+			GBuffer.fbo.BufferTextures[FboAttachment.SpecularAttachment].Bind (TextureUnit.Texture2);
+			GBuffer.fbo.BufferTextures[FboAttachment.DepthAttachment].Bind (TextureUnit.Texture3);
 
-			GL.DepthFunc (DepthFunction.Less);
+			this.LightingPass["u_diffuse"] = 0;
+			this.LightingPass["u_normal"] = 1;
+			this.LightingPass["u_specular"] = 2;
+			this.LightingPass["u_depth"] = 3;
+
+			this.LightingPass["inverseCamera"] = camera.ViewProjectionMatrix.Inverted ();
+
+			this.LightingPass["eye_pos"] = camera.Position;
+
+			this.LightingPass.SetDirectionalLight ("directionalLight", this.DirectionalLights[0]);
+
+			vp.Draw (this.LightingPass);
+			
 			GL.DepthMask (true);
 			GL.Disable (EnableCap.Blend);
 			this.Framebuffer.Unbind ();
-		}
 
-		public void Display (Viewport viewport = null) {
-			var vp = viewport ?? game.MainViewport;
-			this.Framebuffer.ColorTexture.Bind ();
-			vp.DrawTexture (this.Framebuffer.ColorTexture);
+			vp.DrawTexture (Framebuffer.BufferTextures[FboAttachment.DiffuseAttachment]);
 		}
 	}
 }

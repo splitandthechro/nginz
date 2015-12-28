@@ -44,7 +44,8 @@ namespace othertestgame {
 			GL.CullFace (CullFaceMode.Back);
 			GL.Enable (EnableCap.CullFace);
 
-			testTexture = Content.Load<Texture2D> ("testWood.jpg", TextureConfiguration.Linear);
+			testTexture = Content.Load<Texture2D> ("testWoodDiffuse.jpg", TextureConfiguration.Linear);
+			var normal = Content.Load<Texture2D> ("testWoodNormal.jpg", TextureConfiguration.Linear);
 			var res = new Resolution { Width = Configuration.Width, Height = Configuration.Height };
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
@@ -52,7 +53,7 @@ namespace othertestgame {
 			var obj = Content.LoadMultiple<Geometry> ("fruit_v2.obj");
 			var rand = new Random ();
 			foreach (Geometry geom in obj) {
-				geom.Material = new Material (new Color4((byte) rand.Next(0, 255), (byte) rand.Next (0, 255), (byte) rand.Next (0, 255), 255), testTexture, 32, 16);
+				geom.Material = new Material (new Color4((byte) rand.Next(0, 255), (byte) rand.Next (0, 255), (byte) rand.Next (0, 255), 255), testTexture, normal, 32, 16);
 				models.Add (new Model (geom));
 			}
 
@@ -89,7 +90,6 @@ namespace othertestgame {
 				foreach (Model model in models)
 					model.Draw (shader, camera.Camera);
 			});
-			RenderingPipeline.Display ();
 
 			base.Draw (time);
 		}

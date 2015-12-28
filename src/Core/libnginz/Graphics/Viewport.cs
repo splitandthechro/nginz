@@ -63,10 +63,17 @@ namespace nginz.Graphics {
 
 		public void DrawTexture (Texture2D texture) {
 			GL.Viewport (this.ViewportRect);
+			texture.Bind ();
 			this.ViewportShader.Use (shader => {
-				this.ViewportTarget.Geometry.Material.Texture = texture;
+				this.ViewportTarget.Geometry.Material.Diffuse = texture;
 				this.ViewportTarget.Position = new Vector3(this.Position.X, this.Position.Y, 0);
 				this.ViewportTarget.Draw (shader, Matrix);
+			});
+		}
+		
+		public void Draw (ShaderProgram shaderProg) {
+			shaderProg.Use (shader => {
+				this.ViewportTarget.DrawRaw (shader, Matrix);
 			});
 		}
 	}

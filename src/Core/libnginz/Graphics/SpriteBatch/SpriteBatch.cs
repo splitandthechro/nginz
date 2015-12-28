@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using nginz.Common;
+using nginz.Graphics;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -211,7 +212,7 @@ namespace nginz
 			Flush ();
 
 			framebuffer.Unbind ();
-			Game.Viewport.DrawTexture (framebuffer.ColorTexture);
+			Game.Viewport.DrawTexture (framebuffer.BufferTextures[FboAttachment.DiffuseAttachment]);
 
 			// Mark the sprite batch as inactive
 			active = false;

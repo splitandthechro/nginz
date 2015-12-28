@@ -134,12 +134,27 @@ namespace nginz {
 
 			program.SetMaterial ("material", this.Material);
 
-			Material.Texture.Bind ();
+			Material.Diffuse.Bind (TextureUnit.Texture0);
+			Material.Normal.Bind (TextureUnit.Texture1);
 
 			if (Indices != null)
 				GL.DrawElements (mode, Indices.Buffer.Count, DrawElementsType.UnsignedInt, offset);
 			else
 				GL.DrawArrays (mode == BeginMode.Triangles ? PrimitiveType.Triangles : PrimitiveType.Quads, 0, Buffers["v_pos"].BufferSize);
+			Unbind ();
+		}
+
+		public void DrawRaw (ShaderProgram program, Matrix4 MVP, int offset = 0) {
+			Bind ();
+			Buffers.ToList ().ForEach (kvp => kvp.Value.PointTo (program.Attrib (kvp.Key)));
+
+			program["MVP"] = MVP;
+
+			if (Indices != null)
+				GL.DrawElements (mode, Indices.Buffer.Count, DrawElementsType.UnsignedInt, offset);
+			else
+				GL.DrawArrays (mode == BeginMode.Triangles ? PrimitiveType.Triangles : PrimitiveType.Quads, 0, Buffers["v_pos"].BufferSize);
+
 			Unbind ();
 		}
 	}

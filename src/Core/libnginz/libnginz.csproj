@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetProviders\GeometryProvider.cs" />
+    <Compile Include="Graphics\FboAttachment.cs" />
+    <Compile Include="Graphics\GBuffer.cs" />
     <Compile Include="Graphics\Lighting\DirectionalLight.cs" />
     <Compile Include="Graphics\Lighting\Material.cs" />
     <Compile Include="Graphics\Models\ModelLoaders\AssimpLoader.cs" />

@@ -11,8 +11,8 @@ namespace nginz.Graphics {
 
 		public FramebufferTarget Target;
 
-		public Texture2D ColorTexture;
-		public Texture2D DepthTexture;
+		public Dictionary<FboAttachment, Texture2D> BufferTextures;
+		public List<DrawBuffersEnum> Attachments;
 
 		public int Width;
 		public int Height;
@@ -24,22 +24,37 @@ namespace nginz.Graphics {
 
 		public Framebuffer (FramebufferTarget target, int width, int height)
 			: this (target) {
-			this.Bind ();
-
 			this.Width = width;
 			this.Height = height;
 
-			this.ColorTexture = new Texture2D (TextureTarget.Texture2D, PixelInternalFormat.Rgba, PixelFormat.Rgba, PixelType.UnsignedByte, InterpolationMode.Linear, false, this.Width, this.Height);
-			this.DepthTexture = new Texture2D (TextureTarget.Texture2D, PixelInternalFormat.DepthComponent32, PixelFormat.DepthComponent, PixelType.Float, InterpolationMode.Linear, false, this.Width, this.Height);
+			this.BufferTextures = new Dictionary<FboAttachment, Texture2D> ();
+			this.Attachments = new List<DrawBuffersEnum> ();
+		}
 
-			this.ColorTexture.Bind ();
-			GL.FramebufferTexture (FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, this.ColorTexture.TextureId, 0);
-			this.DepthTexture.Bind ();
-			GL.FramebufferTexture (FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, this.DepthTexture.TextureId, 0);
-
-			GL.DrawBuffer (DrawBufferMode.ColorAttachment0);
-
+		public Framebuffer AttachTexture (FboAttachment attachment, DrawBuffersEnum mode, PixelInternalFormat internalFormat, PixelFormat format, PixelType type, InterpolationMode interpolation) {
+			this.Attachments.Add (mode);
+			this.BufferTextures[attachment] = new Texture2D (TextureTarget.Texture2D, internalFormat, format, type, interpolation, false, this.Width, this.Height);
+			this.Bind ();
+			this.BufferTextures[attachment].Bind ();
+			GL.FramebufferTexture (this.Target, (FramebufferAttachment) mode, this.BufferTextures[attachment].TextureId, 0);
 			this.Unbind ();
+			return this;
+		}
+
+		public Framebuffer AttachDepth (PixelInternalFormat internalFormat, PixelFormat format, PixelType type, InterpolationMode interpolation) {
+			this.BufferTextures[FboAttachment.DepthAttachment] = new Texture2D (TextureTarget.Texture2D, internalFormat, format, type, interpolation, false, this.Width, this.Height);
+			this.Bind ();
+			this.BufferTextures[FboAttachment.DepthAttachment].Bind ();
+			GL.FramebufferTexture (this.Target, FramebufferAttachment.DepthAttachment, this.BufferTextures[FboAttachment.DepthAttachment].TextureId, 0);
+			this.Unbind ();
+			return this;
+		}
+
+		public Framebuffer Construct () {
+			this.Bind ();
+			GL.DrawBuffers (this.Attachments.Count, this.Attachments.ToArray ());
+			this.Unbind ();
+			return this;
 		}
 
 		public static void Bind (Framebuffer @this) {

@@ -115,5 +115,9 @@ namespace nginz
 			// Draw the geometry
 			Geometry.Draw (program, Matrix, VP);
 		}
+
+		public void DrawRaw (ShaderProgram program, Matrix4 MVP) {
+			Geometry.DrawRaw (program, MVP);
+		}
 	}
 }

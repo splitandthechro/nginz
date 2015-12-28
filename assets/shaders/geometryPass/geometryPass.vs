@@ -1,4 +1,4 @@
-﻿#version 450
+#version 450
 in vec3 v_pos;
 in vec2 v_tex;
 in vec3 v_nrm;

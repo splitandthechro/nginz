@@ -16,6 +16,7 @@ namespace nginz {
 		public static void SetMaterial (this ShaderProgram shader, string name, Material material) {
 			shader[name + ".color"] = material.Color;
 			shader[name + ".diffuse"] = 0;
+			shader[name + ".normal"] = 1;
 			shader[name + ".specularIntensity"] = material.SpecularIntensity;
 			shader[name + ".specularPower"] = material.SpecularPower;
 		}
