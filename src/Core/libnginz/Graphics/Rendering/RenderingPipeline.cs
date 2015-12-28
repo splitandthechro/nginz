@@ -10,7 +10,8 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace nginz.Rendering {
 	public class RenderingPipeline {
-		public ShaderProgram LightingPass;
+		public ShaderProgram DeferredDirectional;
+		public ShaderProgram DeferredPoint;
 		public ShaderProgram AmbientShader;
 
 		private Game game;
@@ -19,6 +20,7 @@ namespace nginz.Rendering {
 		public Framebuffer Framebuffer;
 
 		public List<DirectionalLight> DirectionalLights = new List<DirectionalLight> ();
+		public List<PointLight> PointLights = new List<PointLight> ();
 
 		public Vector3 AmbientColor { get; set; }
 
@@ -31,7 +33,8 @@ namespace nginz.Rendering {
 				.AttachTexture (FboAttachment.DiffuseAttachment, DrawBuffersEnum.ColorAttachment0, PixelInternalFormat.Rgb10A2, PixelFormat.Rgb, PixelType.UnsignedByte, InterpolationMode.Linear)
 				.Construct ();
 
-			LightingPass = game.Content.Load<ShaderProgram> ("lightingPass");
+			DeferredDirectional = game.Content.Load<ShaderProgram> ("deferredDirectional");
+			DeferredPoint = game.Content.Load<ShaderProgram> ("deferredPoint");
 			AmbientShader = game.Content.Load<ShaderProgram> ("deferredAmbient");
 
 			this.AmbientColor = new Vector3 (.25f, .25f, .25f);
@@ -39,6 +42,10 @@ namespace nginz.Rendering {
 
 		public void AddDirectionalLight (DirectionalLight light) {
 			this.DirectionalLights.Add (light);
+		}
+
+		public void AddPointLight (PointLight light) {
+			this.PointLights.Add (light);
 		}
 
 		public void Draw (Camera camera, Action<ShaderProgram> draw, Viewport viewport = null) {
@@ -63,19 +70,36 @@ namespace nginz.Rendering {
 			GL.Enable (EnableCap.Blend);
 			GL.BlendFunc (BlendingFactorSrc.One, BlendingFactorDest.One);
 
-			this.LightingPass["u_diffuse"] = 0;
-			this.LightingPass["u_normal"] = 1;
-			this.LightingPass["u_specular"] = 2;
-			this.LightingPass["u_depth"] = 3;
+			if (DirectionalLights.Count >= 1) {
+				this.DeferredDirectional["u_diffuse"] = 0;
+				this.DeferredDirectional["u_normal"] = 1;
+				this.DeferredDirectional["u_specular"] = 2;
+				this.DeferredDirectional["u_depth"] = 3;
+				this.DeferredDirectional["inverseCamera"] = camera.ViewProjectionMatrix.Inverted ();
+				this.DeferredDirectional["eye_pos"] = camera.Position;
 
-			this.LightingPass["inverseCamera"] = camera.ViewProjectionMatrix.Inverted ();
+				foreach (DirectionalLight light in this.DirectionalLights) {
+					this.DeferredDirectional.SetDirectionalLight ("directionalLight", light);
 
-			this.LightingPass["eye_pos"] = camera.Position;
+					vp.Draw (this.DeferredDirectional);
+				}
+			}
 
-			this.LightingPass.SetDirectionalLight ("directionalLight", this.DirectionalLights[0]);
+			if (PointLights.Count >= 1) {
+				this.DeferredPoint["u_diffuse"] = 0;
+				this.DeferredPoint["u_normal"] = 1;
+				this.DeferredPoint["u_specular"] = 2;
+				this.DeferredPoint["u_depth"] = 3;
+				this.DeferredPoint["inverseCamera"] = camera.ViewProjectionMatrix.Inverted ();
+				this.DeferredPoint["eye_pos"] = camera.Position;
 
-			vp.Draw (this.LightingPass);
-			
+				foreach (PointLight light in this.PointLights) {
+					this.DeferredPoint.SetPointLight ("pointLight", light);
+
+					vp.Draw (this.DeferredPoint);
+				}
+			}
+
 			GL.Disable (EnableCap.Blend);
 			this.Framebuffer.Unbind ();
 

@@ -45,10 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetProviders\GeometryProvider.cs" />
+    <Compile Include="Extensions\VectorHelper.cs" />
     <Compile Include="Graphics\FboAttachment.cs" />
     <Compile Include="Graphics\GBuffer.cs" />
+    <Compile Include="Graphics\Lighting\Attenuation.cs" />
     <Compile Include="Graphics\Lighting\DirectionalLight.cs" />
     <Compile Include="Graphics\Lighting\Material.cs" />
+    <Compile Include="Graphics\Lighting\PointLight.cs" />
     <Compile Include="Graphics\Models\ModelLoaders\AssimpLoader.cs" />
     <Compile Include="Buffers\GLBuffer.cs" />
     <Compile Include="Buffers\GLBufferDynamic.cs" />

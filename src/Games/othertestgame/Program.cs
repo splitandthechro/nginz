@@ -50,20 +50,39 @@ namespace othertestgame {
 			camera = new FPSCamera (60f, res, Mouse, Keyboard);
 			camera.Camera.SetAbsolutePosition (new Vector3 (0, 0, 2));
 			camera.MouseRotation.X = MathHelper.DegreesToRadians (180);
-			var obj = Content.LoadMultiple<Geometry> ("fruit_v2.obj");
+			var obj = Content.LoadMultiple<Geometry> ("plane.obj");
 			var rand = new Random ();
 			foreach (Geometry geom in obj) {
-				geom.Material = new Material (new Color4((byte) rand.Next(0, 255), (byte) rand.Next (0, 255), (byte) rand.Next (0, 255), 255), testTexture, normal, 32, 16);
+				//geom.Material = new Material (new Color4((byte) rand.Next(0, 255), (byte) rand.Next (0, 255), (byte) rand.Next (0, 255), 255), testTexture, normal, 32, 16);
+				geom.Material = new Material (Color4.White, null, null, 32, 16);
 				models.Add (new Model (geom));
 			}
 
-			this.RenderingPipeline.AddDirectionalLight (new DirectionalLight {
+			/*this.RenderingPipeline.AddDirectionalLight (new DirectionalLight {
 				@base = new BaseLight {
 					Color = new Vector3 (1f),
 					Intensity = 1f,
 				},
 				direction = new Vector3 (0, 1, -1)
-			});
+			});*/
+
+			Func<Random, float, float, float> randPos = (rnd, min, max) => min + (float) rnd.NextDouble() * (max - min);
+
+			for (int i = 0; i < 64; i++) {
+
+				this.RenderingPipeline.AddPointLight (new PointLight {
+					@base = new BaseLight {
+						Color = new Vector3 ((float) rand.NextDouble(), (float) rand.NextDouble (), (float) rand.NextDouble ()),
+						Intensity = .25f
+					},
+					atten = new Attenuation {
+						constant = 2f,
+						exponent = .5f,
+						linear = 1f,
+					},
+					position = new Vector3 (randPos (rand, -5, 5), randPos(rand, .125f, .75f), randPos (rand, -5, 5)),
+				});
+			}
 
 			base.Initialize ();
 		}
