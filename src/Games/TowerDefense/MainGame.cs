@@ -53,9 +53,9 @@ namespace TowerDefense {
 
 			SpriteBatch.Begin ();
 			TileMap.Draw (SpriteBatch);
+			SpriteBatch.Draw (SpriteSheet.Texture, SpriteSheet[0, 3], new Vector2 ((float) Math.Floor (Mouse.X / 64), (float) Math.Floor (Mouse.Y / 64)) * 64, Color4.White, scale: 4f, rotation: 0);
 			SpriteBatch.Draw (UITexture, Vector2.Zero, Color4.White, scale: 8f, rotation: 0);
-			SpriteBatch.Draw (SpriteSheet.Texture, SpriteSheet[0, 5], new Vector2(856, 96), Color4.White, scale: 1f, rotation: 0);
-			SpriteBatch.Draw (SpriteSheet.Texture, SpriteSheet[0, 3], new Vector2 ((float) Math.Floor(Mouse.X / 64), (float) Math.Floor (Mouse.Y / 64)) * 64, Color4.White, scale: 4f, rotation: 0);
+			SpriteBatch.Draw (SpriteSheet.Texture, SpriteSheet[0, 5], new Vector2 (856, 96), Color4.White, scale: 1f, rotation: 0);
 			SpriteBatch.Draw (SpriteSheet.Texture, SpriteSheet[1, 5], new Vector2 (856, 144), Color4.White, scale: 1f, rotation: 0);
 			Font.DrawString (SpriteBatch, "100", new Vector2 (872, 86), Color4.White);
 			Font.DrawString (SpriteBatch, "32", new Vector2 (872, 134), Color4.White);

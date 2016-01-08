@@ -168,7 +168,8 @@ namespace nginz
 			// Initialize vertices
 			Vertices = new Vertex2D[MAX_VERTICES];
 
-			framebuffer = new Graphics.Framebuffer (FramebufferTarget.Framebuffer, Game.Resolution.Width, game.Resolution.Height);
+			framebuffer = new Framebuffer (FramebufferTarget.Framebuffer, Game.Resolution.Width, game.Resolution.Height)
+							.AttachTexture (FboAttachment.DiffuseAttachment, DrawBuffersEnum.ColorAttachment0, PixelInternalFormat.Rgb, PixelFormat.Rgb, PixelType.UnsignedByte, InterpolationMode.Linear);
         }
 
 		/// <summary>
