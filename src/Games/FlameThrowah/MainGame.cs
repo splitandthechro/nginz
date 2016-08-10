@@ -16,9 +16,6 @@ namespace FlameThrowah
 
 		protected override void Initialize () {
 
-			// Set content root
-			ContentRoot = "../../assets";
-
 			// Register map handler for saving and loading maps
 			Content.RegisterAssetHandler<Map> (typeof(MapHandler));
 

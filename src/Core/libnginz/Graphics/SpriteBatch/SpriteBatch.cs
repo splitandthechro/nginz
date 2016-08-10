@@ -189,8 +189,10 @@ namespace nginz
 			if (active)
 				this.Throw ("Cannot begin an active sprite batch.");
 
-			// Mark the sprite batch as active
-			active = true;
+            GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            // Mark the sprite batch as active
+            active = true;
 
 			// Set the current camera
 			CurrentCamera = camera ?? InternalCamera;

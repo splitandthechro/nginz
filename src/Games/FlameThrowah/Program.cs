@@ -11,8 +11,9 @@ namespace FlameThrowah
 				Height = 480,
 				FixedFramerate = false,
 				FixedWindow = true,
-				WindowTitle = "nginz :: FlameThrowah"
-			};
+				WindowTitle = "nginz :: FlameThrowah",
+                ContentRoot = "../../assets",
+            };
 			using (var game = new MainGame (conf))
 				game.Run ();
 		}

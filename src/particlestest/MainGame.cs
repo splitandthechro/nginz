@@ -46,8 +46,6 @@ namespace particlestest {
 			: base (config) { }
 
 		protected override void Initialize () {
-			Content.ContentRoot = "../../assets";
-
 			texture = Content.Load<Texture2D> ("particles_test.png", TextureConfiguration.Nearest);
 
 			program = Content.Load<ShaderProgram> ("particle");

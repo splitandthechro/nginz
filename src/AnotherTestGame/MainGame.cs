@@ -18,7 +18,6 @@ namespace AnotherTestGame {
 
 		protected override void Initialize () {
 			GL.ClearColor (.25f, .30f, .35f, 1f);
-			Content.ContentRoot = "../../assets";
 
 			test = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
 

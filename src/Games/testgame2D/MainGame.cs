@@ -21,8 +21,6 @@ namespace testgame2D {
 			: base (conf) { }
 
 		protected override void Initialize () {
-			Content.ContentRoot = "../../assets";
-
 			var version = Assembly.GetEntryAssembly ().GetName ().Version;
 			batch = new SpriteBatch (this);
 			tex = Content.Load<Texture2D> ("nginz.png", TextureConfiguration.Nearest);
@@ -62,9 +60,9 @@ namespace testgame2D {
 
 		protected override void Draw (GameTime time) {
 			GL.ClearColor (.25f, .30f, .35f, 1f);
-			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			batch.Begin ();
+            batch.Begin ();
 			batch.Draw (tex, Vector2.Zero, Color4.White, Vector2.One);
 			testMap.Draw (batch);
 			stage.Draw (time, batch);

@@ -16,8 +16,9 @@ namespace AnotherTestGame {
 				FixedWindow = true,
 				WindowTitle = "Another Test Game",
 				TargetFramerate = 60,
-				Vsync = VsyncMode.Off	
-			};
+				Vsync = VsyncMode.Off,
+                ContentRoot = "../../assets",
+            };
 
 			new MainGame (config).Run ();
 		}

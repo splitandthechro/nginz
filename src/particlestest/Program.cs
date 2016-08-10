@@ -17,6 +17,7 @@ namespace particlestest {
 				FixedFramerate = false,
 				Fullscreen = false,
 				TargetFramerate = 60,
+                ContentRoot = "../../assets",
             };
 
 			new MainGame (config).Run ();

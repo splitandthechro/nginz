@@ -4,7 +4,7 @@
       {
         "texname": "nginz_logo",
         "tex": {
-          "TextureId": 2,
+          "TextureId": 8,
           "Width": 640,
           "Height": 480,
           "Bounds": "0, 0, 640, 480"
